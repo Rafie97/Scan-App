@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1070431489619",
+    "firebase_url": "https://bigproject-3043c.firebaseio.com",
+    "project_id": "bigproject-3043c",
+    "storage_bucket": "bigproject-3043c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070431489619:android:1cdcc21b203dfdfba7c0a6",
+        "android_client_info": {
+          "package_name": "com.bigmoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070431489619-7itjbpgp3gq6hkdog090skt5q6km8r45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV0LyJAytP5jpQ2aWBJCjz8IU2-sK6AZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070431489619-7itjbpgp3gq6hkdog090skt5q6km8r45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
