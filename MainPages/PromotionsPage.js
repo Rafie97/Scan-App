@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
   promoPageContainer: {
     backgroundColor: "transparent",
     flex: 1,
+    alignItems:'center'
+  },
+  gridContainer:{
+    width:400
   },
 
   promoTitle: {
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
     marginBottom: 80,
     textAlign: "center",
     fontSize: 24,
-    fontFamily: "SegoeUI"
+    fontFamily: "Segoe UI"
   },
 
   promoFooter: {
@@ -100,8 +104,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderRadius: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor:'grey',
   },
 
   itemBox: {
@@ -115,6 +120,7 @@ const styles = StyleSheet.create({
   itemTitleText: {
     textAlign: "center",
     marginBottom:5,
+    fontFamily:'Segoe UI'
   },
 
   fullBackground:

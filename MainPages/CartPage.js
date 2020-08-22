@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 80,
         marginBottom: 80,
+        fontFamily:'Segoe UI'
     },
 
 
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginLeft: 15,
         fontSize: 16,
+        fontFamily:'Segoe UI'
     },
     itemPrice: {
         alignSelf: 'center',
@@ -136,13 +138,15 @@ const styles = StyleSheet.create({
     {
         alignSelf: "flex-end",
         fontSize: 24,
-        fontStyle: "italic"
+        fontFamily:'Segoe UI',
+        marginBottom:10
     },
 
     TaxTotal:
     {
         alignSelf: "center",
-        fontSize: 16
+        fontSize: 16,
+        fontFamily:'Segoe UI'
     },
 
 

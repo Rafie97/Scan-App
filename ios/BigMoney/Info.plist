@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used for scanning barcodes</string>
 	<key>CFBundleDisplayName</key>
 	<string>BigMoney</string>
 	<key>CFBundleExecutable</key>
@@ -71,6 +73,7 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Segoe UI.ttf</string>
 	</array>
 </dict>
 </plist>

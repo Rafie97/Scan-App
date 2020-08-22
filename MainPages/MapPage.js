@@ -17,14 +17,14 @@ class MapPage extends Component {
             <View style ={styles.mapContainer}>
 
                 <View style = {styles.mapTitleView}>
-                    <Text style = {{fontSize: 24}}>Map</Text>
+                    <Text style = {{fontSize: 24, fontFamily:'Segoe UI'}}>Map</Text>
                 </View>
 
                 <View style = {styles.mapView}>
                     <Image source = {require('../res/map-image-right-size.png')} style = {styles.mapImage}  />
                 </View>
                 <View style = {styles.searchBarView}>
-                    <TextInput onEndEditing= {() => {this.setState({focused:false}); }  } backgroundColor = "transparent"  placeholder= "Search this store" placeholderTextColor={this.state.focused ? "white" : "black"} style = {this.state.focused ? styles.searchInputFocused : styles.searchInput}  onFocus = {() => {this.setState({focused:true}); }  }   ></TextInput>
+                    <TextInput style={styles.searchInput}  backgroundColor = "#a2a3a1" placeholderTextColor='#545454' placeholder= "Search this store" ></TextInput>
                 </View>
 
             </View>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     mapView:{
         flex:3,
         backgroundColor:"transparent",
-        borderBottomWidth:2,
+        
         alignItems: "center"
         
     },
@@ -65,10 +65,11 @@ const styles = StyleSheet.create({
     searchBarView:
     {
         flex:1,
-        borderBottomWidth:2,
         justifyContent: "center",
         alignItems: "center",
+        fontFamily:'Segoe UI'
     },
+    
     searchInput:
     {
         width:"65%",
@@ -77,21 +78,10 @@ const styles = StyleSheet.create({
         borderRadius:25,
         textAlign:"center",
         borderWidth:2,
-        borderColor:"#707070",
-        fontWeight: "bold",        
-    },
-    searchInputFocused:
-    {
-        backgroundColor:"rgba(0,0,0,0.25)",
-        width:"65%",
-        paddingLeft:5,
-        paddingRight: 5,
-        borderRadius:25,
-        textAlign:"center",
-        borderWidth:2,
-        borderColor:"#707070",
-        fontWeight: "bold",    
-          
+        borderColor:"#545454",
+        fontFamily:'Segoe UI',
+        fontSize:24,
+        color:'black'
     },
 
     fullBackground:

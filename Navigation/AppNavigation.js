@@ -51,7 +51,7 @@ const TabNav = createBottomTabNavigator();
 class AppNavigation extends Component{
   render(){
     return(
-      <TabNav.Navigator initialRouteName="Promotions" headerMode="none">
+      <TabNav.Navigator  initialRouteName="Promotions" headerMode="none">
         <TabNav.Screen name="Wishlist" component={WishlistStack}     options={{tabBarIcon:()=><Entypo name="list" size={30} color="black"/>}} />
         <TabNav.Screen name="Map" component={MapPage}                options={{tabBarIcon:()=><Entypo name="location" size={30} color="black"/>}}/>
         <TabNav.Screen name="Promotions" component={PromoStack}      options={{tabBarIcon:()=><Entypo name="price-tag" size={30} />}}/>

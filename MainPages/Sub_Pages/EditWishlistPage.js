@@ -40,6 +40,8 @@ class EditWishlistPage extends Component {
 
     }
 
+    
+
     render() {
         const { navigate } = this.props.navigation;
 
@@ -52,7 +54,7 @@ class EditWishlistPage extends Component {
 
                 <Text style={styles.ListNameText}>{this.props.route.params.listNameCallback}</Text>
 
-                <View style={{ "flex": 1, justifyContent: "flex-start" }}>
+                <View style={{ "flex": 1, justifyContent: "flex-end", alignItems:'center' }}>
                     <View style={styles.wishlistGroupView}>
                         <FlatList keyExtractor={(item, index) => index.toString()} data={this.state.listItems} renderItem={this.renderItem} />
                     </View>
@@ -68,9 +70,9 @@ class EditWishlistPage extends Component {
     renderItem = ({ item }) => (
         <TouchableOpacity activeOpacity={0.5} onPress={() => navigate('Wishlist', { screen: 'WishItemPage', params: { itemIDCallback: item } })} >
             <View style={styles.itemBubble} >
-                <Image source={{ uri: item.imageLink }} style={styles.ItemImage}></Image>
+                <Image source={{ uri: item.imageLink }} style={styles.itemImage}></Image>
                 <Text style={styles.itemLabel}>{item.name}</Text>
-                <Text style={styles.itemLabel}>{item.price}</Text>
+                <Text style={styles.itemPrice}>{item.price}</Text>
             </View>
         </TouchableOpacity>
 
@@ -85,16 +87,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
         height: "100%",
-        borderWidth: 3,
-        borderColor: "purple"
+
     },
     wishlistGroupView:
     {
         padding: 30,
         paddingTop: 20,
-        borderWidth: 5,
-        borderColor: "blue",
-
     },
     wishlistButton:
     {
@@ -123,7 +121,8 @@ const styles = StyleSheet.create({
     {
         fontSize: 40,
         textAlign: "center",
-        paddingTop: 60
+        paddingTop: 60,
+        fontFamily:'Segoe UI'
     },
     itemBubble:
     {
@@ -135,21 +134,29 @@ const styles = StyleSheet.create({
         height: 60,
         marginTop: 20,
     },
-    ItemImage:
+    itemImage:
     {
-        alignSelf: "flex-start",
-        width: 30,
-        height: 30,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
+        alignSelf: "center",
+        width: 45,
+        height: 45,
+        marginLeft: 10,
+        marginRight: 0,
+        borderRadius: 10,
+        borderWidth: 10
     },
-
     itemLabel:
     {
         alignSelf: "center",
-        marginLeft: 40,
-        fontSize: 16
+        marginLeft: 15,
+        fontSize: 16,
+        fontFamily:'Segoe UI'
     },
+    itemPrice: {
+        alignSelf: 'center',
+        textAlign: 'right',
+        marginLeft: 'auto',
+        marginRight: 10
+    },
+    
 
 })
