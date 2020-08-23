@@ -1,16 +1,40 @@
 import React, {Component} from 'react';
 
 import { StyleSheet, View,  Text , TextInput , ImageBackground, Image} from 'react-native';
-
+import firestore from '@react-native-firebase/firestore';
 
 
 class MapPage extends Component {
     constructor(){
         super();
         this.state = {
-            focused:false
+            focused:false,
+            backSearches:[],
         }
+        this.searchItems = this.searchItems.bind(this);
     }
+
+    async searchItems(val){
+        
+        hebRef = firestore().collection("stores").doc("HEB").collection('items');
+        const searchQuery = hebRef.where("name", "in", val );
+        await searchQuery.onSnapshot(async(snap)=>{
+            let tempSearch = [];
+            snap.forEach((doc) =>{
+                const item = {
+                    "docID": doc.id,
+                    "name": doc.data().name,
+                    "price": doc.data().price,
+                    "imageLink": doc.data().imageLink,
+                    "promo": doc.data().promo,
+                };
+                tempSearch.push(item);
+            });
+            await this.setState({backSearches:tempSearch});
+        });
+
+    }
+
     render(){
       return(
         <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground} >
@@ -24,7 +48,7 @@ class MapPage extends Component {
                     <Image source = {require('../res/map-image-right-size.png')} style = {styles.mapImage}  />
                 </View>
                 <View style = {styles.searchBarView}>
-                    <TextInput style={styles.searchInput}  backgroundColor = "#a2a3a1" placeholderTextColor='#545454' placeholder= "Search this store" ></TextInput>
+                    <TextInput style={styles.searchInput} onChange={(val)=>{this.searchItems(val)}} backgroundColor = "#a2a3a1" placeholderTextColor='#545454' placeholder="Search this store" ></TextInput>
                 </View>
 
             </View>
@@ -42,17 +66,14 @@ export default MapPage;
 const styles = StyleSheet.create({
     mapContainer:{
         flex:1,
-        
     },
     mapTitleView:
     {
         flex:1,
         backgroundColor:"transparent",
-        
         justifyContent:"center",
         alignItems:"center"
     },
-
 
     mapView:{
         flex:3,
@@ -89,7 +110,5 @@ const styles = StyleSheet.create({
         flex:1,
         width:"100%"
     },
-
-    
 
 });

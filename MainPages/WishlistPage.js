@@ -7,6 +7,7 @@ import { PermissionsAndroid } from 'react-native';
 import Contacts from 'react-native-contacts';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+import SelectableItem from '../Models/Components/SelectableItem';
 
 
 class WishlistPage extends Component {
@@ -18,11 +19,14 @@ class WishlistPage extends Component {
             contactNames: [],
             contactModal: false,
             contactsLoading: false,
-            filteredContactNames:[]
-
+            filteredContactNames: [],
+            selectedNames: [],
+            didCount:false,
+            countContacts:0,
         }
         this.getLists = this.getLists.bind(this);
         this.getContacts = this.getContacts.bind(this);
+        this.logItem = this.logItem.bind(this);
     }
 
     componentDidMount() {
@@ -44,9 +48,36 @@ class WishlistPage extends Component {
         })
     }
 
-    getContacts() {
-        if (this.state.contactNames.length === 0 || this.state.contactNames.length !== Contacts.getCount) {
+    async getContacts() {
 
+
+        Contacts.getCount(count => {
+            console.log('get happened')
+            this.setState({countContacts: count+1, didCount:true});
+        });
+
+
+        if(this.state.didCount){
+            try {
+                const list = await AsyncStorage.getItem('storedContactNames');
+                
+                const parsedList = JSON.parse(list);
+                const numStored = parsedList.length;
+
+                console.log(numStored, this.state.countContacts);
+
+                if (numStored === this.state.countContacts) {
+                    await this.setState({ contactNames: parsedList, contactsLoading: false, filteredContactNames: parsedList });
+                    console.log('did it right');
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+
+        if (this.state.didCount && (this.state.contactNames.length === 0 || this.state.contactNames.length !== this.state.countContacts)) {
+            console.log('gotta do the big boy');
             this.setState({ contactsLoading: true });
             PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
@@ -66,7 +97,9 @@ class WishlistPage extends Component {
                             contacts.forEach((con) => {
                                 this.setState({ contactNames: [...this.state.contactNames, con.displayName] });
                             });
-                            this.setState({  contactsLoading: false , filteredContactNames:this.state.contactNames});
+                            this.setState({ contactsLoading: false, filteredContactNames: this.state.contactNames });
+                            const stringedContacts = JSON.stringify(this.state.contactNames);
+                            await AsyncStorage.setItem('storedContactNames', stringedContacts);
                             
                         }
                     }
@@ -75,21 +108,29 @@ class WishlistPage extends Component {
         }
     }
 
-    searchContacts(val){
-        const tempFilteredList=[]
-        this.state.contactNames.filter((name)=>{
-            if(name.includes(val))
-            {
+    searchContacts(val) {
+        const tempFilteredList = []
+        this.state.contactNames.filter((name) => {
+            if (name.includes(val)) {
                 tempFilteredList.push(name);
             }
         })
-        if(tempFilteredList)
-        {
-            this.setState({filteredContactNames:tempFilteredList});
+        if (tempFilteredList) {
+            this.setState({ filteredContactNames: tempFilteredList });
         }
-        if(val ==='')
-        {
-            this.setState({filteredContactNames:this.state.contactNames})
+        if (val === '') {
+            this.setState({ filteredContactNames: this.state.contactNames })
+        }
+    }
+
+    logItem(name, isSelected) {
+        if (isSelected) {
+            this.setState({ selectedNames: [...this.state.selectedNames, name] })
+        }
+        if (!isSelected) {
+            let tempNames = this.state.selectedNames;
+            tempNames = tempNames.filter(item => item !== name);
+            this.setState({ selectedNames: tempNames });
         }
     }
 
@@ -105,20 +146,20 @@ class WishlistPage extends Component {
                 <View style={styles.wishlistGroupView}>
                     <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                         ({ item }) => (
-                        <TouchableOpacity  onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item.title } })} >
-                            <LinearGradient style={styles.wishlistSelect}   colors={['#D2D2D2','#A2A2A2']}>
-                                <Text style={styles.title}>{item.title}</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>)}
+                            <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item.title } })} >
+                                <LinearGradient style={styles.wishlistSelect} colors={['#D2D2D2', '#A2A2A2']}>
+                                    <Text style={styles.title}>{item.title}</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>)}
                     />
                 </View>
 
-                <View ><Text style={{ fontSize: 20, fontFamily:'Segoe UI', marginLeft:10 }}>Your Family</Text></View>
+                <View ><Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text></View>
 
                 {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
-                <TouchableOpacity onPress={()=>this.setState({contactModal:true})}>
-                    <Text>TOUCH THIS TO ADD CONTACTS</Text>
-                </TouchableOpacity>)}
+                    <TouchableOpacity onPress={() => this.setState({ contactModal: true })}>
+                        <Text>TOUCH THIS TO ADD CONTACTS</Text>
+                    </TouchableOpacity>)}
 
                 <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
                     <View style={styles.centeredView}>
@@ -126,28 +167,27 @@ class WishlistPage extends Component {
                             <Text style={styles.modalText}>Which contact would you like to add?</Text>
                             <TextInput placeholder="Search contacts by name" onChangeText={(val) => this.searchContacts(val)}></TextInput>
 
-                            <FlatList data={this.state.filteredContactNames} keyExtractor={(item, index) => index} initialNumToRender={100} renderItem={
-                                ({ item }) =>
-                                    (<TouchableOpacity style={styles.contactSelect} ><Text style={styles.title}>{item}</Text></TouchableOpacity>)
-                            } />
+                            <FlatList data={this.state.filteredContactNames} keyExtractor={(item, index) => index} initialNumToRender={100} renderItem={this.renderItem} />
 
                             <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
                                 <Text style={styles.title}>Cancel</Text>
                             </TouchableOpacity>
+                            {this.state.selectedNames.length === 0 ? (<></>) : (<TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
+                                <Text style={styles.title}>Ok</Text>
+                            </TouchableOpacity>)}
                         </View>
                     </View>
                 </Modal>
 
-                <FlatList horizontal={true}>
-                    <Image source={require('../res/mom-rect.png')} name="Mom" ></Image>
-                    <Image source={require('../res/dadimg.png')}  ></Image>
-                    <FamilyTile imageUri='../res/dadimg.png' name="Dad"  ></FamilyTile>
-                    <FamilyTile imageUri={require('../res/dadimg.png')} name="Josh" ></FamilyTile>
-                </FlatList>
+                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<View style={{ borderWidth: 1, width: 40, marginLeft: 10, height: 20 }}><Text style={{ fontSize: 16 }}>{item}</Text></View>)} />
+
 
             </ImageBackground>
         )
     }
+
+    renderItem = ({ item }) => (<SelectableItem name={item} logItem={this.logItem}></SelectableItem>)
+
 
 }
 
@@ -175,6 +215,12 @@ const styles = StyleSheet.create(
             marginBottom: 20,
 
         },
+        title: {
+            fontSize: 18,
+            alignSelf: 'center',
+            fontFamily: 'Segoe UI'
+        },
+
 
         wishlistGroupView:
         {
@@ -191,7 +237,7 @@ const styles = StyleSheet.create(
             marginTop: 80,
             marginBottom: 0,
             alignSelf: "center",
-            fontFamily:'Segoe UI'
+            fontFamily: 'Segoe UI'
         },
         textView: {
             alignContent: "center",
@@ -212,7 +258,6 @@ const styles = StyleSheet.create(
             fontSize: 16
         },
         wishlistSelect: {
-            
             borderWidth: 2,
             marginLeft: 20,
             marginTop: 20,
@@ -222,28 +267,15 @@ const styles = StyleSheet.create(
             justifyContent: 'center',
             borderRadius: 10
         },
-        contactSelect: {
-            marginLeft: 20,
-            marginTop: 20,
-            height: 40,
-            width: 250,
-            textAlign: 'center',
-            justifyContent: 'center',
-        },
-        title: {
-            fontSize: 18,
-            alignSelf: 'center',
-            fontFamily:'Segoe UI'
-        },
+
         centeredView: {
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 0,
-            fontFamily:'Segoe UI'
+
+            fontFamily: 'Segoe UI'
         },
         modalView: {
-            margin: 0,
             backgroundColor: "white",
             borderRadius: 20,
             padding: 35,
@@ -261,6 +293,6 @@ const styles = StyleSheet.create(
         modalText: {
             marginBottom: 15,
             textAlign: "center",
-            fontFamily:'Segoe UI'
+            fontFamily: 'Segoe UI'
         },
     });

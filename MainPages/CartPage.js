@@ -49,7 +49,7 @@ class CartPage extends Component {
                     <Text style={styles.TaxTotal}> ${Math.round(100 * 1.0825 * cartSum) / 100} with tax</Text>
                 </View>
 
-                <FlatList style={styles.flatContainer} keyExtractor={(item, index)=>index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
+                <FlatList style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
             </ImageBackground>
         )
     }
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 80,
         marginBottom: 80,
-        fontFamily:'Segoe UI'
+        fontFamily: 'Segoe UI'
     },
 
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginLeft: 15,
         fontSize: 16,
-        fontFamily:'Segoe UI'
+        fontFamily: 'Segoe UI'
     },
     itemPrice: {
         alignSelf: 'center',
@@ -138,15 +138,15 @@ const styles = StyleSheet.create({
     {
         alignSelf: "flex-end",
         fontSize: 24,
-        fontFamily:'Segoe UI',
-        marginBottom:10
+        fontFamily: 'Segoe UI',
+        marginBottom: 10
     },
 
     TaxTotal:
     {
         alignSelf: "center",
         fontSize: 16,
-        fontFamily:'Segoe UI'
+        fontFamily: 'Segoe UI'
     },
 
 
