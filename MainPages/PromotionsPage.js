@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, ImageBackground, TouchableOpacity, Button } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-
+import Item from '../Models/Item';
 
 
 class PromotionsPage extends Component {
@@ -15,27 +15,21 @@ class PromotionsPage extends Component {
       promoItems: []
     }
 
-    this.getItems= this.getItems.bind(this);
+    this.getItems = this.getItems.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getItems();
   }
 
   async getItems() {
     hebRef = firestore().collection("stores").doc("HEB").collection('items')
-    
-    await hebRef.onSnapshot((snap) =>{
+
+    await hebRef.onSnapshot((snap) => {
       this.setState({ promoItems: [] })
-      snap.forEach(doc=>{
-        const item = {
-          "docID": doc.id,
-          "name": doc.data().name,
-          "price": doc.data().price,
-          "imageLink": doc.data().imageLink,
-          "promo": doc.data().promo,
-        };
-        this.setState({promoItems:[...this.state.promoItems, item]});
+      snap.forEach(doc => {
+        const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+        this.setState({ promoItems: [...this.state.promoItems, item] });
       })
     })
   }
@@ -58,10 +52,10 @@ class PromotionsPage extends Component {
 
 
   renderItem(data, i) {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.itemBox} key={i}>
-        <TouchableOpacity style={styles.imageBox}  activeOpacity={0.5} onPress={() => navigate('Promotions', {screen:'PromoItemPage', params:{itemIDCallback: this.state.promoItems[i]}})} >
+        <TouchableOpacity style={styles.imageBox} activeOpacity={0.5} onPress={() => navigate('Promotions', { screen: 'PromoItemPage', params: { itemIDCallback: this.state.promoItems[i] } })} >
           <Image style={styles.itemImage} source={{ uri: this.state.promoItems[i].imageLink }} />
           <Text style={styles.itemTitleText}>{this.state.promoItems[i].name}</Text>
         </TouchableOpacity>
@@ -79,10 +73,10 @@ const styles = StyleSheet.create({
   promoPageContainer: {
     backgroundColor: "transparent",
     flex: 1,
-    alignItems:'center'
+    alignItems: 'center'
   },
-  gridContainer:{
-    width:400
+  gridContainer: {
+    width: 400
   },
 
   promoTitle: {
@@ -106,21 +100,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderRadius: 10,
-    borderColor:'grey',
+    borderColor: 'grey',
   },
 
   itemBox: {
     marginRight: 20,
     marginLeft: 20,
     marginBottom: 20,
-    flex:1,
-    maxWidth:160
+    flex: 1,
+    maxWidth: 160
   },
 
   itemTitleText: {
     textAlign: "center",
-    marginBottom:5,
-    fontFamily:'Segoe UI'
+    marginBottom: 5,
+    fontFamily: 'Segoe UI'
   },
 
   fullBackground:
@@ -135,7 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 100,
     height: 100,
-    borderRadius:10,
+    borderRadius: 10,
   }
 
 });

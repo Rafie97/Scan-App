@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, ImageBackground, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { FlatList } from 'react-native-gesture-handler';
+import Item from '../Models/Item';
 
 class ScanPage extends Component {
 
@@ -22,13 +23,9 @@ class ScanPage extends Component {
     await barQuery.get().then(async (qSnap) => {
       try {
         qSnap.forEach(async (doc, index) => {
-          const item = {
-            "docID": doc.id,
-            "name": doc.data().name,
-            "price": doc.data().price,
-            "imageLink": doc.data().imageLink,
-            "promo": doc.data().promo,
-          };
+          
+          const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+          //In the future, I might be able to jsut replace item with doc.data() instead of a new Item
           if (this.state.scannedItems.find(e => (e.docID === item.docID))) {
             throw BreakException;
           }

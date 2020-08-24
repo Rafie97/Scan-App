@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import { StyleSheet, View,  Text , TextInput , ImageBackground, Image} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import Item from '../Models/Item';
 
 
 class MapPage extends Component {
@@ -16,22 +17,24 @@ class MapPage extends Component {
 
     async searchItems(val){
         
+        const BreakException={};
         hebRef = firestore().collection("stores").doc("HEB").collection('items');
-        const searchQuery = hebRef.where("name", "in", val );
-        await searchQuery.onSnapshot(async(snap)=>{
-            let tempSearch = [];
-            snap.forEach((doc) =>{
-                const item = {
-                    "docID": doc.id,
-                    "name": doc.data().name,
-                    "price": doc.data().price,
-                    "imageLink": doc.data().imageLink,
-                    "promo": doc.data().promo,
-                };
-                tempSearch.push(item);
-            });
-            await this.setState({backSearches:tempSearch});
+        await hebRef.get().then(async(qSnap)=>{
+            try {
+                await this.setState({backSearches:[]})
+                qSnap.forEach(async (doc, index) => {
+                  
+                  if (doc.data().name.includes(val)) {
+                    const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+                    await this.setState({ scannedItems: [...this.state.backSearches, item]})
+                  }
+                })
+            }
+            catch (e) {
+                if (e !== BreakException) throw e;
+            }
         });
+        
 
     }
 
@@ -48,7 +51,7 @@ class MapPage extends Component {
                     <Image source = {require('../res/map-image-right-size.png')} style = {styles.mapImage}  />
                 </View>
                 <View style = {styles.searchBarView}>
-                    <TextInput style={styles.searchInput} onChange={(val)=>{this.searchItems(val)}} backgroundColor = "#a2a3a1" placeholderTextColor='#545454' placeholder="Search this store" ></TextInput>
+                    <TextInput style={styles.searchInput} onChangeText={(val)=>{this.searchItems(val)}} backgroundColor = "#a2a3a1" placeholderTextColor='#545454' placeholder="Search this store" ></TextInput>
                 </View>
 
             </View>

@@ -3,7 +3,7 @@ import { Button, Icon, LinearGradient } from 'react-native-elements';
 import { ImageBackground, StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-
+import Item from '../../Models/Item';
 
 
 class EditWishlistPage extends Component {
@@ -27,13 +27,7 @@ class EditWishlistPage extends Component {
         await wishRef.onSnapshot((snap) => {
             this.setState({ listItems: [] })
             snap.forEach((doc) => {
-                const item = {
-                    "docID": doc.id,
-                    "name": doc.data().name,
-                    "price": doc.data().price,
-                    "imageLink": doc.data().imageLink,
-                    "promo": doc.data().promo,
-                };
+                const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
                 this.setState({ listItems: [...this.state.listItems, item] });
             })
         });

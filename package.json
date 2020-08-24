@@ -28,6 +28,7 @@
     "react-native-grid-component": "^2.0.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-reanimated": "^1.8.0",
+    "react-native-redash": "^14.2.4",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-safe-area-view": "^1.0.0",
     "react-native-screens": "^2.4.0",

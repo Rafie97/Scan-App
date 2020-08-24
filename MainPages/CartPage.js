@@ -3,6 +3,8 @@ import { View, Text, ImageBackground, Image, StyleSheet, } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import { FlatList } from 'react-native-gesture-handler';
+import Item, {itemConverter} from '../Models/Item';
+import SwipeableItem from '../Models/Components/SwipeableItem';
 
 
 class CartPage extends Component {
@@ -16,19 +18,16 @@ class CartPage extends Component {
 
     componentDidMount() {
         const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
+
+
         cartRef.onSnapshot((snap) => {
             this.setState({ cartItems: [] });
             snap.forEach(async (doc) => {
-                const item = {
-                    "docID": doc.id,
-                    "name": doc.data().name,
-                    "price": doc.data().price,
-                    "imageLink": doc.data().imageLink,
-                    "promo": doc.data().promo,
-                };
+                const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
                 await this.setState({ cartItems: [...this.state.cartItems, item] })
             })
         })
+        
     }
 
     render() {
@@ -49,18 +48,14 @@ class CartPage extends Component {
                     <Text style={styles.TaxTotal}> ${Math.round(100 * 1.0825 * cartSum) / 100} with tax</Text>
                 </View>
 
-                <FlatList style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
+                <FlatList contentContainerStyle={{alignItems:"center"}} style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
             </ImageBackground>
         )
     }
 
 
     renderItem = ({ item }) => (
-        <View style={styles.itemBubble} >
-            <Image source={{ uri: item.imageLink }} style={styles.itemImage}></Image>
-            <Text style={styles.itemLabel}>{item.name}</Text>
-            <Text style={styles.itemPrice}>${item.price}</Text>
-        </View>
+        <SwipeableItem {...{ item }}/>
     )
 
 }
@@ -82,6 +77,7 @@ const styles = StyleSheet.create({
     {
         marginTop: 30,
         flex: 1,
+        width:"100%",
     },
 
     YourCartText:

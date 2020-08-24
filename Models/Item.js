@@ -1,28 +1,19 @@
-import React from 'react';
-
-var mongoose = require('mongoose');
-
-var schema= mongoose.Schema;
-
-var ItemSchema = new Schema(
-    {
-        item_name: {type: String, required:true, max:100},
-        price: {type:String, required:true, max:6 },
-        imageLink: {type:String, required:true, max:1000 }
+class Item {
+    constructor(docID, name, price, imageLink, barcode, promo, reviews){
+        this.docID = docID;
+        this.name = name;
+        this.price = price;
+        this.imageLink = imageLink;
+        this.barcode = barcode;
+        this.promo = promo;
+        this.reviews = reviews;
     }
-);
 
-ItemSchema.virtual('name').get(function(){
+    toString(){
+        return this.docID + ',' + this.name + ',' + this.price + ',' + this.imageLink + ',' + this.barcode + ',' + this.promo + ',' + this.reviews;
+    }
 
-    var name = '';
-    return name;
-});
-
-ItemSchema.virtual('price').get(function() {
-    price = '';
-    return price;
-});
+}
 
 
-
-module.exports= mongoose.model('Item', ItemSchema);
+export default Item;
