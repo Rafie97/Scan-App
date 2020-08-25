@@ -54,12 +54,12 @@ class PromotionsPage extends Component {
   renderItem(data, i) {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.itemBox} key={i}>
-        <TouchableOpacity style={styles.imageBox} activeOpacity={0.5} onPress={() => navigate('Promotions', { screen: 'PromoItemPage', params: { itemIDCallback: this.state.promoItems[i] } })} >
+      
+        <TouchableOpacity style={styles.itemBox} activeOpacity={0.5} onPress={() => navigate('Promotions', { screen: 'PromoItemPage', params: { itemIDCallback: this.state.promoItems[i] } })} >
           <Image style={styles.itemImage} source={{ uri: this.state.promoItems[i].imageLink }} />
           <Text style={styles.itemTitleText}>{this.state.promoItems[i].name}</Text>
         </TouchableOpacity>
-      </View>
+  
     )
   }
 }
@@ -94,16 +94,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
 
-  imageBox: {
+  
+
+  itemBox: {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderRadius: 10,
     borderColor: 'grey',
-  },
-
-  itemBox: {
     marginRight: 20,
     marginLeft: 20,
     marginBottom: 20,

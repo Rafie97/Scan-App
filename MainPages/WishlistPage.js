@@ -147,7 +147,7 @@ class WishlistPage extends Component {
                     <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                         ({ item }) => (
                             <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item.title } })} >
-                                <LinearGradient style={styles.wishlistSelect} colors={['#D2D2D2', '#A2A2A2']}>
+                                <LinearGradient style={styles.wishlistSelect} colors={['#b6d6db','#D2D2D2']}>
                                     <Text style={styles.title}>{item.title}</Text>
                                 </LinearGradient>
                             </TouchableOpacity>)}

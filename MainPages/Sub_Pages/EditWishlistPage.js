@@ -4,6 +4,7 @@ import { ImageBackground, StyleSheet, View, Text, FlatList, TouchableOpacity, Im
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/Item';
+import SwipeableItem from '../../Models/Components/SwipeableItem';
 
 
 class EditWishlistPage extends Component {
@@ -11,7 +12,8 @@ class EditWishlistPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listItems: []
+            listItems: [],
+            isScrollEnabled:true,
         }
 
         this.getItems = this.getItems.bind(this);
@@ -43,7 +45,7 @@ class EditWishlistPage extends Component {
             <ImageBackground style={styles.fullBackground} source={require('../../res/android-promotions.png')} >
 
                 <View style={styles.backButtonView}>
-                    <Button title="go back" onPress={() => navigate('MainWishlistPage')} style={styles.backButton} />
+                    <Button title="go back" onPress={() => navigate.navigate('MainWishlistPage')} style={styles.backButton} />
                 </View>
 
                 <Text style={styles.ListNameText}>{this.props.route.params.listNameCallback}</Text>
@@ -60,16 +62,24 @@ class EditWishlistPage extends Component {
         );
     }
 
+    deleteItem(itemID){
+        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists').doc(this.props.route.params.listNameCallback).collection('items');;
+
+        cartRef.doc(itemID).delete().then(()=>{
+            console.log("Successfully deleted from cart")
+        }).catch((err)=>{
+            console.log("Error deleteing from cart: ", err)
+        })
+    }
+
+    setScrollEnabled(enable) {
+        this.setState({
+          enable,
+        });
+    }
 
     renderItem = ({ item }) => (
-        <TouchableOpacity activeOpacity={0.5} onPress={() => navigate('Wishlist', { screen: 'WishItemPage', params: { itemIDCallback: item } })} >
-            <View style={styles.itemBubble} >
-                <Image source={{ uri: item.imageLink }} style={styles.itemImage}></Image>
-                <Text style={styles.itemLabel}>{item.name}</Text>
-                <Text style={styles.itemPrice}>{item.price}</Text>
-            </View>
-        </TouchableOpacity>
-
+        <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)}  deleteItem = {this.deleteItem} sourcePage="Wishlist" />
     );
 
 }

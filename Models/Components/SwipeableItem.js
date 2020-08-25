@@ -1,69 +1,91 @@
-import React from 'react'
-import Animated, { useCode, cond, eq, not, set, add, abs, multiply, divide } from 'react-native-reanimated';
-import { PanGestureHandler, State, TouchableOpacity } from 'react-native-gesture-handler';
-import { usePanGestureHandler, useValue, timing, snapPoint, minus, clamp, min } from 'react-native-redash';
-import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions, PanResponder, Animated, Image, TouchableOpacity } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-const snapPoints = [-20, 0];
+const { width } = Dimensions.get('window');
 
-const SwipeableItem = ({ item }) => {
+export default class ListItem extends React.PureComponent {
+    constructor(props) {
+        super(props);
 
-    const {
-        gestureHandler,
-        translation,
-        velocity,
-        state,
-    } = usePanGestureHandler();
+        this.gestureDelay = 20;
+        this.scrollViewEnabled = true;
 
-    const translateX = useValue(0);
-    const offsetX = useValue(0);
-    const snapTo = snapPoint(translateX, velocity.x, snapPoints);
+        const position = new Animated.ValueXY();
+        const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (evt, gestureState) => false,
+            onMoveShouldSetPanResponder: (evt, gestureState) => true,
+            onPanResponderTerminationRequest: (evt, gestureState) => false,
+            onPanResponderMove: (evt, gestureState) => {
+                if (gestureState.dx < -20) {
+                    this.setScrollViewEnabled(false);
+                    let newX = gestureState.dx + this.gestureDelay;
+                    position.setValue({ x: newX, y: 0 });
+                }
+            },
+            onPanResponderRelease: (evt, gestureState) => {
+                if (gestureState.dx < -50) {
+                    Animated.timing(this.state.position, {
+                        toValue: { x: -50, y: 0 },
+                        duration: 150
+                    }).start(() => {
+                        this.setScrollViewEnabled(true);
+                    });
+                }
+                if (gestureState.dx > -50) {
+                    Animated.timing(this.state.position, {
+                        toValue: { x: 0, y: 0 },
+                        duration: 150
+                    }).start(() => {
+                        this.setScrollViewEnabled(true);
+                    })
+                }
+            },
+        });
 
-    useCode(() => [
-        cond(eq(state, State.ACTIVE), set(translateX, add(offsetX, clamp(translation.x, -9999, minus(offsetX))))),
-        cond(eq(state, State.END), [
-            set(translateX, timing({ from: translateX, to: snapTo })),
-            //set(offsetX, translateX)
-        ])
-    ], []);
+        this.state = { position };
+        this.panResponder = panResponder;
+
+    }
 
 
-    return (
-        <Animated.View style={{flexDirection:"row"}}>
+    setScrollViewEnabled(enabled) {
+        if (this.scrollViewEnabled !== enabled) {
+            this.props.setScrollEnabled(enabled);
+            this.scrollViewEnabled = enabled;
+        }
+    }
 
-            <PanGestureHandler {...gestureHandler}>
-                <Animated.View style={{ transform: [{ translateX }] }}>
-                    <View style={styles.itemBubble} >
-                        <Image source={{ uri: item.imageLink }} style={styles.itemImage}></Image>
-                        <Text style={styles.itemLabel}>{item.name}</Text>
-                        <Text style={styles.itemPrice}>${item.price}</Text>
-                    </View>
-                </Animated.View>
-            </PanGestureHandler >
-
-            <View style={{alignSelf:"center", marginBottom: 20, justifyContent:"flex-end"}}>
-                <TouchableOpacity>
-                    <DeleteButton x = {abs(translateX)}/>
-                </TouchableOpacity>
-            </View>
-
-        </Animated.View>
-
+    render() {
         
-    )
+
+
+        return (
+            <Animated.View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+
+                <View style={{ alignSelf: "center", paddingBottom: 20, position: "absolute" }}>
+                    <TouchableOpacity onPress= {()=>this.props.deleteItem(this.props.item.docID)} on>
+                        <Animated.View style={{ backgroundColor: "#D93F12", width: 40, height: 40, alignItems: "center", justifyContent: "center", borderRadius: 10, borderWidth:2 }}>
+                            <EvilIcons name="trash" size={30} color="black"></EvilIcons>
+                        </Animated.View>
+                    </TouchableOpacity>
+                </View>
+
+                <Animated.View style={{ left: this.state.position.x }} {...this.panResponder.panHandlers}>
+                    <TouchableOpacity style={styles.itemBubble} onPress = {()=>this.props.navigation.navigate(this.props.sourcePage, {screen:this.props.sourcePage+"ItemPage" , params:{itemIDCallback:this.props.item }})}>
+                        <Image source={{ uri: this.props.item.imageLink }} style={styles.itemImage}></Image>
+                        <Text style={styles.itemLabel}>{this.props.item.name}</Text>
+                        <Text style={styles.itemPrice}>${this.props.item.price}</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+
+
+            </Animated.View>
+
+        );
+    }
 }
 
-export default SwipeableItem;
-
-const DeleteButton = ({x}) => {
-    const size = min(multiply(4,x),40);
-    return (
-        <Animated.View style = {{backgroundColor:"#D93F12",height:size, width:size, alignItems:"center", justifyContent:"center", transform:[], borderRadius:10, borderWidth:divide(size,20)}}>
-            <EvilIcons name="trash" size={30} color="black"></EvilIcons>
-        </Animated.View>
-    )
-}
 
 const styles = new StyleSheet.create({
     itemBubble:

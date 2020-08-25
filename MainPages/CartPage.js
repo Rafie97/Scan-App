@@ -7,18 +7,21 @@ import Item, {itemConverter} from '../Models/Item';
 import SwipeableItem from '../Models/Components/SwipeableItem';
 
 
+
 class CartPage extends Component {
     constructor() {
         super();
         this.renderItem = this.renderItem.bind(this);
         this.state = {
-            cartItems: []
+            cartItems: [],
+            isScrollEnabled:true
         }
+        this.setScrollEnabled = this.setScrollEnabled.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
     }
 
     componentDidMount() {
         const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
-
 
         cartRef.onSnapshot((snap) => {
             this.setState({ cartItems: [] });
@@ -28,6 +31,16 @@ class CartPage extends Component {
             })
         })
         
+    }
+
+    deleteItem(itemID){
+        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
+
+        cartRef.doc(itemID).delete().then(()=>{
+            console.log("Successfully deleted from cart")
+        }).catch((err)=>{
+            console.log("Error deleteing from cart: ", err)
+        })
     }
 
     render() {
@@ -48,15 +61,19 @@ class CartPage extends Component {
                     <Text style={styles.TaxTotal}> ${Math.round(100 * 1.0825 * cartSum) / 100} with tax</Text>
                 </View>
 
-                <FlatList contentContainerStyle={{alignItems:"center"}} style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
+                <FlatList scrollEnabled={this.state.isScrollEnabled} contentContainerStyle={{alignItems:"center"}} style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
             </ImageBackground>
         )
     }
 
+    setScrollEnabled(enable) {
+        this.setState({
+          isScrollEnabled:enable,
+        });
+    }
 
-    renderItem = ({ item }) => (
-        <SwipeableItem {...{ item }}/>
-    )
+    renderItem = ({item})=>  ( <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)}  deleteItem = {this.deleteItem} /> );
+      
 
 }
 

@@ -19,7 +19,7 @@ function WishlistStack(){
     <WishlistStackNav.Navigator headerMode="none">
       <WishlistStackNav.Screen name="MainWishlistPage" component={WishlistPage}/>
       <WishlistStackNav.Screen name="EditWishlistPage" component={EditWishlistPage}/>
-      <WishlistStackNav.Screen name="WishItemPage" component={ItemPage}/>
+      <WishlistStackNav.Screen name="WishlistItemPage" component={ItemPage}/>
     </WishlistStackNav.Navigator>
   )
 }
