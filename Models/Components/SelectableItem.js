@@ -18,7 +18,6 @@ class SelectableItem extends Component{
     }
 
     render(){
-        
         return(
             <TouchableOpacity style={[styles.contactSelect, this.state.isSelected? {backgroundColor:'grey'}:{backgroundColor:'transparent'}]} onPress={this.selectItem}  >
                 <Text style={styles.title}>{this.props.name}</Text>

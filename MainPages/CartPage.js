@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
     {
         fontSize: 24,
         alignSelf: "center",
-        marginTop: 80,
-        marginBottom: 80,
+        marginTop: 40,
+        marginBottom: 60,
         fontFamily: 'Segoe UI'
     },
 

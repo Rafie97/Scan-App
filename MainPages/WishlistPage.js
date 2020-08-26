@@ -240,7 +240,8 @@ const styles = StyleSheet.create(
         {
             padding: 30,
             paddingTop: 20,
-            alignItems: 'center'
+            alignItems: 'center',
+            marginBottom:40
         },
         buttonText: {
             color: "black"
@@ -248,7 +249,7 @@ const styles = StyleSheet.create(
         yourWishlistsText:
         {
             fontSize: 24,
-            marginTop: 80,
+            marginTop: 40,
             marginBottom: 0,
             alignSelf: "center",
             fontFamily: 'Segoe UI'

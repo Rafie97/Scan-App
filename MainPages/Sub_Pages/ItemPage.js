@@ -81,6 +81,12 @@ function ItemPage({ route }) {
                             <Text>Here are the stonks for this item</Text>
                         </Card>
 
+
+                        <Text style={{fontFamily:"Segoe UI Italic",fontSize:24, color:"green", marginTop:50}}>Reviews</Text>
+                        <View style={{borderWidth:1, borderColor:"green", width:300, height:200, marginTop:20, marginBottom:30}}>
+                            
+                        </View>
+
                         <TouchableOpacity style={styles.bottomButtons} title="Add to Cart" onPress={addToCart} >
                             <Text style={styles.title}>Add to Cart</Text>
                         </TouchableOpacity>
@@ -168,7 +174,7 @@ const styles = StyleSheet.create(
             alignSelf: 'flex-start'
         },
         chartCard: {
-            paddingTop:100
+            margin:20
         },
         centeredView: {
             flex: 1,

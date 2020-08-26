@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
   },
 
   promoTitle: {
-    marginTop: 80,
-    marginBottom: 80,
+    marginTop: 40,
+    marginBottom: 60,
     textAlign: "center",
     fontSize: 24,
     fontFamily: "Segoe UI"
