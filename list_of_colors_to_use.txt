@@ -1,0 +1,7 @@
+#5D87CA  //Sky blue
+
+#B6C4DC  //Pale blue
+
+#0D1B2A  //Rich black
+
+#1B263B  //Oxford blue

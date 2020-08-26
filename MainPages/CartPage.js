@@ -72,7 +72,7 @@ class CartPage extends Component {
         });
     }
 
-    renderItem = ({item})=>  ( <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)}  deleteItem = {this.deleteItem} /> );
+    renderItem = ({item})=>  ( <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)}  deleteItem = {this.deleteItem} sourcePage="Cart" navigation={this.props.navigation} /> );
       
 
 }

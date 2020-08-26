@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, PanResponder, Animated, Image, TouchableOpacity } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
-export default class ListItem extends React.PureComponent {
+export default class SwipeableItem extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -45,6 +46,7 @@ export default class ListItem extends React.PureComponent {
 
         this.state = { position };
         this.panResponder = panResponder;
+        this.navToItem = this.navToItem.bind(this);
 
     }
 
@@ -56,10 +58,12 @@ export default class ListItem extends React.PureComponent {
         }
     }
 
+    navToItem(){
+        this.props.navigation.navigate(this.props.sourcePage, {screen: this.props.sourcePage + "ItemPage" , params:{itemIDCallback:this.props.item }})
+    }
+
     render() {
         
-
-
         return (
             <Animated.View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
 
@@ -72,19 +76,19 @@ export default class ListItem extends React.PureComponent {
                 </View>
 
                 <Animated.View style={{ left: this.state.position.x }} {...this.panResponder.panHandlers}>
-                    <TouchableOpacity style={styles.itemBubble} onPress = {()=>this.props.navigation.navigate(this.props.sourcePage, {screen:this.props.sourcePage+"ItemPage" , params:{itemIDCallback:this.props.item }})}>
+                    <TouchableOpacity style={styles.itemBubble} onPress = {this.navToItem}>
                         <Image source={{ uri: this.props.item.imageLink }} style={styles.itemImage}></Image>
                         <Text style={styles.itemLabel}>{this.props.item.name}</Text>
                         <Text style={styles.itemPrice}>${this.props.item.price}</Text>
                     </TouchableOpacity>
                 </Animated.View>
 
-
             </Animated.View>
 
         );
     }
 }
+
 
 
 const styles = new StyleSheet.create({

@@ -55,7 +55,7 @@ class PromotionsPage extends Component {
     const { navigate } = this.props.navigation;
     return (
       
-        <TouchableOpacity style={styles.itemBox} activeOpacity={0.5} onPress={() => navigate('Promotions', { screen: 'PromoItemPage', params: { itemIDCallback: this.state.promoItems[i] } })} >
+        <TouchableOpacity style={styles.itemBox} activeOpacity={0.5} onPress={() => navigate('Promo', { screen: 'PromoItemPage', params: { itemIDCallback: this.state.promoItems[i] } })} >
           <Image style={styles.itemImage} source={{ uri: this.state.promoItems[i].imageLink }} />
           <Text style={styles.itemTitleText}>{this.state.promoItems[i].name}</Text>
         </TouchableOpacity>

@@ -13,10 +13,12 @@ class EditWishlistPage extends Component {
         super(props);
         this.state = {
             listItems: [],
-            isScrollEnabled:true,
+            isScrollEnabled: true,
+            routeListName:this.props.route.params.listNameCallback
         }
-
+        this.deleteItem = this.deleteItem.bind(this);
         this.getItems = this.getItems.bind(this);
+        this.setScrollEnabled = this.setScrollEnabled.bind(this);
     }
 
     componentDidMount() {
@@ -24,7 +26,7 @@ class EditWishlistPage extends Component {
     }
 
     async getItems() {
-        wishRef = firestore().collection("users").doc("PPJZH5YZUK6Km6kewvNg").collection('Wishlists').doc(this.props.route.params.listNameCallback).collection('items');
+        const wishRef = firestore().collection("users").doc("PPJZH5YZUK6Km6kewvNg").collection('Wishlists').doc(this.state.routeListName).collection('items');
 
         await wishRef.onSnapshot((snap) => {
             this.setState({ listItems: [] })
@@ -36,7 +38,25 @@ class EditWishlistPage extends Component {
 
     }
 
-    
+    deleteItem(itemID) {
+        
+        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists').doc(this.state.routeListName).collection('items');;
+
+        cartRef.doc(itemID).delete().then(() => {
+            console.log("Successfully deleted from wishlist")
+        }).catch((err) => {
+            console.log("Error removing from list: ", err)
+        })
+    }
+
+    setScrollEnabled(enable) {
+        this.setState({isScrollEnabled:enable });
+    }
+
+    renderItem = ({ item }) => (
+        <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)} deleteItem={this.deleteItem} sourcePage="Wishlist" navigation={this.props.navigation} />
+    );
+
 
     render() {
         const { navigate } = this.props.navigation;
@@ -45,43 +65,22 @@ class EditWishlistPage extends Component {
             <ImageBackground style={styles.fullBackground} source={require('../../res/android-promotions.png')} >
 
                 <View style={styles.backButtonView}>
-                    <Button title="go back" onPress={() => navigate.navigate('MainWishlistPage')} style={styles.backButton} />
+                    <Button title="go back" onPress={() => navigate('MainWishlistPage')} style={styles.backButton} />
                 </View>
 
-                <Text style={styles.ListNameText}>{this.props.route.params.listNameCallback}</Text>
+                <Text style={styles.ListNameText}>{this.state.routeListName}</Text>
 
-                <View style={{ "flex": 1, justifyContent: "flex-end", alignItems:'center' }}>
+                <View style={{ "flex": 1, justifyContent: "flex-end", alignItems: 'center' }}>
                     <View style={styles.wishlistGroupView}>
                         <FlatList keyExtractor={(item, index) => index.toString()} data={this.state.listItems} renderItem={this.renderItem} />
                     </View>
                 </View>
 
-
-
             </ImageBackground>
         );
     }
 
-    deleteItem(itemID){
-        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists').doc(this.props.route.params.listNameCallback).collection('items');;
-
-        cartRef.doc(itemID).delete().then(()=>{
-            console.log("Successfully deleted from cart")
-        }).catch((err)=>{
-            console.log("Error deleteing from cart: ", err)
-        })
-    }
-
-    setScrollEnabled(enable) {
-        this.setState({
-          enable,
-        });
-    }
-
-    renderItem = ({ item }) => (
-        <SwipeableItem item={item} setScrollEnabled={enable => this.setScrollEnabled(enable)}  deleteItem = {this.deleteItem} sourcePage="Wishlist" />
-    );
-
+    
 }
 
 export default EditWishlistPage;
@@ -126,7 +125,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         textAlign: "center",
         paddingTop: 60,
-        fontFamily:'Segoe UI'
+        fontFamily: 'Segoe UI'
     },
     itemBubble:
     {
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginLeft: 15,
         fontSize: 16,
-        fontFamily:'Segoe UI'
+        fontFamily: 'Segoe UI'
     },
     itemPrice: {
         alignSelf: 'center',
@@ -161,6 +160,6 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 10
     },
-    
+
 
 })

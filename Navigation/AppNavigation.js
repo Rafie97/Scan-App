@@ -45,18 +45,28 @@ function PromoStack(){
   )
 }
 
+const CartStackNav = createStackNavigator();
+function CartStack(){
+  return (
+    <PromoStackNav.Navigator headerMode='none'>
+      <ScanStackNav.Screen name="MainCartPage" component={CartPage}/>
+      <ScanStackNav.Screen name="CartItemPage" component={ItemPage}/>
+    </PromoStackNav.Navigator>
+  )
+}
+
 const TabNav = createBottomTabNavigator();
 
 
 class AppNavigation extends Component{
   render(){
     return(
-      <TabNav.Navigator  initialRouteName="Promotions" headerMode="none">
+      <TabNav.Navigator  initialRouteName="Promo" headerMode="none">
         <TabNav.Screen name="Wishlist" component={WishlistStack}     options={{tabBarIcon:()=><Entypo name="list" size={30} color="black"/>}} />
         <TabNav.Screen name="Map" component={MapPage}                options={{tabBarIcon:()=><Entypo name="location" size={30} color="black"/>}}/>
-        <TabNav.Screen name="Promotions" component={PromoStack}      options={{tabBarIcon:()=><Entypo name="price-tag" size={30} />}}/>
+        <TabNav.Screen name="Promo" component={PromoStack}           options={{tabBarIcon:()=><Entypo name="price-tag" size={30} />}}/>
         <TabNav.Screen name="Scan" component={ScanStack}             options={{tabBarIcon:()=><FontAwe name="barcode" size={30} color="black"/>}}/>
-        <TabNav.Screen name="Cart" component={CartPage}              options={{tabBarIcon:()=><FontAwe name="shopping-cart" size={30} color="black"/>}}/>
+        <TabNav.Screen name="Cart" component={CartStack}             options={{tabBarIcon:()=><FontAwe name="shopping-cart" size={30} color="black"/>}}/>
       </TabNav.Navigator>
     )
   }

@@ -19,18 +19,19 @@ function ItemPage({ route }) {
         setThing(route.params.itemIDCallback);
     });
 
-    function getLists() {
+    async function getLists() {
         //Retrieve names of wishlists
         const wishRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists');
         let lists = [];
-        wishRef.onSnapshot((snap) => {
+        await wishRef.get().then((snap) => {
             snap.forEach(doc => {
                 const listname = doc.id;
                 lists.push(listname);
             })
         })
-        setWishlists(lists);
-        setTimeout(() => { setWishlistModal(true) }, 100);
+        await setWishlists(lists);
+
+        setWishlistModal(true)
     }
 
     function addToCart() {
@@ -56,13 +57,9 @@ function ItemPage({ route }) {
         });
 
         navigate.navigate('Wishlist', {screen:'EditWishlistPage', params:{listNameCallback: listname}});
+
     }
 
-    const LISTS = [
-        { title: wishlists[0], id: '1' },
-        { title: wishlists[1], id: '2' },
-        { title: wishlists[2], id: '3' }
-    ]
 
     return (
         <ImageBackground source={require('../../res/android-promotions.png')} style={styles.fullBackground} >
@@ -80,7 +77,9 @@ function ItemPage({ route }) {
 
                         <Image style={styles.itemImage} source={{ uri: thing.imageLink }} />
                         <Text style={styles.itemPriceText}>${thing.price}</Text>
-                        <Card style={styles.chartCard} title="Price History" image={require('../../res/stocks_chart_image.png')}><Text>Here are the stonks for this item</Text></Card>
+                        <Card style={styles.chartCard} title="Price History" image={require('../../res/stocks_chart_image.png')}>
+                            <Text>Here are the stonks for this item</Text>
+                        </Card>
 
                         <TouchableOpacity style={styles.bottomButtons} title="Add to Cart" onPress={addToCart} >
                             <Text style={styles.title}>Add to Cart</Text>
@@ -99,9 +98,9 @@ function ItemPage({ route }) {
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Which wishlist would you like to add it to?</Text>
 
-                        <FlatList data={LISTS} keyExtractor={(item) => item.id} renderItem={
+                        <FlatList data={wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                             ({ item }) =>
-                                (<TouchableOpacity style={styles.wishlistSelect} onPress={()=>addToWishlist(item.title)}><Text style={styles.title}>{item.title}</Text></TouchableOpacity>)
+                                (<TouchableOpacity style={styles.wishlistSelect} onPress={()=>addToWishlist(item)}><Text style={styles.title}>{item}</Text></TouchableOpacity>)
                         } />
 
                         <TouchableOpacity style={{width:80, height:40, borderWidth:1, justifyContent:'center'}} onPress={() => setWishlistModal(false)}>
@@ -133,7 +132,7 @@ const styles = StyleSheet.create(
         },
         bottomButtons: {
             marginBottom: 20,
-            marginTop:40,
+            marginTop:20,
             width: 200,
             height: 60,
             backgroundColor:'#b3d6db',
@@ -169,7 +168,7 @@ const styles = StyleSheet.create(
             alignSelf: 'flex-start'
         },
         chartCard: {
-            marginBottom: 50,
+            paddingTop:100
         },
         centeredView: {
             flex: 1,

@@ -16,22 +16,29 @@ class WishlistPage extends Component {
         super(props);
         this.state = {
             wishlists: [],
+
+            didCount: false,
+            countContacts: 0,
             contactNames: [],
             contactModal: false,
             contactsLoading: false,
             filteredContactNames: [],
+
+            tempSelectedNames: [],
             selectedNames: [],
-            didCount:false,
-            countContacts:0,
+
         }
+        this.getCount = this.getCount.bind(this);
         this.getLists = this.getLists.bind(this);
         this.getContacts = this.getContacts.bind(this);
         this.logItem = this.logItem.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        this.getCount();
         this.getLists();
-        this.getContacts();
+        setTimeout(() => this.getContacts(), 1000);
+
     }
 
 
@@ -48,27 +55,25 @@ class WishlistPage extends Component {
         })
     }
 
-    async getContacts() {
-
-
-        Contacts.getCount(count => {
-            console.log('get happened')
-            this.setState({countContacts: count+1, didCount:true});
+    getCount() {
+        Contacts.getCount(async (count) => {
+            await this.setState({ countContacts: count + 1, didCount: true });
         });
 
+    }
 
-        if(this.state.didCount){
+    async getContacts() {
+
+        if (this.state.didCount) {
             try {
                 const list = await AsyncStorage.getItem('storedContactNames');
-                
+
                 const parsedList = JSON.parse(list);
                 const numStored = parsedList.length;
 
-                console.log(numStored, this.state.countContacts);
-
                 if (numStored === this.state.countContacts) {
                     await this.setState({ contactNames: parsedList, contactsLoading: false, filteredContactNames: parsedList });
-                    console.log('did it right');
+                    
                 }
             }
             catch (err) {
@@ -76,8 +81,8 @@ class WishlistPage extends Component {
             }
         }
 
-        if (this.state.didCount && (this.state.contactNames.length === 0 || this.state.contactNames.length !== this.state.countContacts)) {
-            console.log('gotta do the big boy');
+        else if (this.state.didCount && (this.state.contactNames.length === 0 || this.state.contactNames.length !== this.state.countContacts)) {
+
             this.setState({ contactsLoading: true });
             PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
@@ -100,7 +105,7 @@ class WishlistPage extends Component {
                             this.setState({ contactsLoading: false, filteredContactNames: this.state.contactNames });
                             const stringedContacts = JSON.stringify(this.state.contactNames);
                             await AsyncStorage.setItem('storedContactNames', stringedContacts);
-                            
+
                         }
                     }
                 })
@@ -125,13 +130,15 @@ class WishlistPage extends Component {
 
     logItem(name, isSelected) {
         if (isSelected) {
-            this.setState({ selectedNames: [...this.state.selectedNames, name] })
+            this.setState({ tempSelectedNames: [...this.state.tempSelectedNames, name] })
+
         }
         if (!isSelected) {
-            let tempNames = this.state.selectedNames;
-            tempNames = tempNames.filter(item => item !== name);
-            this.setState({ selectedNames: tempNames });
+            let tempNames = this.state.tempSelectedNames;
+            tempNames = tempNames.filter((item) => item !== name);
+            this.setState({ tempSelectedNames: tempNames });
         }
+
     }
 
 
@@ -142,25 +149,28 @@ class WishlistPage extends Component {
             <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground}  >
                 <View style={styles.textView}><Text style={styles.yourWishlistsText}>Your Wishlists</Text></View>
 
-
                 <View style={styles.wishlistGroupView}>
                     <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                         ({ item }) => (
                             <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item.title } })} >
-                                <LinearGradient style={styles.wishlistSelect} colors={['#b6d6db','#D2D2D2']}>
+                                <LinearGradient style={styles.wishlistSelect} colors={['#b6d6db', '#D2D2D2']}>
                                     <Text style={styles.title}>{item.title}</Text>
                                 </LinearGradient>
                             </TouchableOpacity>)}
                     />
                 </View>
 
-                <View ><Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text></View>
+                <View style={{flexDirection:"column"}} >
+                    <Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text>
 
-                {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
-                    <TouchableOpacity onPress={() => this.setState({ contactModal: true })}>
-                        <Text>TOUCH THIS TO ADD CONTACTS</Text>
+                    {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
+                    <TouchableOpacity style ={{backgroundColor:"#1B263B", borderWidth:1,height:30, width:100, alignItems:"center", justifyContent:"center" , margin:10}} onPress={() => this.setState({ contactModal: true })}>
+                        <Text style={{color:"white", fontFamily:"Segoe UI"}}>Add Family</Text>
                     </TouchableOpacity>)}
 
+                </View>
+
+                
                 <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
@@ -169,17 +179,21 @@ class WishlistPage extends Component {
 
                             <FlatList data={this.state.filteredContactNames} keyExtractor={(item, index) => index} initialNumToRender={100} renderItem={this.renderItem} />
 
-                            <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
-                                <Text style={styles.title}>Cancel</Text>
-                            </TouchableOpacity>
-                            {this.state.selectedNames.length === 0 ? (<></>) : (<TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
-                                <Text style={styles.title}>Ok</Text>
-                            </TouchableOpacity>)}
+                            <View style={{flexDirection:"row"}}>
+                                <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
+                                    <Text style={styles.title}>Cancel</Text>
+                                </TouchableOpacity>
+                                {this.state.tempSelectedNames.length === 0 ? (<></>) : (
+                                    <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 , marginLeft:20}} onPress={() => this.setState({ contactModal: false, contactsLoading: false, selectedNames: this.state.tempSelectedNames })}>
+                                        <Text style={styles.title}>Ok</Text>
+                                    </TouchableOpacity>)}
+                            </View>
+
                         </View>
                     </View>
                 </Modal>
 
-                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<View style={{ borderWidth: 1, width: 40, marginLeft: 10, height: 20 }}><Text style={{ fontSize: 16 }}>{item}</Text></View>)} />
+                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
 
 
             </ImageBackground>
