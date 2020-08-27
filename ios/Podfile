@@ -79,6 +79,8 @@ target 'BigMoney' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'ReactNativePayments', :path => '../node_modules/react-native-payments'
+
   target 'BigMoneyTests' do
     inherit! :complete
     # Pods for testing

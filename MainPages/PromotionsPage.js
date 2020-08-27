@@ -73,10 +73,12 @@ const styles = StyleSheet.create({
   promoPageContainer: {
     backgroundColor: "transparent",
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+
   },
   gridContainer: {
-    width: 400
+    width: 400,
+    marginBottom:60
   },
 
   promoTitle: {

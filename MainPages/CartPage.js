@@ -61,7 +61,7 @@ class CartPage extends Component {
                     <Text style={styles.TaxTotal}> ${Math.round(100 * 1.0825 * cartSum) / 100} with tax</Text>
                 </View>
 
-                <FlatList scrollEnabled={this.state.isScrollEnabled} contentContainerStyle={{alignItems:"center"}} style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
+                <FlatList scrollEnabled={this.state.isScrollEnabled} contentContainerStyle={{alignItems:"center", marginBottom:80}} style={styles.flatContainer} keyExtractor={(item, index) => index.toString()} renderItem={this.renderItem} data={this.state.cartItems} />
             </ImageBackground>
         )
     }
@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
         height: "100%",
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
 
     flatContainer:
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         flex: 1,
         width:"100%",
+        marginBottom:60
     },
 
     YourCartText:

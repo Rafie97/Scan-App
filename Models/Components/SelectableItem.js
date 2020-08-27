@@ -5,8 +5,7 @@ class SelectableItem extends Component{
     constructor(props){
         super(props)
         this.state={
-            isSelected:false,
-            yes:true,
+            isSelected:this.props.initialState,
         }
 
         this.selectItem = this.selectItem.bind(this);

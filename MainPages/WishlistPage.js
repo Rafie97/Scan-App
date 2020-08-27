@@ -24,22 +24,88 @@ class WishlistPage extends Component {
             contactsLoading: false,
             filteredContactNames: [],
 
-            tempSelectedNames: [],
             selectedNames: [],
-
+            tempSelectedNames: [],
         }
+
         this.getCount = this.getCount.bind(this);
         this.getLists = this.getLists.bind(this);
-        this.getContacts = this.getContacts.bind(this);
+        this.getLocalContacts = this.getLocalContacts.bind(this);
         this.logItem = this.logItem.bind(this);
+        this.pullContactsFirebase = this.pullContactsFirebase.bind(this);
+        this.pushContactsFirebase = this.pushContactsFirebase.bind(this);
+        this.initialContactState = this.initialContactState.bind(this);
     }
 
     async componentDidMount() {
+        this.pullContactsFirebase();
         this.getCount();
         this.getLists();
-        setTimeout(() => this.getContacts(), 1000);
+        setTimeout(() => this.getLocalContacts(), 1000);
 
     }
+
+    render() {
+        const { navigate } = this.props.navigation;
+
+        return (
+            <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground}  >
+                <View style={styles.textView}><Text style={styles.yourWishlistsText}>Your Wishlists</Text></View>
+
+                <View style={styles.wishlistGroupView}>
+                    <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
+                        ({ item }) => (
+                            <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item } })} >
+                                <LinearGradient style={styles.wishlistSelect} colors={['#b6d6db', '#D2D2D2']}>
+                                    <Text style={styles.title}>{item}</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>)}
+                    />
+                </View>
+
+                <View style={{ flexDirection: "column" }} >
+                    <Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text>
+
+                    {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
+                        <TouchableOpacity style={{ backgroundColor: "#1B263B", borderWidth: 1, height: 30, width: 100, alignItems: "center", justifyContent: "center", margin: 10 }} onPress={() => this.setState({ contactModal: true })}>
+                            <Text style={{ color: "white", fontFamily: "Segoe UI" }}>Add Family</Text>
+                        </TouchableOpacity>)}
+
+                </View>
+
+
+                <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Which contact would you like to add?</Text>
+                            <TextInput placeholder="Search contacts by name" onChangeText={(val) => this.searchContacts(val)}></TextInput>
+
+                            <FlatList data={this.state.filteredContactNames} keyExtractor={(item, index) => index} initialNumToRender={100} renderItem={this.renderItem} />
+
+                            <View style={{ flexDirection: "row" }}>
+                                <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
+                                    <Text style={styles.title}>Cancel</Text>
+                                </TouchableOpacity>
+                                {(this.state.selectedNames.length === 0 && this.state.tempSelectedNames.length === 0)? (<></>) : (
+                                    <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20, marginLeft: 20 }} onPress={this.pushContactsFirebase}>
+                                        <Text style={styles.title}>Ok</Text>
+                                    </TouchableOpacity>)}
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
+
+                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
+
+
+            </ImageBackground>
+        )
+    }
+
+    renderItem = ({ item }) => (<SelectableItem name={item} logItem={this.logItem} initialState={this.initialContactState(item)}></SelectableItem>)
+
+
 
 
     async getLists() {
@@ -47,10 +113,7 @@ class WishlistPage extends Component {
         const wishRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists');
         await wishRef.onSnapshot((snap) => {
             snap.forEach((doc, index) => {
-                const listname = {
-                    "title": doc.id,
-                }
-                this.setState({ wishlists: [...this.state.wishlists, listname] });
+                this.setState({ wishlists: [...this.state.wishlists, doc.id] });
             })
         })
     }
@@ -62,7 +125,7 @@ class WishlistPage extends Component {
 
     }
 
-    async getContacts() {
+    async getLocalContacts() {
 
         if (this.state.didCount) {
             try {
@@ -73,7 +136,6 @@ class WishlistPage extends Component {
 
                 if (numStored === this.state.countContacts) {
                     await this.setState({ contactNames: parsedList, contactsLoading: false, filteredContactNames: parsedList });
-                    
                 }
             }
             catch (err) {
@@ -131,7 +193,6 @@ class WishlistPage extends Component {
     logItem(name, isSelected) {
         if (isSelected) {
             this.setState({ tempSelectedNames: [...this.state.tempSelectedNames, name] })
-
         }
         if (!isSelected) {
             let tempNames = this.state.tempSelectedNames;
@@ -141,66 +202,45 @@ class WishlistPage extends Component {
 
     }
 
+    async pullContactsFirebase() {
+        const famRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Family');
+        await famRef.onSnapshot(async (snap) => {
+            await this.setState({ selectedNames: [] });
+            snap.forEach(async (doc) => {
+                await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name] })
+            })
+        })
 
-    render() {
-        const { navigate } = this.props.navigation;
-
-        return (
-            <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground}  >
-                <View style={styles.textView}><Text style={styles.yourWishlistsText}>Your Wishlists</Text></View>
-
-                <View style={styles.wishlistGroupView}>
-                    <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
-                        ({ item }) => (
-                            <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item.title } })} >
-                                <LinearGradient style={styles.wishlistSelect} colors={['#b6d6db', '#D2D2D2']}>
-                                    <Text style={styles.title}>{item.title}</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>)}
-                    />
-                </View>
-
-                <View style={{flexDirection:"column"}} >
-                    <Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text>
-
-                    {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
-                    <TouchableOpacity style ={{backgroundColor:"#1B263B", borderWidth:1,height:30, width:100, alignItems:"center", justifyContent:"center" , margin:10}} onPress={() => this.setState({ contactModal: true })}>
-                        <Text style={{color:"white", fontFamily:"Segoe UI"}}>Add Family</Text>
-                    </TouchableOpacity>)}
-
-                </View>
-
-                
-                <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Which contact would you like to add?</Text>
-                            <TextInput placeholder="Search contacts by name" onChangeText={(val) => this.searchContacts(val)}></TextInput>
-
-                            <FlatList data={this.state.filteredContactNames} keyExtractor={(item, index) => index} initialNumToRender={100} renderItem={this.renderItem} />
-
-                            <View style={{flexDirection:"row"}}>
-                                <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 }} onPress={() => this.setState({ contactModal: false, contactsLoading: false })}>
-                                    <Text style={styles.title}>Cancel</Text>
-                                </TouchableOpacity>
-                                {this.state.tempSelectedNames.length === 0 ? (<></>) : (
-                                    <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center', marginTop: 20 , marginLeft:20}} onPress={() => this.setState({ contactModal: false, contactsLoading: false, selectedNames: this.state.tempSelectedNames })}>
-                                        <Text style={styles.title}>Ok</Text>
-                                    </TouchableOpacity>)}
-                            </View>
-
-                        </View>
-                    </View>
-                </Modal>
-
-                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
-
-
-            </ImageBackground>
-        )
+        await this.setState({tempSelectedNames:this.state.selectedNames});
     }
 
-    renderItem = ({ item }) => (<SelectableItem name={item} logItem={this.logItem}></SelectableItem>)
+    async pushContactsFirebase() {
+        this.setState({ contactModal: false, contactsLoading: false });
+        const famRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Family');
+
+        famRef.get().then((snap) => {
+            snap.forEach((doc) => {
+                if (!this.state.tempSelectedNames.includes(doc.data().name)) {
+                    famRef.doc(doc.id).delete();
+                }
+            })
+        })
+
+        this.state.tempSelectedNames.forEach((tempName) => {
+
+            if (!this.state.selectedNames.includes(tempName)) {
+                famRef.add({
+                    name: tempName
+                });
+            }
+
+        });
+    }
+
+    initialContactState(name) {
+        return this.state.selectedNames.includes(name);
+    }
+
 
 
 }
@@ -241,7 +281,7 @@ const styles = StyleSheet.create(
             padding: 30,
             paddingTop: 20,
             alignItems: 'center',
-            marginBottom:40
+            marginBottom: 40
         },
         buttonText: {
             color: "black"

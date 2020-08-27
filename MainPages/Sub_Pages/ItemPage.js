@@ -94,6 +94,7 @@ function ItemPage({ route }) {
                         <TouchableOpacity style={styles.bottomButtons} title="Add to Wishlist" onPress={getLists} >
                             <Text style={styles.title}> Add to Wishlist</Text>
                         </TouchableOpacity>
+                        <View style={{height:60}}></View>
 
                     </View>
                 </ScrollView>)
@@ -128,7 +129,7 @@ const styles = StyleSheet.create(
         {
             flex: 1,
             width: "100%",
-            height: "100%"
+            height: "100%",
         },
 
         bigApple: {
@@ -144,6 +145,7 @@ const styles = StyleSheet.create(
             backgroundColor:'#b3d6db',
             justifyContent:'center',
             borderWidth:2,
+            
         },
         itemImage: {
             marginBottom: 50,
