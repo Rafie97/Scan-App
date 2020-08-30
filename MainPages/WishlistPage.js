@@ -73,6 +73,9 @@ class WishlistPage extends Component {
 
                 </View>
 
+                
+                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
+
 
                 <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
                     <View style={styles.centeredView}>
@@ -96,7 +99,6 @@ class WishlistPage extends Component {
                     </View>
                 </Modal>
 
-                <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
 
 
             </ImageBackground>
@@ -204,14 +206,13 @@ class WishlistPage extends Component {
 
     async pullContactsFirebase() {
         const famRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Family');
+        
         await famRef.onSnapshot(async (snap) => {
-            await this.setState({ selectedNames: [] });
+            this.setState({selectedNames:[], tempSelectedNames:[]});
             snap.forEach(async (doc) => {
-                await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name] })
+                await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name], tempSelectedNames: [...this.state.tempSelectedNames, doc.data().name] })
             })
         })
-
-        await this.setState({tempSelectedNames:this.state.selectedNames});
     }
 
     async pushContactsFirebase() {
