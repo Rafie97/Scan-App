@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Icon, LinearGradient } from 'react-native-elements';
-import { ImageBackground, Image, StyleSheet, View, Text, ScrollView, FlatList, Modal, TouchableOpacity } from 'react-native';
+import { ImageBackground, Image, StyleSheet, View, Text, ScrollView, FlatList, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-
+import { LineChart } from 'react-native-charts-wrapper';
+import auth from '@react-native-firebase/auth';
+import Item from '../../Models/Item';
 
 
 function ItemPage({ route }) {
@@ -21,7 +23,8 @@ function ItemPage({ route }) {
 
     async function getLists() {
         //Retrieve names of wishlists
-        const wishRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists');
+        const userID = auth().currentUser.uid;
+        const wishRef = firestore().collection('users').doc(userID).collection('Wishlists');
         let lists = [];
         await wishRef.get().then((snap) => {
             snap.forEach(doc => {
@@ -35,28 +38,35 @@ function ItemPage({ route }) {
     }
 
     function addToCart() {
-        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
-        cartRef.add({
-            docID: thing.docID,
-            name: thing.name,
-            price: thing.price,
-            imageLink: thing.imageLink,
-            promo: thing.promo,
-        });
+        const userID = auth().currentUser.uid;
+        const cartRef = firestore().collection('users').doc(userID).collection('Cart');
+        const item = new Item(thing);
+
+        cartRef.add(item);
         navigate.navigate('Cart');
     }
 
-    function addToWishlist(listname){
-        const wishRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists').doc(listname).collection('items');
-        wishRef.add({
-            docID: thing.docID,
-            name: thing.name,
-            price: thing.price,
-            imageLink: thing.imageLink,
-            promo: thing.promo,
-        });
+    function addToWishlist(listname) {
+        const userID = auth().currentUser.uid;
+        const wishRef = firestore().collection('users').doc(userID).collection('Wishlists').doc(listname).collection('items');
+        const item = new Item(thing);
+        wishRef.add(thing);
 
-        navigate.navigate('Wishlist', {screen:'EditWishlistPage', params:{listNameCallback: listname}});
+        navigate.navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: listname } });
+
+    }
+
+    let data1 = { dataSets: [{ label: "prices", values: null, config: { drawValues: false, drawCircles: false, linewidth: 2 } }] }
+
+    let vals = [];
+
+    if (thing) {
+        const entries = Object.entries(thing.priceHistory);
+        entries.forEach((entry) => {
+            vals.push({ x: Math.floor(parseFloat(entry[0])), y: Math.round(entry[1] * 100) });
+        })
+
+        data1.dataSets[0].values = vals;
 
     }
 
@@ -77,24 +87,28 @@ function ItemPage({ route }) {
 
                         <Image style={styles.itemImage} source={{ uri: thing.imageLink }} />
                         <Text style={styles.itemPriceText}>${thing.price}</Text>
-                        <Card style={styles.chartCard} title="Price History" image={require('../../res/stocks_chart_image.png')}>
+                        <Card style={styles.chartCard} title="Price History" >
+                            <LineChart style={styles.priceChart} data={data1} xAxis={{ enabled: false }} />
                             <Text>Here are the stonks for this item</Text>
                         </Card>
 
 
-                        <Text style={{fontFamily:"Segoe UI Italic",fontSize:24, color:"green", marginTop:50}}>Reviews</Text>
-                        <View style={{borderWidth:1, borderColor:"green", width:300, height:200, marginTop:20, marginBottom:30}}>
-                            
+                        <Text style={{ fontFamily: "Segoe UI Italic", fontSize: 24, color: "green", marginTop: 50 }}>Reviews</Text>
+                        <View style={{ borderWidth: 1, borderColor: "green", width: 300, height: 200, marginTop: 20, marginBottom: 30 }}>
+
                         </View>
+
+
+                        <TouchableOpacity style={styles.bottomButtons} title="Add to Wishlist" onPress={getLists} >
+                            <Text style={styles.title}> Add to Wishlist</Text>
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={styles.bottomButtons} title="Add to Cart" onPress={addToCart} >
                             <Text style={styles.title}>Add to Cart</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.bottomButtons} title="Add to Wishlist" onPress={getLists} >
-                            <Text style={styles.title}> Add to Wishlist</Text>
-                        </TouchableOpacity>
-                        <View style={{height:60}}></View>
+
+                        <View style={{ height: 60 }}></View>
 
                     </View>
                 </ScrollView>)
@@ -107,10 +121,10 @@ function ItemPage({ route }) {
 
                         <FlatList data={wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                             ({ item }) =>
-                                (<TouchableOpacity style={styles.wishlistSelect} onPress={()=>addToWishlist(item)}><Text style={styles.title}>{item}</Text></TouchableOpacity>)
+                                (<TouchableOpacity style={styles.wishlistSelect} onPress={() => addToWishlist(item)}><Text style={styles.title}>{item}</Text></TouchableOpacity>)
                         } />
 
-                        <TouchableOpacity style={{width:80, height:40, borderWidth:1, justifyContent:'center'}} onPress={() => setWishlistModal(false)}>
+                        <TouchableOpacity style={{ width: 80, height: 40, borderWidth: 1, justifyContent: 'center' }} onPress={() => setWishlistModal(false)}>
                             <Text style={styles.title}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
@@ -125,6 +139,11 @@ export default ItemPage;
 
 const styles = StyleSheet.create(
     {
+
+        priceChart: {
+            height: 250,
+            width: 350
+        },
         fullBackground:
         {
             flex: 1,
@@ -139,13 +158,13 @@ const styles = StyleSheet.create(
         },
         bottomButtons: {
             marginBottom: 20,
-            marginTop:20,
+            marginTop: 20,
             width: 200,
             height: 60,
-            backgroundColor:'#b3d6db',
-            justifyContent:'center',
-            borderWidth:2,
-            
+            backgroundColor: '#b3d6db',
+            justifyContent: 'center',
+            borderWidth: 2,
+
         },
         itemImage: {
             marginBottom: 50,
@@ -161,7 +180,7 @@ const styles = StyleSheet.create(
             fontSize: 35,
             paddingBottom: 50
         },
-        
+
         spacer: {
             height: 20,
         },
@@ -176,7 +195,7 @@ const styles = StyleSheet.create(
             alignSelf: 'flex-start'
         },
         chartCard: {
-            margin:20
+            width: 400
         },
         centeredView: {
             flex: 1,
@@ -198,7 +217,7 @@ const styles = StyleSheet.create(
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            height:350,
+            height: 350,
         },
         openButton: {
             backgroundColor: "#F194FF",
@@ -214,15 +233,15 @@ const styles = StyleSheet.create(
         wishlistSelect: {
             backgroundColor: '#5cbcc9',
             padding: 0,
-            marginTop:20,
-            height:40,
-            width:200,
-            textAlign:'center',
-            justifyContent:'center'
+            marginTop: 20,
+            height: 40,
+            width: 200,
+            textAlign: 'center',
+            justifyContent: 'center'
         },
         title: {
             fontSize: 18,
-            alignSelf:'center',
+            alignSelf: 'center',
         },
     }
 );

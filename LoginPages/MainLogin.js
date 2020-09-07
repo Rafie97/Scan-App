@@ -49,6 +49,7 @@ function MainLogin() {
         try{
             const cred = auth.PhoneAuthProvider.credential(verificationId, code);
             await auth().signInWithCredential(cred);
+            
             navigation.navigate('App');      
         }
         catch(error){

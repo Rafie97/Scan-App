@@ -24,14 +24,16 @@ class PromotionsPage extends Component {
 
   async getItems() {
     hebRef = firestore().collection("stores").doc("HEB").collection('items')
+    
 
     await hebRef.onSnapshot((snap) => {
       this.setState({ promoItems: [] })
-      snap.forEach(doc => {
-        const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
-        this.setState({ promoItems: [...this.state.promoItems, item] });
+      snap.forEach(async (doc) => {
+        const item = new Item(doc);
+        await this.setState({ promoItems: [...this.state.promoItems, item] });
       })
     })
+
   }
 
 
@@ -42,8 +44,9 @@ class PromotionsPage extends Component {
 
           <Text style={styles.promoTitle}>Today's Best Deals</Text>
 
-          <Grid style={styles.gridContainer} renderItem={this.renderItem} data={this.state.promoItems} numColumns={2} />
-
+          
+          <Grid style={styles.gridContainer} renderItem={this.renderItem} data={this.state.promoItems} numColumns={2} renderPlaceholder={(i)=>(<View style={{flex:1, height:60, width:400, backgroundColor:'yellow'}} />)} />
+            
         </View>
       </ImageBackground>
 
@@ -70,6 +73,12 @@ export default PromotionsPage;
 
 const styles = StyleSheet.create({
 
+  fullBackground:
+  {
+    flex: 1,
+    width: "100%"
+  },
+
   promoPageContainer: {
     backgroundColor: "transparent",
     flex: 1,
@@ -78,7 +87,8 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     width: 400,
-    marginBottom:60
+    marginBottom:30,
+    
   },
 
   promoTitle: {
@@ -118,11 +128,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Segoe UI'
   },
 
-  fullBackground:
-  {
-    flex: 1,
-    width: "100%"
-  },
+  
 
   itemImage: {
     marginTop: 5,

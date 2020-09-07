@@ -24,7 +24,7 @@ class ScanPage extends Component {
       try {
         qSnap.forEach(async (doc, index) => {
           
-          const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+          const item = new Item(doc);
           //In the future, I might be able to jsut replace item with doc.data() instead of a new Item
           if (this.state.scannedItems.find(e => (e.docID === item.docID))) {
             throw BreakException;

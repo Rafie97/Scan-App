@@ -5,6 +5,7 @@ import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/Item';
 import SwipeableItem from '../../Models/Components/SwipeableItem';
+import auth from '@react-native-firebase/auth';
 
 
 class EditWishlistPage extends Component {
@@ -26,12 +27,13 @@ class EditWishlistPage extends Component {
     }
 
     async getItems() {
-        const wishRef = firestore().collection("users").doc("PPJZH5YZUK6Km6kewvNg").collection('Wishlists').doc(this.state.routeListName).collection('items');
+        const userID = auth().currentUser.uid;
+        const wishRef = firestore().collection("users").doc(userID).collection('Wishlists').doc(this.state.routeListName).collection('items');
 
         await wishRef.onSnapshot((snap) => {
             this.setState({ listItems: [] })
             snap.forEach((doc) => {
-                const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+                const item = new Item(doc);
                 this.setState({ listItems: [...this.state.listItems, item] });
             })
         });
@@ -39,8 +41,8 @@ class EditWishlistPage extends Component {
     }
 
     deleteItem(itemID) {
-        
-        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Wishlists').doc(this.state.routeListName).collection('items');;
+        const userID = auth().currentUser.uid;
+        const cartRef = firestore().collection('users').doc(userID).collection('Wishlists').doc(this.state.routeListName).collection('items');;
 
         cartRef.doc(itemID).delete().then(() => {
             console.log("Successfully deleted from wishlist")

@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import { FlatList } from 'react-native-gesture-handler';
 import Item, {itemConverter} from '../Models/Item';
 import SwipeableItem from '../Models/Components/SwipeableItem';
-
+import auth from '@react-native-firebase/auth';
 
 
 class CartPage extends Component {
@@ -21,12 +21,13 @@ class CartPage extends Component {
     }
 
     componentDidMount() {
-        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
+        const userID = auth().currentUser.uid;
+        const cartRef = firestore().collection('users').doc(userID).collection('Cart');
 
         cartRef.onSnapshot((snap) => {
             this.setState({ cartItems: [] });
             snap.forEach(async (doc) => {
-                const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+                const item = new Item(doc);
                 await this.setState({ cartItems: [...this.state.cartItems, item] })
             })
         })
@@ -34,12 +35,13 @@ class CartPage extends Component {
     }
 
     deleteItem(itemID){
-        const cartRef = firestore().collection('users').doc('PPJZH5YZUK6Km6kewvNg').collection('Cart');
+        const userID = auth().currentUser.uid;
+        const cartRef = firestore().collection('users').doc(userID).collection('Cart');
 
         cartRef.doc(itemID).delete().then(()=>{
             console.log("Successfully deleted from cart")
         }).catch((err)=>{
-            console.log("Error deleteing from cart: ", err)
+            console.log("Error deleting from cart: ", err)
         })
     }
 

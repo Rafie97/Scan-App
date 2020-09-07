@@ -26,7 +26,7 @@ class MapPage extends Component {
                 qSnap.forEach(async (doc, index) => {
 
                     if (doc.data().name.includes(val)) {
-                        const item = new Item(doc.id, doc.data().name, doc.data().price, doc.data().imageLink, doc.data().barcode, doc.data().promo, null);
+                        const item = new Item(doc);
                         await this.setState({ backSearches: [...this.state.backSearches, item] })
                     }
                 })

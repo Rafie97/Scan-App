@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import auth from '@react-native-firebase/auth';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import {Text} from 'react-native'
 
 
@@ -7,7 +7,7 @@ export const AuthContext = React.createContext();
 
 export const AuthProvider = ({children})=>{
 
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(auth().currentUser);
     const [pending, setPending]= useState(true);
 
     useEffect(()=>{
@@ -15,6 +15,11 @@ export const AuthProvider = ({children})=>{
             setCurrentUser(user);
             setPending(false);
         });
+
+        if(currentUser){
+            setPending(false);
+        }
+        
     }, []);
 
     if(pending){

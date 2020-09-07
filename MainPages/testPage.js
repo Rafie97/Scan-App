@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Text, Image, FlatList, TouchableOpacity, Modal, AsyncStorage } from 'react-native';
-require('react-native-linear-gradient').default;
-import FamilyTile from '../Models/Components/FamilyTile';
+import { ImageBackground, StyleSheet, View, Text, Image, FlatList,TextInput, TouchableOpacity, Modal, AsyncStorage } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import { PermissionsAndroid } from 'react-native';
-import Contacts from 'react-native-contacts';
-import { TextInput } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-import SelectableItem from '../Models/Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
+import FamilyTile from '../Models/Components/FamilyTile';
+import Contacts from 'react-native-contacts';
+import { PermissionsAndroid } from 'react-native';
 
-
-class WishlistPage extends Component {
+class testPage extends Component {
 
     constructor(props) {
         super(props);
@@ -30,24 +25,31 @@ class WishlistPage extends Component {
             selectedNames: [],
             tempSelectedNames: [],
         }
-
-        this.getCount = this.getCount.bind(this);
+        this.pullContactsFirebase = this.pullContactsFirebase.bind(this);
         this.getLists = this.getLists.bind(this);
         this.getLocalContacts = this.getLocalContacts.bind(this);
-        this.logItem = this.logItem.bind(this);
-        this.pullContactsFirebase = this.pullContactsFirebase.bind(this);
-        this.pushContactsFirebase = this.pushContactsFirebase.bind(this);
-        this.initialContactState = this.initialContactState.bind(this);
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+        PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+            {
+                title: 'Contacts',
+                message: 'This app would like to view your contacts',
+                buttonPositive: 'OK',
+                buttonNegative: 'Cancel'
+            }
+        );
         this.pullContactsFirebase();
-        this.getCount();
+        this.getLocalContacts();
         this.getLists();
-        setTimeout(() => this.getLocalContacts(), 1000);
     }
+
+   
+
 
     render() {
+
         const { navigate } = this.props.navigation;
 
         return (
@@ -58,7 +60,7 @@ class WishlistPage extends Component {
                     <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
                         ({ item }) => (
                             <TouchableOpacity onPress={() => navigate('Wishlist', { screen: 'EditWishlistPage', params: { listNameCallback: item } })} >
-                                <View style={styles.wishlistSelect} >
+                                <View style={styles.wishlistSelect}>
                                     <Text style={styles.title}>{item}</Text>
                                 </View>
                             </TouchableOpacity>)}
@@ -67,17 +69,12 @@ class WishlistPage extends Component {
 
                 <View style={{ flexDirection: "column" }} >
                     <Text style={{ fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10 }}>Your Family</Text>
-
-                    {this.state.contactsLoading ? (<Text>Loading...</Text>) : (
-                        <TouchableOpacity style={{ backgroundColor: "#1B263B", borderWidth: 1, height: 30, width: 100, alignItems: "center", justifyContent: "center", margin: 10 }} onPress={() => this.setState({ contactModal: true })}>
-                            <Text style={{ color: "white", fontFamily: "Segoe UI" }}>Add Family</Text>
-                        </TouchableOpacity>)}
-
+                    <TouchableOpacity style={{ backgroundColor: "#1B263B", borderWidth: 1, height: 30, width: 100, alignItems: "center", justifyContent: "center", margin: 10 }} onPress={() => this.setState({ contactModal: true })}>
+                        <Text style={{ color: "white", fontFamily: "Segoe UI" }}>Add Family</Text>
+                    </TouchableOpacity>
                 </View>
 
-                
                 <FlatList data={this.state.selectedNames} horizontal={true} renderItem={({ item }) => (<FamilyTile name={item} />)} />
-
 
                 <Modal animationType="slide" transparent={true} visible={this.state.contactModal} onRequestClose={() => this.setState({ contactModal: false })} >
                     <View style={styles.centeredView}>
@@ -101,40 +98,36 @@ class WishlistPage extends Component {
                     </View>
                 </Modal>
 
-
-
             </ImageBackground>
         )
     }
 
-    renderItem = ({ item }) => (<SelectableItem name={item} logItem={this.logItem} initialState={this.initialContactState(item)}></SelectableItem>)
-
-
     async getLists() {
         //Retrieve names of wishlists
+
         const userID = auth().currentUser.uid;
+
         const wishRef = firestore().collection('users').doc(userID).collection('Wishlists');
+
         await wishRef.onSnapshot((snap) => {
             this.setState({ wishlistSelect: [] });
             snap.forEach((doc, index) => {
                 this.setState({ wishlists: [...this.state.wishlists, doc.id] });
             })
         })
+
     }
 
-    getCount() {
-        PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_CONTACTS, { title: 'Contacts', message: 'This app would like to view your contacts', buttonPositive: 'OK', buttonNegative: 'Cancel' }
-        ).then(()=>{
-            Contacts.getCount(async (count) => {
-                await this.setState({ countContacts: count + 1, didCount: true });
-            });
-        })
-
+    initialContactState(name) {
+        return this.state.selectedNames.includes(name);
     }
 
     async getLocalContacts() {
-        
+
+        Contacts.getCount(async (count) => {
+            await this.setState({ countContacts: count + 1, didCount: true });
+        });
+
         if (this.state.didCount) {
             try {
                 const list = await AsyncStorage.getItem('storedContactNames');
@@ -155,7 +148,13 @@ class WishlistPage extends Component {
 
             this.setState({ contactsLoading: true });
             PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_CONTACTS, { title: 'Contacts', message: 'This app would like to view your contacts', buttonPositive: 'OK', buttonNegative: 'Cancel' }
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+                {
+                    title: 'Contacts',
+                    message: 'This app would like to view your contacts',
+                    buttonPositive: 'OK',
+                    buttonNegative: 'Cancel'
+                }
             ).then(() => {
                 Contacts.getAll(async (err, contacts) => {
                     if (err === 'denied') {
@@ -175,6 +174,40 @@ class WishlistPage extends Component {
                 })
             })
         }
+    }
+
+    async pullContactsFirebase() {
+        const userID = auth().currentUser.uid;
+        const famRef = firestore().collection('users').doc(userID).collection('Family');
+        
+        await famRef.onSnapshot(async (snap) => {
+            this.setState({selectedNames:[], tempSelectedNames:[]});
+            snap.forEach(async (doc) => {
+                await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name], tempSelectedNames: [...this.state.tempSelectedNames, doc.data().name] })
+            })
+        })
+    }
+
+    async pushContactsFirebase() {
+        this.setState({ contactModal: false });
+        const userID = auth().currentUser.uid;
+        const famRef = firestore().collection('users').doc(userID).collection('Family');
+
+        famRef.get().then((snap) => {
+            snap.forEach((doc) => {
+                if (!this.state.tempSelectedNames.includes(doc.data().name)) {
+                    famRef.doc(doc.id).delete();
+                }
+            })
+        })
+
+        this.state.tempSelectedNames.forEach((tempName) => {
+            if (!this.state.selectedNames.includes(tempName)) {
+                famRef.add({
+                    name: tempName
+                });
+            }
+        });
     }
 
     searchContacts(val) {
@@ -203,56 +236,9 @@ class WishlistPage extends Component {
         }
 
     }
-
-    async pullContactsFirebase() {
-        const userID = auth().currentUser.uid;
-        const famRef = firestore().collection('users').doc(userID).collection('Family');
-        
-        await famRef.onSnapshot(async (snap) => {
-            this.setState({selectedNames:[], tempSelectedNames:[]});
-            snap.forEach(async (doc) => {
-                await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name], tempSelectedNames: [...this.state.tempSelectedNames, doc.data().name] })
-            })
-        })
-    }
-
-    async pushContactsFirebase() {
-        this.setState({ contactModal: false, contactsLoading: false });
-        const userID = auth().currentUser.uid;
-        const famRef = firestore().collection('users').doc(userID).collection('Family');
-
-        famRef.get().then((snap) => {
-            snap.forEach((doc) => {
-                if (!this.state.tempSelectedNames.includes(doc.data().name)) {
-                    famRef.doc(doc.id).delete();
-                }
-            })
-        })
-
-        this.state.tempSelectedNames.forEach((tempName) => {
-
-            if (!this.state.selectedNames.includes(tempName)) {
-                famRef.add({
-                    name: tempName
-                });
-            }
-
-        });
-    }
-
-    initialContactState(name) {
-        return this.state.selectedNames.includes(name);
-    }
-
-
-
 }
 
-
-
-
-export default WishlistPage;
-
+export default testPage;
 
 
 const styles = StyleSheet.create(
@@ -353,4 +339,4 @@ const styles = StyleSheet.create(
             textAlign: "center",
             fontFamily: 'Segoe UI'
         },
-    });
+});
