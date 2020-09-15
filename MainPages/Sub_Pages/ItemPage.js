@@ -3,7 +3,6 @@ import { Button, Card, Icon, LinearGradient } from 'react-native-elements';
 import { ImageBackground, Image, StyleSheet, View, Text, ScrollView, FlatList, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 import { LineChart } from 'react-native-charts-wrapper';
 import auth from '@react-native-firebase/auth';
 import Item from '../../Models/Item';

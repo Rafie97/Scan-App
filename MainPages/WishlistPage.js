@@ -47,12 +47,25 @@ class WishlistPage extends Component {
         setTimeout(() => this.getLocalContacts(), 1000);
     }
 
+    async signOut(){
+        const userID = auth().currentUser.uid; 
+        firestore().collection('users').doc(userID).collection('Cart').onSnapshot(()=>{}); 
+        firestore().collection('users').doc(userID).collection('Wishlist').onSnapshot(()=>{}); 
+        firestore().collection('users').doc(userID).collection('Family').onSnapshot(()=>{}); 
+        auth().signOut();
+    }
+
     render() {
         const { navigate } = this.props.navigation;
 
         return (
             <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground}  >
-                <View style={styles.textView}><Text style={styles.yourWishlistsText}>Your Wishlists</Text></View>
+                <View style={styles.textView}>
+                    <Text style={styles.yourWishlistsText}>Your Wishlists</Text> 
+                    <TouchableOpacity style={{marginLeft:50,marginRight:20, alignSelf:'center'}} onPress={()=> this.signOut()} >
+                        <Text style={{color:'blue',fontSize: 16,  fontFamily: 'Segoe UI'}}>Sign out</Text>
+                     </TouchableOpacity>
+                </View>
 
                 <View style={styles.wishlistGroupView}>
                     <FlatList data={this.state.wishlists} keyExtractor={(item, index) => index.toString()} renderItem={
@@ -114,13 +127,19 @@ class WishlistPage extends Component {
         //Retrieve names of wishlists
         const userID = auth().currentUser.uid;
         const wishRef = firestore().collection('users').doc(userID).collection('Wishlists');
-        await wishRef.onSnapshot((snap) => {
+        wishRef.onSnapshot((snap) => {
             this.setState({ wishlistSelect: [] });
             snap.forEach((doc, index) => {
                 this.setState({ wishlists: [...this.state.wishlists, doc.id] });
             })
         })
     }
+
+
+
+    // ============================== CONTACT METHODS ====================================
+
+
 
     getCount() {
         PermissionsAndroid.request(
@@ -132,6 +151,7 @@ class WishlistPage extends Component {
         })
 
     }
+
 
     async getLocalContacts() {
         
@@ -208,12 +228,14 @@ class WishlistPage extends Component {
         const userID = auth().currentUser.uid;
         const famRef = firestore().collection('users').doc(userID).collection('Family');
         
-        await famRef.onSnapshot(async (snap) => {
+        const sub =  famRef.onSnapshot(async (snap) => {
             this.setState({selectedNames:[], tempSelectedNames:[]});
             snap.forEach(async (doc) => {
                 await this.setState({ selectedNames: [...this.state.selectedNames, doc.data().name], tempSelectedNames: [...this.state.tempSelectedNames, doc.data().name] })
             })
         })
+
+        return () => sub();
     }
 
     async pushContactsFirebase() {
@@ -292,13 +314,13 @@ const styles = StyleSheet.create(
         yourWishlistsText:
         {
             fontSize: 24,
-            marginTop: 40,
-            marginBottom: 0,
-            alignSelf: "center",
             fontFamily: 'Segoe UI'
         },
         textView: {
-            alignContent: "center",
+            marginTop: 40,
+            alignItems: "center",
+            justifyContent:'flex-end',
+            flexDirection:'row'
         },
         ItemImage:
         {

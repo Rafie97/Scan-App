@@ -7,7 +7,6 @@ import MapPage from '../MainPages/MapPage';
 import PromotionsPage from '../MainPages/PromotionsPage';
 import WishlistPage from '../MainPages/WishlistPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
-import testPage from '../MainPages/testPage';
 import ItemPage from '../MainPages/Sub_Pages/ItemPage';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -65,13 +64,13 @@ class AppNavigation extends Component{
 
   render(){
     return(
-      <TabNav.Navigator initialRouteName="Promo" tabBarOptions={{ tabStyle:{alignSelf:'center'}, keyboardHidesTabBar:true ,showLabel:false, style:{position:'absolute',alignItems:'center',bottom:0, left:0, backgroundColor:'transparent', paddingBottom:20, borderTopColor:'transparent', elevation:0}}}   headerMode="none">
+      <TabNav.Navigator initialRouteName="Promo" tabBarOptions={{ tabStyle:{alignSelf:'center'}, keyboardHidesTabBar:true ,showLabel:false, style:{position:'absolute',alignItems:'center',bottom:0, left:0, backgroundColor:'transparent',  borderTopColor:'transparent', elevation:0}}}   headerMode="none">
         
-        <TabNav.Screen name="Wishlist" component={WishlistStack}     options={{tabBarIcon:()=><View style={{width:55, height:55, backgroundColor:'yellow', alignItems:'center', justifyContent:'center'}}><Entypo name="list" size={50} color="black"/></View>}} />
-        <TabNav.Screen name="Map" component={MapPage}                options={{tabBarIcon:()=><View style={{width:55, height:55, backgroundColor:'yellow', alignItems:'center', justifyContent:'center'}}><Entypo name="location" size={40} color="black"/></View>}}/>
-        <TabNav.Screen name="Promo" component={PromoStack}           options={{tabBarIcon:()=><View style={{width:55, height:55, backgroundColor:'yellow', alignItems:'center', justifyContent:'center'}}><Entypo name="price-tag" size={40} /></View>}}/>
-        <TabNav.Screen name="Scan" component={ScanStack}             options={{tabBarIcon:()=><View style={{width:55, height:55, backgroundColor:'yellow', alignItems:'center', justifyContent:'center'}}><FontAwe name="barcode" size={45} color="black"/></View>}}/>
-        <TabNav.Screen name="Cart" component={CartStack}             options={{tabBarIcon:()=><View style={{width:55, height:55, backgroundColor:'yellow', alignItems:'center', justifyContent:'center'}}><FontAwe name="shopping-cart" size={40} color="black"/></View>}}/>
+        <TabNav.Screen name="Wishlist" component={WishlistStack}     options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><Entypo name="list" size={50} color="black"/></View>}} />
+        <TabNav.Screen name="Map" component={MapPage}                options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><Entypo name="location" size={40} color="black"/></View>}}/>
+        <TabNav.Screen name="Promo" component={PromoStack}           options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><Entypo name="price-tag" size={40} /></View>}}/>
+        <TabNav.Screen name="Scan" component={ScanStack}             options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><FontAwe name="barcode" size={45} color="black"/></View>}}/>
+        <TabNav.Screen name="Cart" component={CartStack}             options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><FontAwe name="shopping-cart" size={40} color="black"/></View>}}/>
     
       </TabNav.Navigator>
     )

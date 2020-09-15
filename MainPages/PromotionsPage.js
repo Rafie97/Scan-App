@@ -23,16 +23,18 @@ class PromotionsPage extends Component {
   }
 
   async getItems() {
-    hebRef = firestore().collection("stores").doc("HEB").collection('items')
+    const hebRef = firestore().collection("stores").doc("HEB").collection('items')
     
 
-    await hebRef.onSnapshot((snap) => {
+    const sub = hebRef.onSnapshot((snap) => {
       this.setState({ promoItems: [] })
       snap.forEach(async (doc) => {
         const item = new Item(doc);
         await this.setState({ promoItems: [...this.state.promoItems, item] });
       })
     })
+
+    return () => sub();
 
   }
 
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     width: 400,
-    marginBottom:30,
+    marginBottom:60,
     
   },
 

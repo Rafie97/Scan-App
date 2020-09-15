@@ -24,15 +24,17 @@ class CartPage extends Component {
         const userID = auth().currentUser.uid;
         const cartRef = firestore().collection('users').doc(userID).collection('Cart');
 
-        cartRef.onSnapshot((snap) => {
+        const sub = cartRef.onSnapshot((snap) => {
             this.setState({ cartItems: [] });
             snap.forEach(async (doc) => {
                 const item = new Item(doc);
                 await this.setState({ cartItems: [...this.state.cartItems, item] })
             })
         })
-        
+        return () => sub();
     }
+
+    
 
     deleteItem(itemID){
         const userID = auth().currentUser.uid;

@@ -1,45 +1,76 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, View, Text, TextInput, ImageBackground, Image } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ImageBackground, Image, Animated } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
 import { FlatList } from 'react-native-gesture-handler';
+import MapBubble from '../Models/Components/MapBubble';
 
 
 class MapPage extends Component {
     constructor() {
         super();
         this.state = {
-            focused: false,
+            titleHeight:null,
+            searchFocused: false,
             backSearches: [],
+            markedAisles:[],
         }
         this.searchItems = this.searchItems.bind(this);
+        this.drawCircles = this.drawCircles.bind(this);
+
     }
 
     async searchItems(val) {
+        if(val ==="" || val===" "){
+            await this.setState({ backSearches: [] })
+        }
 
-        const BreakException = {};
-        hebRef = firestore().collection("stores").doc("HEB").collection('items');
-        await hebRef.get().then(async (qSnap) => {
-            try {
-                await this.setState({ backSearches: [] })
-                qSnap.forEach(async (doc, index) => {
+        else if (val !== ""){
+            await this.setState({ backSearches: [] })
+            const BreakException = {};
+            const hebRef = firestore().collection("stores").doc("HEB").collection('items');
+            await hebRef.get().then(async (qSnap) => {
+                try {
+                    
+                    qSnap.forEach(async (doc, index) => {
 
-                    if (doc.data().name.includes(val)) {
-                        const item = new Item(doc);
-                        await this.setState({ backSearches: [...this.state.backSearches, item] })
-                    }
-                })
-            }
-            catch (e) {
-                if (e !== BreakException) throw e;
-            }
-        });
+                        if (doc.data().name.includes(val)) {
+                            const item = new Item(doc);
+                            await this.setState({ backSearches: [...this.state.backSearches, item] })
+                        }
+                    })
+                }
+                catch (e) {
+                    if (e !== BreakException) throw e;
+                }
+            });
 
+            
+        }
 
+        if (this.state.backSearches) {
+            console.log(this.state.backSearches.length)
+            const aislesTemp = []
+            this.state.backSearches.forEach((el)=>{
+                aislesTemp.push(el.location);
+            })
+            this.setState({markedAisles : aislesTemp});
+        }
+        
+    }
+
+    drawCircles(){
+        if(this.state.markedAisles)
+        {
+            return this.state.markedAisles.map(function(loc){
+                return <MapBubble location={loc} /> ;
+            })
+        }
     }
 
     render() {
+
         return (
             <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground} >
 
@@ -48,13 +79,17 @@ class MapPage extends Component {
                 </View>
 
                 <View style={styles.mapView}>
-                    <Image source={require('../res/map-image-right-size.png')} style={styles.mapImage} />
+                    <ImageBackground source={require('../res/map-image-right-size.png')} style={{ width: 375, height: 300 }} >
+                        {this.state.markedAisles?   this.drawCircles() :  {}  }
+                        
+
+                    </ImageBackground>
                 </View>
-                {/*<View style={{borderWidth:2, height:150,width:300, flex:1, alignSelf:"center"}}>
-                        <FlatList></FlatList>
-                </View>*/}
+
                 <View style={styles.searchBarView}>
-                    <TextInput style={styles.searchInput} onChangeText={(val) => { this.searchItems(val) }} backgroundColor="#a2a3a1" placeholderTextColor='#545454' placeholder="Search this store" ></TextInput>
+                    <TextInput style={styles.searchInput} onChangeText={(val) => { this.searchItems(val) }} onFocus={() => this.setState({ searchFocused: true })} onBlur={() => this.setState({ searchFocused: false })}
+                        backgroundColor="#a2a3a1" placeholderTextColor='#545454' placeholder="Search this store" >
+                    </TextInput>
                 </View>
 
             </ImageBackground>
@@ -81,7 +116,7 @@ const styles = StyleSheet.create({
 
     mapView: {
         alignItems: "center",
-        flex:4
+        flex: 4
     },
 
     searchBarView:

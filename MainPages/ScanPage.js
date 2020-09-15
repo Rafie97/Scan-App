@@ -25,7 +25,7 @@ class ScanPage extends Component {
         qSnap.forEach(async (doc, index) => {
           
           const item = new Item(doc);
-          //In the future, I might be able to jsut replace item with doc.data() instead of a new Item
+          
           if (this.state.scannedItems.find(e => (e.docID === item.docID))) {
             throw BreakException;
           }
@@ -70,7 +70,7 @@ class ScanPage extends Component {
   }
 
   renderItem = ({ item }) =>
-    (<TouchableOpacity activeOpacity={0.5} onPress={() => navigate('Scan', { screen: 'ScanItemPage', params: { itemIDCallback: this.state.scannedItems[0] } })} >
+    (<TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.navigate('Scan', { screen: 'ScanItemPage', params: { itemIDCallback: this.state.scannedItems[0] } })} >
       <View style={styles.itemBubble} >
         <Image source={{ uri: item.imageLink }} style={styles.itemImage}></Image>
         <Text style={styles.itemLabel}>{item.name}</Text>
@@ -81,6 +81,7 @@ class ScanPage extends Component {
 
 
   barcodeRecognized = ({ barcodes }) => {
+    
     barcodes.forEach(barcode => {
       if (!barcode.data.startsWith("{")) { //Filter out errors
         this.fetchByBarcode(barcode.data);

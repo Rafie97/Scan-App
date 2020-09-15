@@ -8,7 +8,8 @@ class Item {
             this.barcode = doc.data().barcode;
             this.promo = doc.data().promo;
             this.reviews = doc.data().reviews;
-            this.priceHistory = doc.data().priceHistory
+            this.priceHistory = doc.data().priceHistory;
+            this.location = doc.data().location;
         }
         else{
             this.docID = doc.docID;
@@ -18,7 +19,8 @@ class Item {
             this.barcode = doc.barcode;
             this.promo = doc.promo;
             this.reviews = doc.reviews;
-            this.priceHistory = doc.priceHistory
+            this.priceHistory = doc.priceHistory;
+            this.location = doc.location;
         }
     }
 

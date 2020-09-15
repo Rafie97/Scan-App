@@ -15,7 +15,7 @@ class EditWishlistPage extends Component {
         this.state = {
             listItems: [],
             isScrollEnabled: true,
-            routeListName:this.props.route.params.listNameCallback
+            routeListName: this.props.route.params.listNameCallback
         }
         this.deleteItem = this.deleteItem.bind(this);
         this.getItems = this.getItems.bind(this);

@@ -40,8 +40,10 @@ class App extends Component {
         <NavigationContainer>
           <OuterNavigator.Navigator headerMode="none">
             {this.state.isSignedIn ? 
-            (<OuterNavigator.Screen name="App" component={AppNavigation}/>): 
-            (<OuterNavigator.Screen name="Auth" component={AuthNavigation}/>)}
+                (<OuterNavigator.Screen name="App" component={AppNavigation}/>):
+                (<OuterNavigator.Screen name="Auth" component={AuthNavigation}/>)
+            }
+            
           </OuterNavigator.Navigator>
         </NavigationContainer>
       </AuthProvider>
