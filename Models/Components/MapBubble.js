@@ -9,8 +9,10 @@ const MapBubble = (props) => {
     const [top, setTop] = useState(null);
 
     useEffect(()=>{
-        setLeft(props.location.xPos);
-        setTop(props.location.yPos);
+        setLeft(props.location.coordinates.xPos);
+        setTop(props.location.coordinates.yPos);
+
+        console.log(left, top);
     })
 
     const styles = StyleSheet.create({
@@ -19,7 +21,8 @@ const MapBubble = (props) => {
             height: 20,
             borderRadius: 10,
             backgroundColor: 'black',
-            
+            left:left,
+            top:top,
         }
     });
 
