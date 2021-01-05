@@ -64,7 +64,7 @@ class AppNavigation extends Component{
 
   render(){
     return(
-      <TabNav.Navigator initialRouteName="Promo" tabBarOptions={{ tabStyle:{alignSelf:'center'}, keyboardHidesTabBar:true ,showLabel:false, style:{position:'absolute',alignItems:'center',bottom:0, left:0, backgroundColor:'transparent',  borderTopColor:'transparent', elevation:0}}}   headerMode="none">
+      <TabNav.Navigator initialRouteName="Promo"  tabBarOptions={{ tabStyle:{alignSelf:'center'}, keyboardHidesTabBar:true ,showLabel:false, style:{position:'absolute',alignItems:'center',bottom:0, left:0, backgroundColor:'transparent',  borderTopColor:'transparent', elevation:0}}}   headerMode="none">
         
         <TabNav.Screen name="Wishlist" component={WishlistStack}     options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><Entypo name="list" size={50} color="black"/></View>}} />
         <TabNav.Screen name="Map" component={MapPage}                options={{tabBarIcon:()=><View style={{width:55, height:55, alignItems:'center', justifyContent:'center', paddingBottom:10}}><Entypo name="location" size={40} color="black"/></View>}}/>

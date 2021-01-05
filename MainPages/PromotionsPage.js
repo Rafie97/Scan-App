@@ -43,7 +43,6 @@ class PromotionsPage extends Component {
       arr = [...arr, i.name];
     })
 
-    console.log('Arrrrr', arr);
 
     return (
       <ImageBackground source={require('../res/android-promotions.png')} style={styles.fullBackground} >
