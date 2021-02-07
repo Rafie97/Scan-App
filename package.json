@@ -22,6 +22,7 @@
     "node-fetch": "^2.6.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-blur": "^3.2.2",
     "react-native-camera": "^3.23.1",
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-contacts": "^5.2.7",
@@ -35,11 +36,13 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-safe-area-view": "^1.0.0",
     "react-native-screens": "^2.4.0",
+    "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^6.7.0",
     "react-navigation": "^4.4.0",
     "react-navigation-material-bottom-tabs": "^2.2.10",
     "react-navigation-stack": "^2.3.11",
-    "react-navigation-tabs": "^2.8.11"
+    "react-navigation-tabs": "^2.8.11",
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
