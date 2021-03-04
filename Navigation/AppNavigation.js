@@ -10,26 +10,26 @@ import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
 import ItemPage from '../MainPages/Sub_Pages/ItemPage';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ion from 'react-native-vector-icons/Ionicons';
+import Ant from 'react-native-vector-icons/AntDesign';
 import {firebase} from '@react-native-firebase/firestore';
 import {View} from 'react-native';
+import AccountPage from '../MainPages/AccountPage';
 
-const WishlistStackNav = createStackNavigator();
-function WishlistStack() {
+const AccountStackNav = createStackNavigator();
+function AccountStack() {
   return (
-    <WishlistStackNav.Navigator
-      initialRouteName="MainWishlistPage"
-      headerMode="none">
-      <WishlistStackNav.Screen
-        name="MainWishlistPage"
-        component={WishlistPage}
-      />
-      <WishlistStackNav.Screen
+    <AccountStackNav.Navigator initialRouteName="AccountPage" headerMode="none">
+      <AccountStackNav.Screen name="AccountPage" component={AccountPage} />
+      <AccountStackNav.Screen name="WishlistPage" component={WishlistPage} />
+      <AccountStackNav.Screen
         name="EditWishlistPage"
         component={EditWishlistPage}
       />
-      <WishlistStackNav.Screen name="WishlistItemPage" component={ItemPage} />
-    </WishlistStackNav.Navigator>
+      <AccountStackNav.Screen name="WishlistItemPage" component={ItemPage} />
+    </AccountStackNav.Navigator>
   );
 }
 
@@ -74,32 +74,36 @@ class AppNavigation extends Component {
           tabStyle: {alignSelf: 'center'},
           keyboardHidesTabBar: true,
           showLabel: false,
-          activeBackgroundColor: 'grey',
+          activeBackgroundColor: '#b0abab',
           style: {
             position: 'absolute',
             alignItems: 'center',
-            bottom: 0,
+            bottom: -5,
             left: 0,
             backgroundColor: 'transparent',
             borderTopColor: 'transparent',
             elevation: 0,
+            height: 60,
           },
         }}
         headerMode="none">
         <TabNav.Screen
-          name="Wishlist"
-          component={WishlistStack}
+          name="Account"
+          component={AccountStack}
           options={{
-            tabBarIcon: () => (
+            tabBarIcon: ({focused}) => (
               <View
                 style={{
                   width: 55,
                   height: 55,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingBottom: 10,
                 }}>
-                <FontAwe5 name="user" size={40} color="black" />
+                <Material
+                  name={focused ? 'account' : 'account-outline'}
+                  size={50}
+                  color="black"
+                />
               </View>
             ),
           }}
@@ -108,16 +112,19 @@ class AppNavigation extends Component {
           name="Map"
           component={MapPage}
           options={{
-            tabBarIcon: () => (
+            tabBarIcon: ({focused}) => (
               <View
                 style={{
                   width: 55,
                   height: 55,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingBottom: 10,
                 }}>
-                <Entypo name="location" size={40} color="black" />
+                <Material
+                  name={focused ? 'map-search' : 'map-search-outline'}
+                  size={40}
+                  color="black"
+                />
               </View>
             ),
           }}
@@ -126,16 +133,15 @@ class AppNavigation extends Component {
           name="Promo"
           component={PromoStack}
           options={{
-            tabBarIcon: () => (
+            tabBarIcon: ({focused}) => (
               <View
                 style={{
                   width: 55,
                   height: 55,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingBottom: 10,
                 }}>
-                <Entypo name="price-tag" size={40} />
+                <Ant name={focused ? 'tags' : 'tagso'} size={45} />
               </View>
             ),
           }}
@@ -145,7 +151,7 @@ class AppNavigation extends Component {
           component={ScanStack}
           style={{borderRadius: 100, borderWidth: 1}}
           options={{
-            tabBarIcon: () => (
+            tabBarIcon: ({focused}) => (
               <View
                 style={{
                   width: 55,
@@ -153,8 +159,22 @@ class AppNavigation extends Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                   paddingTop: 0,
+                  paddingBottom: 4,
                 }}>
-                <FontAwe name="barcode" size={40} color="black" />
+                <FontAwe name="barcode" size={35} color="black" />
+                {focused ? (
+                  <Ion
+                    name="scan-outline"
+                    size={60}
+                    style={{
+                      position: 'absolute',
+                      right: 1,
+                      bottom: -2,
+                    }}
+                  />
+                ) : (
+                  <></>
+                )}
               </View>
             ),
           }}
@@ -163,16 +183,19 @@ class AppNavigation extends Component {
           name="Cart"
           component={CartStack}
           options={{
-            tabBarIcon: () => (
+            tabBarIcon: ({focused}) => (
               <View
                 style={{
                   width: 55,
                   height: 55,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  paddingBottom: 10,
                 }}>
-                <FontAwe name="shopping-cart" size={40} color="black" />
+                <Material
+                  name={focused ? 'cart' : 'cart-outline'}
+                  size={40}
+                  color="black"
+                />
               </View>
             ),
           }}

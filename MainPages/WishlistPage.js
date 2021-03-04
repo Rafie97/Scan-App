@@ -8,7 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  AsyncStorage,
+  Button,
 } from 'react-native';
 require('react-native-linear-gradient').default;
 import FamilyTile from '../Models/Components/FamilyTile';
@@ -25,54 +25,13 @@ class WishlistPage extends Component {
     super(props);
     this.state = {
       wishlists: [],
-
-      didCount: false,
-      countContacts: 0,
-
-      contactModal: false,
-      contactsLoading: false,
-
-      contactNames: [],
-      filteredContactNames: [],
-
-      selectedNames: [],
-      tempSelectedNames: [],
     };
 
-    this.getCount = this.getCount.bind(this);
     this.getLists = this.getLists.bind(this);
-    this.getLocalContacts = this.getLocalContacts.bind(this);
-    this.logItem = this.logItem.bind(this);
-    this.pullContactsFirebase = this.pullContactsFirebase.bind(this);
-    this.pushContactsFirebase = this.pushContactsFirebase.bind(this);
-    this.initialContactState = this.initialContactState.bind(this);
   }
 
   async componentDidMount() {
-    this.pullContactsFirebase();
-    this.getCount();
     this.getLists();
-    setTimeout(() => this.getLocalContacts(), 1000);
-  }
-
-  async signOut() {
-    const userID = auth().currentUser.uid;
-    firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Cart')
-      .onSnapshot(() => {});
-    firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Wishlist')
-      .onSnapshot(() => {});
-    firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family')
-      .onSnapshot(() => {});
-    auth().signOut();
   }
 
   render() {
@@ -80,19 +39,12 @@ class WishlistPage extends Component {
 
     return (
       <ImageBackground
-        source={require('../res/android-promotions.png')}
+        source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
-        <View style={styles.textView}>
-          <Text style={styles.yourWishlistsText}>Your Wishlists</Text>
-          <TouchableOpacity
-            style={{marginLeft: 50, marginRight: 20, alignSelf: 'center'}}
-            onPress={() => this.signOut()}>
-            <Text style={{color: 'blue', fontSize: 16, fontFamily: 'Segoe UI'}}>
-              Sign out
-            </Text>
-          </TouchableOpacity>
-        </View>
-
+        <Button
+          onPress={() => navigate('Account', {screen: 'AccountPage'})}
+          title="Go Back"
+        />
         <View style={styles.wishlistGroupView}>
           <FlatList
             data={this.state.wishlists}
@@ -100,7 +52,7 @@ class WishlistPage extends Component {
             renderItem={({item}) => (
               <TouchableOpacity
                 onPress={() =>
-                  navigate('Wishlist', {
+                  navigate('Account', {
                     screen: 'EditWishlistPage',
                     params: {listNameCallback: item},
                   })
@@ -112,107 +64,11 @@ class WishlistPage extends Component {
             )}
           />
         </View>
-
-        <View style={{flexDirection: 'column'}}>
-          <Text style={{fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10}}>
-            Your Family
-          </Text>
-
-          {this.state.contactsLoading ? (
-            <Text>Loading...</Text>
-          ) : (
-            <TouchableOpacity
-              style={{
-                backgroundColor: '#1B263B',
-                borderWidth: 1,
-                height: 30,
-                width: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: 10,
-              }}
-              onPress={() => this.setState({contactModal: true})}>
-              <Text style={{color: 'white', fontFamily: 'Segoe UI'}}>
-                Add Family
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <FlatList
-          data={this.state.selectedNames}
-          horizontal={true}
-          renderItem={({item}) => <FamilyTile name={item} />}
-        />
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.contactModal}
-          onRequestClose={() => this.setState({contactModal: false})}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>
-                Which contact would you like to add?
-              </Text>
-              <TextInput
-                placeholder="Search contacts by name"
-                onChangeText={val => this.searchContacts(val)}
-              />
-
-              <FlatList
-                data={this.state.filteredContactNames}
-                keyExtractor={(item, index) => index}
-                initialNumToRender={100}
-                renderItem={this.renderItem}
-              />
-
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                  style={{
-                    width: 80,
-                    height: 40,
-                    borderWidth: 1,
-                    justifyContent: 'center',
-                    marginTop: 20,
-                  }}
-                  onPress={() =>
-                    this.setState({contactModal: false, contactsLoading: false})
-                  }>
-                  <Text style={styles.title}>Cancel</Text>
-                </TouchableOpacity>
-                {this.state.selectedNames.length === 0 &&
-                this.state.tempSelectedNames.length === 0 ? (
-                  <></>
-                ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: 80,
-                      height: 40,
-                      borderWidth: 1,
-                      justifyContent: 'center',
-                      marginTop: 20,
-                      marginLeft: 20,
-                    }}
-                    onPress={this.pushContactsFirebase}>
-                    <Text style={styles.title}>Ok</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          </View>
-        </Modal>
       </ImageBackground>
     );
   }
 
-  renderItem = ({item}) => (
-    <SelectableItem
-      name={item}
-      logItem={this.logItem}
-      initialState={this.initialContactState(item)}
-    />
-  );
+  renderItem = ({item}) => <SelectableItem name={item} />;
 
   async getLists() {
     //Retrieve names of wishlists
@@ -227,159 +83,6 @@ class WishlistPage extends Component {
         this.setState({wishlists: [...this.state.wishlists, doc.id]});
       });
     });
-  }
-
-  // ============================== CONTACT METHODS ====================================
-
-  getCount() {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-      title: 'Contacts',
-      message: 'This app would like to view your contacts',
-      buttonPositive: 'OK',
-      buttonNegative: 'Cancel',
-    }).then(() => {
-      Contacts.getCount(async count => {
-        await this.setState({countContacts: count + 1, didCount: true});
-      });
-    });
-  }
-
-  async getLocalContacts() {
-    if (this.state.didCount) {
-      try {
-        const list = await AsyncStorage.getItem('storedContactNames');
-
-        const parsedList = JSON.parse(list);
-
-        if (parsedList) {
-          const numStored = parsedList.length;
-
-          if (numStored === this.state.countContacts) {
-            await this.setState({
-              contactNames: parsedList,
-              contactsLoading: false,
-              filteredContactNames: parsedList,
-            });
-          }
-        } else {
-          throw Error('No list');
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    } else if (
-      this.state.didCount &&
-      (this.state.contactNames.length === 0 ||
-        this.state.contactNames.length !== this.state.countContacts)
-    ) {
-      this.setState({contactsLoading: true});
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: 'Contacts',
-        message: 'This app would like to view your contacts',
-        buttonPositive: 'OK',
-        buttonNegative: 'Cancel',
-      }).then(() => {
-        Contacts.getAll(async (err, contacts) => {
-          if (err === 'denied') {
-            alert('Contacts access was not granted');
-          } else {
-            if (contacts) {
-              contacts.forEach(con => {
-                this.setState({
-                  contactNames: [...this.state.contactNames, con.displayName],
-                });
-              });
-              this.setState({
-                contactsLoading: false,
-                filteredContactNames: this.state.contactNames,
-              });
-              const stringedContacts = JSON.stringify(this.state.contactNames);
-              await AsyncStorage.setItem(
-                'storedContactNames',
-                stringedContacts,
-              );
-            }
-          }
-        });
-      });
-    }
-  }
-
-  searchContacts(val) {
-    const tempFilteredList = [];
-    this.state.contactNames.filter(name => {
-      if (name.includes(val)) {
-        tempFilteredList.push(name);
-      }
-    });
-    if (tempFilteredList) {
-      this.setState({filteredContactNames: tempFilteredList});
-    }
-    if (val === '') {
-      this.setState({filteredContactNames: this.state.contactNames});
-    }
-  }
-
-  logItem(name, isSelected) {
-    if (isSelected) {
-      this.setState({
-        tempSelectedNames: [...this.state.tempSelectedNames, name],
-      });
-    }
-    if (!isSelected) {
-      let tempNames = this.state.tempSelectedNames;
-      tempNames = tempNames.filter(item => item !== name);
-      this.setState({tempSelectedNames: tempNames});
-    }
-  }
-
-  async pullContactsFirebase() {
-    const userID = auth().currentUser.uid;
-    const famRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family');
-
-    const sub = famRef.onSnapshot(async snap => {
-      this.setState({selectedNames: [], tempSelectedNames: []});
-      snap.forEach(async doc => {
-        await this.setState({
-          selectedNames: [...this.state.selectedNames, doc.data().name],
-          tempSelectedNames: [...this.state.tempSelectedNames, doc.data().name],
-        });
-      });
-    });
-
-    return () => sub();
-  }
-
-  async pushContactsFirebase() {
-    this.setState({contactModal: false, contactsLoading: false});
-    const userID = auth().currentUser.uid;
-    const famRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family');
-
-    famRef.get().then(snap => {
-      snap.forEach(doc => {
-        if (!this.state.tempSelectedNames.includes(doc.data().name)) {
-          famRef.doc(doc.id).delete();
-        }
-      });
-    });
-
-    this.state.tempSelectedNames.forEach(tempName => {
-      if (!this.state.selectedNames.includes(tempName)) {
-        famRef.add({
-          name: tempName,
-        });
-      }
-    });
-  }
-
-  initialContactState(name) {
-    return this.state.selectedNames.includes(name);
   }
 }
 

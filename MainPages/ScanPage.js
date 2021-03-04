@@ -53,7 +53,7 @@ class ScanPage extends Component {
     const {navigate} = this.props.navigation;
     return (
       <ImageBackground
-        source={require('../res/android-promotions.png')}
+        source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
         <View style={styles.scanContainer}>
           <RNCamera
@@ -69,7 +69,7 @@ class ScanPage extends Component {
           <View style={styles.underCam}>
             {this.state.loading && this.state.scannedItems.length == 0 ? (
               <Text style={styles.scannedItemsText}>
-                Please scan a barcode to begin
+                Scan a barcode to show products
               </Text>
             ) : (
               <View style={styles.underCam}>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
 
   scannedItemsText: {
-    marginTop: 140,
+    marginTop: 200,
     marginBottom: 10,
     fontSize: 20,
     fontFamily: 'Segoe UI',

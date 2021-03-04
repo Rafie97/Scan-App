@@ -18,7 +18,7 @@ export default class SwipeableItem extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.gestureDelay = 15;
+    this.gestureDelay = 10;
     this.scrollViewEnabled = true;
 
     const position = new Animated.ValueXY();
@@ -86,6 +86,7 @@ export default class SwipeableItem extends React.PureComponent {
               alignSelf: 'center',
               paddingBottom: 20,
               position: 'absolute',
+              right: -5,
             }}>
             <TouchableOpacity
               onPress={() => this.props.deleteItem(this.props.item.docID)}>
@@ -117,7 +118,9 @@ export default class SwipeableItem extends React.PureComponent {
                 source={{uri: this.props.item.imageLink}}
                 style={styles.itemImage}
               />
-              <Text style={styles.itemLabel}>{this.props.item.name}</Text>
+              <View style={{marginVertical: 10}}>
+                <Text style={styles.itemLabel}>{this.props.item.name}</Text>
+              </View>
               <Text style={styles.itemPrice}>${this.props.item.price}</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -127,15 +130,23 @@ export default class SwipeableItem extends React.PureComponent {
   }
 }
 
-const styles = new StyleSheet.create({
+const styles = StyleSheet.create({
   itemBubble: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#d4d4d4',
     borderWidth: 2,
     borderRadius: 20,
     flexDirection: 'row',
     width: 300,
     height: 70,
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 9.11,
+    elevation: 5,
   },
   itemImage: {
     alignSelf: 'center',
@@ -150,8 +161,8 @@ const styles = new StyleSheet.create({
   itemLabel: {
     alignSelf: 'center',
     marginLeft: 15,
-    fontSize: 16,
-    fontFamily: 'Segoe UI',
+    fontSize: 18,
+    fontFamily: 'Roboto',
   },
   itemPrice: {
     alignSelf: 'center',

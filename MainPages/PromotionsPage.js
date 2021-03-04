@@ -53,48 +53,54 @@ class PromotionsPage extends Component {
 
     return (
       <ImageBackground
-        source={require('../res/android-promotions.png')}
+        source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
         <View style={styles.promoPageContainer}>
           <Text style={styles.promoTitle}>Today's Best Deals</Text>
-          <BlurView
-            blurType="light"
-            blurAmount={100}
+
+          <Text
             style={{
-              position: 'absolute',
-              width: 200,
-              height: 100,
-              borderWidth: 3,
-              top: 0,
-              left: 110,
-              backgroundColor: 'rgba(255,255,255,0.8)',
-            }}
-          />
-
-          <Text>Explore our best picks</Text>
-
-          <View style={{height: 200, marginTop: 20}}>
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginLeft: 20,
+              marginBottom: 10,
+            }}>
+            Explore our coupons
+          </Text>
+          <View style={{height: 180}}>
             <FlatList
-              data={[
-                'Weekly deals',
-                'Fall flavors',
-                'Halloween Specials',
-                'Savings on appliances',
-              ]}
+              data={this.state.promoItems}
               horizontal={true}
-              renderItem={({item}) => <FamilyTile name={item} />}
+              renderItem={this.renderItem}
             />
           </View>
-          <Text>Explore our coupons</Text>
-          <FlatList
-            data={this.state.promoItems}
-            horizontal={true}
-            renderItem={this.renderItem}
-          />
-
-          {
-            //<Grid style={styles.gridContainer} renderItem={this.renderItem} data={this.state.promoItems} numColumns={2} renderPlaceholder={(i)=>(<View style={{flex:1, height:60, width:400, backgroundColor:'yellow'}} />)} />
-          }
+          <View style={{height: 20}} />
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              marginLeft: 20,
+              marginBottom: 10,
+            }}>
+            Explore our combos and recipes
+          </Text>
+          <View style={{height: 160}}>
+            <FlatList
+              data={[
+                {
+                  name: 'Spicy Ramen Combo',
+                  image: 'Spicy-Chicken-Ramen-28-scaled.jpg',
+                },
+                {name: 'Spring Combos', image: ''},
+                {name: 'Grill Combos', image: ''},
+                {name: 'Taco Combos', image: ''},
+              ]}
+              horizontal={true}
+              renderItem={({item}) => (
+                <FamilyTile name={item.name} imageSource={item.image} />
+              )}
+            />
+          </View>
         </View>
       </ImageBackground>
     );
@@ -153,31 +159,32 @@ const styles = StyleSheet.create({
   },
 
   itemBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: 'grey',
-    marginRight: 10,
-    marginLeft: 10,
-    marginTop: 20,
-    flex: 1,
-    maxWidth: 180,
+    marginHorizontal: 10,
+    maxWidth: 260,
     maxHeight: 160,
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 10,
   },
 
   itemTitleText: {
     textAlign: 'center',
     marginBottom: 5,
+    marginHorizontal: 2,
     fontFamily: 'Segoe UI',
   },
 
   itemImage: {
     marginTop: 5,
-    marginBottom: 0,
+    marginBottom: 5,
+    marginHorizontal: 5,
     flex: 1,
-    width: 100,
+    width: 160,
     height: 100,
     borderRadius: 10,
   },

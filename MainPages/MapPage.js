@@ -36,7 +36,7 @@ function MapPage() {
       height: 300,
       width: 300,
     },
-    coordinates: [],
+    wallCoordinates: [],
   });
 
   useEffect(() => {
@@ -96,11 +96,14 @@ function MapPage() {
 
   return (
     <ImageBackground
-      source={require('../res/android-promotions.png')}
+      source={require('../res/grad_3.png')}
       style={styles.fullBackground}>
       <View style={styles.mapPageContainer}>
         <View style={styles.mapTitleView}>
-          <Text style={{fontSize: 24, fontFamily: 'Segoe UI'}}>Map</Text>
+          <Text
+            style={{fontSize: 24, fontFamily: 'Segoe UI', textAlign: 'center'}}>
+            Map
+          </Text>
         </View>
 
         <View style={styles.mapView}>
@@ -135,7 +138,7 @@ function MapPage() {
               <></>
             )}
 
-            {wallData.coordinates.map((coordinates, index) => {
+            {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall
                   start={coordinates.start}
@@ -207,6 +210,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     fontFamily: 'Segoe UI',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   mapPageContainer: {
@@ -216,7 +221,6 @@ const styles = StyleSheet.create({
 
   mapView: {
     flex: 4,
-    alignItems: 'center',
     justifyContent: 'center',
   },
 

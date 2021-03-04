@@ -9,23 +9,24 @@ import auth from '@react-native-firebase/auth';
 import {Button} from 'react-native-paper';
 import styled from 'styled-components/native';
 import {BlurView} from 'react-native-blur';
+import Ticker from 'react-native-ticker';
 
-const StyledBlurView = styled(BlurView)`
-  height: 80px;
-`;
-const Container = styled.View`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`;
-const Content = styled.View`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-`;
+// const StyledBlurView = styled(BlurView)`
+//   height: 80px;
+// `;
+// const Container = styled.View`
+//   position: absolute;
+//   bottom: 0;
+//   left: 0;
+//   right: 0;
+// `;
+// const Content = styled.View`
+//   position: absolute;
+//   top: 0;
+//   bottom: 0;
+//   right: 0;
+//   left: 0;
+// `;
 
 class CartPage extends Component {
   constructor() {
@@ -84,14 +85,26 @@ class CartPage extends Component {
 
     return (
       <ImageBackground
-        source={require('../res/android-promotions.png')}
+        source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
         <View style={styles.TotalPricesView}>
-          <Text style={styles.FirstTotal}>
-            Total : ${Math.round(100 * 1.0825 * cartSum) / 100}
+          <Text
+            style={[
+              styles.FirstTotal,
+              {position: 'absolute', left: 20, top: -2},
+            ]}>
+            Total:
           </Text>
-          <Text style={styles.TaxTotal}> ${cartSum} before tax</Text>
+          <Ticker />
+          <Text style={styles.FirstTotal}>
+            ${Math.round(100 * 1.0825 * cartSum) / 100}
+          </Text>
         </View>
+        <Text style={styles.TaxTotal}>
+          {' '}
+          <B>${cartSum}</B> without tax
+        </Text>
+
         <TouchableOpacity
           style={{margin: 15, position: 'relative', top: 0, right: 0}}>
           <Text style={{color: 'blue', right: 0, position: 'relative'}}>
@@ -107,7 +120,7 @@ class CartPage extends Component {
           renderItem={this.renderItem}
           data={this.state.cartItems}
         />
-        <Blur />
+
         <View style={{position: 'absolute', right: 0, bottom: 0}}>
           <TouchableOpacity
             style={styles.checkOutButton}
@@ -119,7 +132,7 @@ class CartPage extends Component {
                 fontFamily: 'Segoe UI',
                 fontSize: 20,
                 fontVariant: ['small-caps'],
-                color: 'purple',
+                color: 'white',
               }}>
               Check out
             </Text>
@@ -145,30 +158,33 @@ class CartPage extends Component {
     />
   );
 }
-function Blur() {
-  return (
-    <View style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
-      <BlurView
-        blurRadius={25}
-        overlayColor=""
-        blurAmount={3}
-        blurType="dark"
-        style={{height: 80, backgroundColor: 'yellow'}}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 400,
-          right: 0,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          left: 0,
-        }}>
-        <Text>BLUR THIS</Text>
-      </View>
-    </View>
-  );
-}
+
+// function Blur() {
+//   return (
+//     <View style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
+//       <BlurView
+//         blurRadius={25}
+//         overlayColor=""
+//         blurAmount={3}
+//         blurType="dark"
+//         style={{height: 80, backgroundColor: 'yellow'}}
+//       />
+//       <View
+//         style={{
+//           position: 'absolute',
+//           bottom: 400,
+//           right: 0,
+//           flexDirection: 'row',
+//           justifyContent: 'space-around',
+//           left: 0,
+//         }}>
+//         <Text>BLUR THIS</Text>
+//       </View>
+//     </View>
+//   );
+// }
+
+const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 
 export default CartPage;
 
@@ -196,18 +212,19 @@ const styles = StyleSheet.create({
   },
   checkOutButton: {
     marginBottom: 80,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 7,
     },
-    shadowOpacity: 0.41,
+    shadowOpacity: 1,
     shadowRadius: 9.11,
-    padding: 4,
-    elevation: 14,
+    padding: 10,
+    elevation: 20,
     borderWidth: 2,
     borderRadius: 100,
+    borderColor: 'white',
   },
 
   itemBubble: {
@@ -243,16 +260,16 @@ const styles = StyleSheet.create({
 
   TotalPricesView: {
     alignSelf: 'center',
-    marginRight: 10,
+    width: '100%',
     marginTop: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   FirstTotal: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     fontSize: 30,
     fontFamily: 'Segoe UI',
-    fontWeight: 'bold',
-    fontVariant: ['small-caps'],
 
     marginBottom: 10,
   },
