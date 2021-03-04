@@ -113,9 +113,9 @@ function MapPage() {
             <Rect
               width={wallData.mapSize.width}
               height={wallData.mapSize.width}
-              stroke="red"
-              strokeWidth="2"
-              fill="yellow"
+              stroke="black"
+              strokeWidth="4"
+              fillOpacity={0.5}
             />
             {wallData.aisles ? (
               wallData.aisles.map((coordinate, index) => {
@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
 
   mapView: {
     flex: 4,
-    justifyContent: 'center',
   },
 
   searchBarView: {

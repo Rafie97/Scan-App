@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Card, Icon, LinearGradient} from 'react-native-elements';
+import {Button, Card, LinearGradient} from 'react-native-elements';
+
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import Ant from 'react-native-vector-icons/AntDesign';
 import {
   ImageBackground,
   Image,
@@ -103,14 +106,18 @@ function ItemPage({route}) {
 
   return (
     <ImageBackground
-      source={require('../../res/android-promotions.png')}
+      source={require('../../res/grad_3.png')}
       style={styles.fullBackground}>
       <View style={styles.backButtonView}>
-        <Button
-          title="go back"
-          onPress={() => navigate.goBack()}
-          style={styles.backButton}
-        />
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => navigate.goBack()}>
+          <Ionicon
+            name="arrow-back-circle-outline"
+            size={50}
+            style={{marginLeft: 10, marginTop: 5}}
+          />
+        </TouchableOpacity>
       </View>
 
       {!thing ? (

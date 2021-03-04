@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
-import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import Item, {itemConverter} from '../Models/Item';
+import Item from '../Models/Item';
 import SwipeableItem from '../Models/Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
-import {Button} from 'react-native-paper';
-import styled from 'styled-components/native';
-import {BlurView} from 'react-native-blur';
-import Ticker from 'react-native-ticker';
+
+import Ticker, {Tick} from 'react-native-ticker';
+
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 // const StyledBlurView = styled(BlurView)`
 //   height: 80px;
@@ -28,19 +28,13 @@ import Ticker from 'react-native-ticker';
 //   left: 0;
 // `;
 
-class CartPage extends Component {
-  constructor() {
-    super();
-    this.renderItem = this.renderItem.bind(this);
-    this.state = {
-      cartItems: [],
-      isScrollEnabled: true,
-    };
-    this.setScrollEnabled = this.setScrollEnabled.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
-  }
+function CartPage() {
+  const [cartItems, setCartItems] = React.useState<Item[]>([]);
+  const [isScrollEnabled, setScrollEnabled] = React.useState(true);
+  const [cartSum, setCartSum] = React.useState<number>(undefined);
+  const navigation = useNavigation();
 
-  componentDidMount() {
+  React.useEffect(() => {
     const userID = auth().currentUser.uid;
     const cartRef = firestore()
       .collection('users')
@@ -48,16 +42,29 @@ class CartPage extends Component {
       .collection('Cart');
 
     const sub = cartRef.onSnapshot(snap => {
-      this.setState({cartItems: []});
+      setCartItems([]);
+      const tempItems: Item[] = [];
       snap.forEach(async doc => {
         const item = new Item(doc);
-        await this.setState({cartItems: [...this.state.cartItems, item]});
+        tempItems.push(item);
       });
+      setCartItems(tempItems);
     });
-    return () => sub();
-  }
 
-  deleteItem(itemID) {
+    return () => sub();
+  }, []);
+
+  React.useEffect(() => {
+    let tempSum = 0;
+    cartItems.forEach(item => {
+      const numPrice = +item.price;
+      tempSum += numPrice;
+    });
+    setCartSum(Math.round(100 * tempSum) / 100);
+    console.log('in render', cartSum);
+  }, [cartItems]);
+
+  function deleteItem(itemID) {
     const userID = auth().currentUser.uid;
     const cartRef = firestore()
       .collection('users')
@@ -75,87 +82,77 @@ class CartPage extends Component {
       });
   }
 
-  render() {
-    let cartSum = 0;
-    this.state.cartItems.forEach(item => {
-      const numPrice = +item.price;
-      cartSum += numPrice;
-    });
-    cartSum = Math.round(100 * cartSum) / 100;
-
-    return (
-      <ImageBackground
-        source={require('../res/grad_3.png')}
-        style={styles.fullBackground}>
-        <View style={styles.TotalPricesView}>
-          <Text
-            style={[
-              styles.FirstTotal,
-              {position: 'absolute', left: 20, top: -2},
-            ]}>
-            Total:
-          </Text>
-          <Ticker />
-          <Text style={styles.FirstTotal}>
-            ${Math.round(100 * 1.0825 * cartSum) / 100}
-          </Text>
-        </View>
-        <Text style={styles.TaxTotal}>
-          {' '}
-          <B>${cartSum}</B> without tax
-        </Text>
-
-        <TouchableOpacity
-          style={{margin: 15, position: 'relative', top: 0, right: 0}}>
-          <Text style={{color: 'blue', right: 0, position: 'relative'}}>
-            About this store
-          </Text>
-        </TouchableOpacity>
-
-        <FlatList
-          scrollEnabled={this.state.isScrollEnabled}
-          contentContainerStyle={{alignItems: 'center', marginBottom: 80}}
-          style={styles.flatContainer}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderItem}
-          data={this.state.cartItems}
-        />
-
-        <View style={{position: 'absolute', right: 0, bottom: 0}}>
-          <TouchableOpacity
-            style={styles.checkOutButton}
-            onPress={() => {
-              return;
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Segoe UI',
-                fontSize: 20,
-                fontVariant: ['small-caps'],
-                color: 'white',
-              }}>
-              Check out
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    );
+  function getTotalPriceString(price) {
+    const totalString = (Math.round(100 * 1.0825 * price) / 100).toString();
+    console.log('in func ', totalString);
+    return totalString;
   }
 
-  setScrollEnabled(enable) {
-    this.setState({
-      isScrollEnabled: enable,
-    });
-  }
-
-  renderItem = ({item}) => (
+  const renderItem = ({item}) => (
     <SwipeableItem
       item={item}
-      setScrollEnabled={enable => this.setScrollEnabled(enable)}
-      deleteItem={this.deleteItem}
+      setScrollEnabled={enable => setScrollEnabled(enable)}
+      deleteItem={deleteItem}
       sourcePage="Cart"
-      navigation={this.props.navigation}
+      navigation={navigation}
     />
+  );
+
+  return (
+    <ImageBackground
+      source={require('../res/grad_3.png')}
+      style={styles.fullBackground}>
+      <View style={styles.TotalPricesView}>
+        <Text
+          style={[
+            styles.FirstTotal,
+            {position: 'absolute', left: 20, top: -2},
+          ]}>
+          Total:
+        </Text>
+        <Ticker textStyle={{fontSize: 40}} duration={1000}>
+          ${cartSum ? getTotalPriceString(cartSum) : 0.0}
+        </Ticker>
+      </View>
+      <Text style={styles.TaxTotal}>
+        {' '}
+        <B>${cartSum}</B> without tax
+      </Text>
+
+      <TouchableOpacity
+        style={{margin: 15, position: 'relative', top: 0, right: 0}}>
+        <Text style={{color: 'blue', right: 0, position: 'relative'}}>
+          About this store
+        </Text>
+      </TouchableOpacity>
+
+      <FlatList
+        scrollEnabled={isScrollEnabled}
+        contentContainerStyle={{alignItems: 'center', marginBottom: 80}}
+        style={styles.flatContainer}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        data={cartItems}
+      />
+
+      <View style={{position: 'absolute', right: 0, bottom: 0}}>
+        <TouchableOpacity
+          style={styles.checkOutButton}
+          onPress={() => {
+            return;
+          }}>
+          <Text
+            style={{
+              fontFamily: 'Segoe UI',
+              fontSize: 20,
+              fontVariant: ['small-caps'],
+              color: 'white',
+            }}>
+            Check out
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -267,11 +264,7 @@ const styles = StyleSheet.create({
   },
 
   FirstTotal: {
-    alignSelf: 'center',
-    fontSize: 30,
-    fontFamily: 'Segoe UI',
-
-    marginBottom: 10,
+    fontSize: 40,
   },
 
   TaxTotal: {

@@ -267,30 +267,44 @@ export default class AccountPage extends Component {
             </Text>
           </TouchableOpacity>
         </View>
+        <View style={{}}>
+          <TouchableOpacity
+            onPress={e =>
+              navigate('Account', {
+                screen: 'WishlistPage',
+              })
+            }>
+            <Text
+              style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
+              Wishlists
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              borderBottomColor: '#858585',
+              width: '50%',
+              borderBottomWidth: 1,
+              alignSelf: 'center',
+            }}
+          />
 
-        <TouchableOpacity
-          onPress={e =>
-            navigate('Account', {
-              screen: 'WishlistPage',
-            })
-          }>
           <Text style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
-            Wishlists
+            Account Details
           </Text>
-        </TouchableOpacity>
-        <View
-          style={{
-            borderBottomColor: '#858585',
-            width: '50%',
-            borderBottomWidth: 1,
-            alignSelf: 'center',
-          }}
-        />
 
-        <Text style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
-          Account Details
-        </Text>
+          <View
+            style={{
+              borderBottomColor: '#858585',
+              width: '50%',
+              borderBottomWidth: 1,
+              alignSelf: 'center',
+            }}
+          />
 
+          <Text style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
+            Billing History
+          </Text>
+        </View>
         <View
           style={{flexDirection: 'column', position: 'absolute', bottom: 60}}>
           <Text style={{fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10}}>
@@ -450,7 +464,7 @@ const styles = StyleSheet.create({
   },
   textView: {
     marginTop: 40,
-    marginBottom: 100,
+    marginBottom: 50,
     alignItems: 'center',
     justifyContent: 'flex-end',
     flexDirection: 'row',
