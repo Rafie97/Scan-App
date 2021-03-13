@@ -118,13 +118,14 @@ function MapPage() {
               fillOpacity={0.5}
             />
             {wallData.aisles ? (
-              wallData.aisles.map((coordinate, index) => {
+              wallData.aisles.map((aisl, index) => {
+                console.log(aisl.products);
                 return (
                   <>
                     <G>
                       <Circle
-                        cx={coordinate.x}
-                        cy={coordinate.y}
+                        cx={aisl.coordinate.x}
+                        cy={aisl.coordinate.y}
                         r={3}
                         stroke="black"
                         strokeWidth={1}

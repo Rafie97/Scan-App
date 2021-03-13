@@ -89,15 +89,46 @@ class PromotionsPage extends Component {
               data={[
                 {
                   name: 'Spicy Ramen Combo',
-                  image: 'Spicy-Chicken-Ramen-28-scaled.jpg',
+                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
                 },
-                {name: 'Spring Combos', image: ''},
-                {name: 'Grill Combos', image: ''},
-                {name: 'Taco Combos', image: ''},
+                {
+                  name: 'Spring Combos',
+                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
+                },
+                {
+                  name: 'Grill Combos',
+                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
+                },
+                {
+                  name: 'Taco Combos',
+                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
+                },
               ]}
               horizontal={true}
               renderItem={({item}) => (
-                <FamilyTile name={item.name} imageSource={item.image} />
+                <View
+                  style={{
+                    height: 130,
+                    width: 100,
+                    marginLeft: 10,
+                    alignItems: 'flex-end',
+                  }}>
+                  <Image
+                    source={{uri: item.image}}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 10,
+                      borderColor: '#dddddd',
+                      borderWidth: 2,
+                      marginLeft: 10,
+                    }}
+                  />
+
+                  <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+                    <Text style={{fontFamily: 'Segoe UI'}}>{item.name}</Text>
+                  </View>
+                </View>
               )}
             />
           </View>

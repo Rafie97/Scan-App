@@ -31,7 +31,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);
   const [isScrollEnabled, setScrollEnabled] = React.useState(true);
-  const [cartSum, setCartSum] = React.useState<number>(undefined);
+  const [cartSum, setCartSum] = React.useState<number[]>(undefined);
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -60,8 +60,13 @@ function CartPage() {
       const numPrice = +item.price;
       tempSum += numPrice;
     });
-    setCartSum(Math.round(100 * tempSum) / 100);
-    console.log('in render', cartSum);
+    if (tempSum > 0) {
+      setCartSum([
+        Math.round(100 * tempSum) / 100,
+        Math.round(100 * 1.0825 * tempSum) / 100,
+      ]);
+      console.log('in render', cartSum);
+    }
   }, [cartItems]);
 
   function deleteItem(itemID) {
@@ -82,11 +87,13 @@ function CartPage() {
       });
   }
 
-  function getTotalPriceString(price) {
-    const totalString = (Math.round(100 * 1.0825 * price) / 100).toString();
-    console.log('in func ', totalString);
-    return totalString;
-  }
+  // function getTotalPriceString(price) {
+  //   const totalNum = Math.round(100 * 1.0825 * price) / 100;
+  //   const totalString = totalNum.toString();
+  //   console.log('in func ', totalString);
+  //   // return totalString;
+  //   return totalNum;
+  // }
 
   const renderItem = ({item}) => (
     <SwipeableItem
@@ -110,13 +117,21 @@ function CartPage() {
           ]}>
           Total:
         </Text>
-        <Ticker textStyle={{fontSize: 40}} duration={1000}>
-          ${cartSum ? getTotalPriceString(cartSum) : 0.0}
-        </Ticker>
+        <View
+          style={{flexDirection: 'row', marginLeft: 0, alignSelf: 'center'}}>
+          <Ticker textStyle={{fontSize: 40}} duration={500}>
+            ${cartSum[1] ? Math.trunc(cartSum[1]).toString() : 0}
+          </Ticker>
+          <Ticker duration={250} textStyle={{fontSize: 40}}>
+            {cartSum[1]
+              ? (cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4)
+              : 0}
+          </Ticker>
+        </View>
       </View>
       <Text style={styles.TaxTotal}>
         {' '}
-        <B>${cartSum}</B> without tax
+        <B>${cartSum[0]}</B> without tax
       </Text>
 
       <TouchableOpacity
@@ -259,7 +274,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     marginTop: 30,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
 
