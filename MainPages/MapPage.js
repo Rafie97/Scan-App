@@ -27,7 +27,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import MapBubble from '../Models/Components/MapBubble';
 
 function MapPage() {
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchFocused, setSearchFocused] = useState();
   const [backSearches, setBackSearches] = useState([]);
   const [markedAisles, setMarkedAisles] = useState([]);
   const [wallData, setWallData] = useState({
@@ -46,9 +46,21 @@ function MapPage() {
       .collection('map-data')
       .doc('walls');
 
-    mapRef.onSnapshot(async snap => {
-      console.log(snap.data());
-      await setWallData({...snap.data()});
+    mapRef.get().then(snap => {
+      try {
+        if (snap.exists) {
+          setWallData({
+            aisles: snap.data().aisles,
+            mapSize: {
+              height: snap.data().mapSize.height,
+              width: snap.data().mapSize.width,
+            },
+            wallCoordinates: snap.data().wallCoordinates,
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
     });
   }, []);
 
@@ -77,13 +89,16 @@ function MapPage() {
     }
 
     if (backSearches) {
-      console.log(backSearches.length);
       const aislesTemp = [];
       backSearches.forEach(el => {
         aislesTemp.push(el.location);
       });
       setMarkedAisles(aislesTemp);
     }
+  }
+
+  function pressAisle(index) {
+    console.log(wallData.aisles[index]);
   }
 
   function drawCircles() {
@@ -99,12 +114,20 @@ function MapPage() {
       source={require('../res/grad_3.png')}
       style={styles.fullBackground}>
       <View style={styles.mapPageContainer}>
-        <View style={styles.mapTitleView}>
-          <Text
-            style={{fontSize: 24, fontFamily: 'Segoe UI', textAlign: 'center'}}>
-            Map
-          </Text>
-        </View>
+        {searchFocused ? (
+          <></>
+        ) : (
+          <View style={styles.mapTitleView}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontFamily: 'Segoe UI',
+                textAlign: 'center',
+              }}>
+              Map
+            </Text>
+          </View>
+        )}
 
         <View style={styles.mapView}>
           {markedAisles ? drawCircles() : {}}
@@ -119,14 +142,13 @@ function MapPage() {
             />
             {wallData.aisles ? (
               wallData.aisles.map((aisl, index) => {
-                console.log(aisl.products);
                 return (
                   <>
-                    <G>
+                    <G onPress={() => pressAisle(index)}>
                       <Circle
                         cx={aisl.coordinate.x}
                         cy={aisl.coordinate.y}
-                        r={3}
+                        r={6}
                         stroke="black"
                         strokeWidth={1}
                         fill="white"
@@ -159,7 +181,6 @@ function MapPage() {
             }}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            backgroundColor="#a2a3a1"
             placeholderTextColor="#545454"
             placeholder="Search this store"
           />
@@ -226,8 +247,7 @@ const styles = StyleSheet.create({
 
   searchBarView: {
     alignItems: 'center',
-    fontFamily: 'Segoe UI',
-    marginBottom: 10,
+    // marginBottom: 10,
     flex: 1,
   },
 
