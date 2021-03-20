@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
@@ -46,16 +47,16 @@ class PromotionsPage extends Component {
   }
 
   render() {
-    let arr = [];
-    this.state.promoItems.forEach(i => {
-      arr = [...arr, i.name];
-    });
+    // let arr = [];
+    // this.state.promoItems.forEach(i => {
+    //   arr = [...arr, i.name];
+    // });
 
     return (
       <ImageBackground
         source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
-        <View style={styles.promoPageContainer}>
+        <ScrollView style={styles.promoPageContainer}>
           <Text style={styles.promoTitle}>Today's Best Deals</Text>
 
           <Text
@@ -67,7 +68,7 @@ class PromotionsPage extends Component {
             }}>
             Explore our coupons
           </Text>
-          <View style={{height: 180}}>
+          <View style={{height: 300}}>
             <FlatList
               data={this.state.promoItems}
               horizontal={true}
@@ -125,14 +126,15 @@ class PromotionsPage extends Component {
                     }}
                   />
 
-                  <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+                  <View
+                    style={{flex: 1, paddingTop: 10, alignSelf: 'flex-start'}}>
                     <Text style={{fontFamily: 'Segoe UI'}}>{item.name}</Text>
                   </View>
                 </View>
               )}
             />
           </View>
-        </View>
+        </ScrollView>
       </ImageBackground>
     );
   }
@@ -151,6 +153,10 @@ class PromotionsPage extends Component {
         }>
         <Image style={styles.itemImage} source={{uri: item.imageLink}} />
 
+        <Text style={[styles.itemTitleText, {fontWeight: 'bold'}]}>
+          ${item.price}
+        </Text>
+
         <Text style={styles.itemTitleText}>{item.name}</Text>
       </TouchableOpacity>
     );
@@ -168,6 +174,7 @@ const styles = StyleSheet.create({
   promoPageContainer: {
     width: '100%',
     height: '100%',
+    marginBottom: 60,
   },
   gridContainer: {
     width: 400,
@@ -190,13 +197,13 @@ const styles = StyleSheet.create({
   },
 
   itemBox: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 1,
-    borderRadius: 10,
     borderColor: 'grey',
+    borderRadius: 20,
     marginHorizontal: 10,
-    maxWidth: 260,
-    maxHeight: 160,
+    width: 200,
+    maxHeight: 360,
     shadowColor: '#000',
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -204,19 +211,22 @@ const styles = StyleSheet.create({
   },
 
   itemTitleText: {
-    textAlign: 'center',
-    marginBottom: 5,
-    marginHorizontal: 2,
+    textAlign: 'left',
+    marginVertical: 5,
+    marginLeft: 20,
+    fontSize: 20,
     fontFamily: 'Segoe UI',
   },
 
   itemImage: {
     marginTop: 5,
-    marginBottom: 5,
+    marginBottom: 20,
     marginHorizontal: 5,
-    flex: 1,
-    width: 160,
-    height: 100,
-    borderRadius: 10,
+    borderRadius: 2,
+    top: 0,
+    width: 120,
+    height: 120,
+    resizeMode: 'contain',
+    alignSelf: 'center',
   },
 });

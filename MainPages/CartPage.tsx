@@ -65,7 +65,6 @@ function CartPage() {
         Math.round(100 * tempSum) / 100,
         Math.round(100 * 1.0825 * tempSum) / 100,
       ]);
-      console.log('in render', cartSum);
     }
   }, [cartItems]);
 
@@ -117,21 +116,24 @@ function CartPage() {
           ]}>
           Total:
         </Text>
-        <View
-          style={{flexDirection: 'row', marginLeft: 0, alignSelf: 'center'}}>
-          <Ticker textStyle={{fontSize: 40}} duration={500}>
-            ${cartSum[1] ? Math.trunc(cartSum[1]).toString() : 0}
-          </Ticker>
-          <Ticker duration={250} textStyle={{fontSize: 40}}>
-            {cartSum[1]
-              ? (cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4)
-              : 0}
-          </Ticker>
-        </View>
+        {cartSum ? (
+          <View
+            style={{flexDirection: 'row', marginLeft: 0, alignSelf: 'center'}}>
+            <Ticker textStyle={{fontSize: 40}} duration={500}>
+              ${Math.trunc(cartSum[1]).toString() || 0}
+            </Ticker>
+            <Ticker duration={250} textStyle={{fontSize: 40}}>
+              {(cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4) ||
+                0}
+            </Ticker>
+          </View>
+        ) : (
+          <></>
+        )}
       </View>
       <Text style={styles.TaxTotal}>
         {' '}
-        <B>${cartSum[0]}</B> without tax
+        <B>${cartSum ? cartSum[0] : 0}</B> without tax
       </Text>
 
       <TouchableOpacity

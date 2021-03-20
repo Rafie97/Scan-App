@@ -20,16 +20,17 @@ import {
   ImageBackground,
   Image,
   Animated,
+  FlatList,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
-import {FlatList} from 'react-native-gesture-handler';
 import MapBubble from '../Models/Components/MapBubble';
 
 function MapPage() {
-  const [searchFocused, setSearchFocused] = useState();
+  const [searchFocused, setSearchFocused] = useState(false);
   const [backSearches, setBackSearches] = useState([]);
   const [markedAisles, setMarkedAisles] = useState([]);
+  const [currentBubble, setCurrentBubble] = useState(-1);
   const [wallData, setWallData] = useState({
     aisles: [],
     mapSize: {
@@ -97,10 +98,6 @@ function MapPage() {
     }
   }
 
-  function pressAisle(index) {
-    console.log(wallData.aisles[index]);
-  }
-
   function drawCircles() {
     if (markedAisles) {
       return markedAisles.map(function(loc) {
@@ -108,6 +105,20 @@ function MapPage() {
       });
     }
   }
+
+  const ProdBubble = ({prods, coord}) => {
+    if (currentBubble > -1) {
+      return (
+        <View style={{flexDirection: 'column'}}>
+          {prods.map(p => {
+            return <Text>{p}</Text>;
+          })}
+        </View>
+      );
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <ImageBackground
@@ -140,23 +151,12 @@ function MapPage() {
               strokeWidth="4"
               fillOpacity={0.5}
             />
-            {wallData.aisles ? (
-              wallData.aisles.map((aisl, index) => {
-                return (
-                  <>
-                    <G onPress={() => pressAisle(index)}>
-                      <Circle
-                        cx={aisl.coordinate.x}
-                        cy={aisl.coordinate.y}
-                        r={6}
-                        stroke="black"
-                        strokeWidth={1}
-                        fill="white"
-                      />
-                    </G>
-                  </>
-                );
-              })
+
+            {currentBubble > -1 ? (
+              <ProdBubble
+                prods={wallData.aisles[currentBubble].products}
+                coord={wallData.aisles[currentBubble].coordinate}
+              />
             ) : (
               <></>
             )}
@@ -170,6 +170,27 @@ function MapPage() {
                 />
               );
             })}
+
+            {wallData.aisles ? (
+              wallData.aisles.map((aisl, index) => {
+                return (
+                  <>
+                    <G onPress={() => setCurrentBubble(index)}>
+                      <Circle
+                        cx={aisl.coordinate.x}
+                        cy={aisl.coordinate.y}
+                        r={20}
+                        stroke="black"
+                        strokeWidth={1}
+                        fill="rgba(0,0,0,0)"
+                      />
+                    </G>
+                  </>
+                );
+              })
+            ) : (
+              <></>
+            )}
           </Svg>
         </View>
 
