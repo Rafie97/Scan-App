@@ -22,6 +22,7 @@ class PromotionsPage extends Component {
     this.state = {
       loading: true,
       promoItems: [],
+      recipes: [],
     };
 
     this.getItems = this.getItems.bind(this);
@@ -29,6 +30,7 @@ class PromotionsPage extends Component {
 
   componentDidMount() {
     this.getItems();
+    this.getRecipes();
   }
 
   async getItems() {
@@ -42,6 +44,24 @@ class PromotionsPage extends Component {
       snap.forEach(async doc => {
         const item = new Item(doc);
         await this.setState({promoItems: [...this.state.promoItems, item]});
+      });
+    });
+  }
+
+  async getRecipes() {
+    const hebRef = firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('recipes');
+
+    hebRef.onSnapshot(snap => {
+      this.setState({recipes: []});
+      snap.forEach(async doc => {
+        const item = {
+          imageLink: doc.data().imageLink,
+          name: doc.data().name,
+        };
+        await this.setState({recipes: [...this.state.recipes, item]});
       });
     });
   }
@@ -87,51 +107,42 @@ class PromotionsPage extends Component {
           </Text>
           <View style={{height: 160}}>
             <FlatList
-              data={[
-                {
-                  name: 'Spicy Ramen Combo',
-                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
-                },
-                {
-                  name: 'Spring Combos',
-                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
-                },
-                {
-                  name: 'Grill Combos',
-                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
-                },
-                {
-                  name: 'Taco Combos',
-                  image: '../../res/Spicy-Chicken-Ramen-28-scaled.jpg',
-                },
-              ]}
+              data={this.state.recipes}
               horizontal={true}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    height: 130,
-                    width: 100,
-                    marginLeft: 10,
-                    alignItems: 'flex-end',
-                  }}>
-                  <Image
-                    source={{uri: item.image}}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 10,
-                      borderColor: '#dddddd',
-                      borderWidth: 2,
-                      marginLeft: 10,
-                    }}
-                  />
+              renderItem={({item}) => {
+                const link = item.imageLink;
 
+                return (
                   <View
-                    style={{flex: 1, paddingTop: 10, alignSelf: 'flex-start'}}>
-                    <Text style={{fontFamily: 'Segoe UI'}}>{item.name}</Text>
+                    style={{
+                      height: 130,
+                      width: 100,
+                      marginLeft: 10,
+                      alignItems: 'flex-end',
+                    }}>
+                    <Image
+                      source={{uri: link}}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        borderRadius: 10,
+                        borderColor: '#dddddd',
+                        borderWidth: 2,
+                        marginLeft: 10,
+                      }}
+                    />
+
+                    <View
+                      style={{
+                        flex: 1,
+                        paddingTop: 10,
+                        alignSelf: 'flex-start',
+                      }}>
+                      <Text style={{fontFamily: 'Segoe UI'}}>{item.name}</Text>
+                    </View>
                   </View>
-                </View>
-              )}
+                );
+              }}
             />
           </View>
         </ScrollView>

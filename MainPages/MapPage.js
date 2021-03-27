@@ -31,6 +31,7 @@ function MapPage() {
   const [backSearches, setBackSearches] = useState([]);
   const [markedAisles, setMarkedAisles] = useState([]);
   const [currentBubble, setCurrentBubble] = useState(-1);
+  const [items, setItems] = useState([]);
   const [wallData, setWallData] = useState({
     aisles: [],
     mapSize: {
@@ -62,6 +63,23 @@ function MapPage() {
       } catch (e) {
         console.log(e);
       }
+    });
+  }, []);
+
+  useEffect(() => {
+    setItems([]);
+    const hebRef = firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('items');
+
+    hebRef.onSnapshot(snap => {
+      const itemsTemp = [];
+      snap.forEach(async doc => {
+        const item = new Item(doc);
+        itemsTemp.push(item);
+      });
+      setItems(itemsTemp);
     });
   }, []);
 
@@ -111,7 +129,10 @@ function MapPage() {
       return (
         <View style={{flexDirection: 'column'}}>
           {prods.map(p => {
-            return <Text>{p}</Text>;
+            const match = items.findIndex(i => {
+              return i.docID === p;
+            });
+            return <Text>{items[match].name}</Text>;
           })}
         </View>
       );
