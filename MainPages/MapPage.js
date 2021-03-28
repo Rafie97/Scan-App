@@ -127,12 +127,24 @@ function MapPage() {
   const ProdBubble = ({prods, coord}) => {
     if (currentBubble > -1) {
       return (
-        <View style={{flexDirection: 'column'}}>
+        <View
+          style={{
+            flexDirection: 'column',
+            position: 'relative',
+            left: coord.x,
+            top: coord.y,
+            backgroundColor: 'white',
+            maxWidth: 100,
+          }}>
           {prods.map(p => {
             const match = items.findIndex(i => {
               return i.docID === p;
             });
-            return <Text>{items[match].name}</Text>;
+            if (match > -1) {
+              return <Text>{items[match].name}</Text>;
+            } else {
+              return <></>;
+            }
           })}
         </View>
       );
