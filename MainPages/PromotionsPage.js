@@ -88,7 +88,7 @@ class PromotionsPage extends Component {
             }}>
             Explore our coupons
           </Text>
-          <View style={{height: 300}}>
+          <View style={{height: 240}}>
             <FlatList
               data={this.state.promoItems}
               horizontal={true}
@@ -103,7 +103,7 @@ class PromotionsPage extends Component {
               marginLeft: 20,
               marginBottom: 10,
             }}>
-            Explore our combos and recipes
+            Explore our take-and-make recipes
           </Text>
           <View style={{height: 160}}>
             <FlatList
@@ -135,10 +135,15 @@ class PromotionsPage extends Component {
                     <View
                       style={{
                         flex: 1,
-                        paddingTop: 10,
-                        alignSelf: 'flex-start',
+                        alignSelf: 'center',
                       }}>
-                      <Text style={{fontFamily: 'Segoe UI'}}>{item.name}</Text>
+                      <Text
+                        style={{
+                          fontFamily: 'NotoSansJP-Medium',
+                          textAlign: 'center',
+                        }}>
+                        {item.name}
+                      </Text>
                     </View>
                   </View>
                 );
@@ -214,7 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 10,
     width: 200,
-    maxHeight: 360,
+    maxHeight: 240,
     shadowColor: '#000',
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -226,7 +231,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginLeft: 20,
     fontSize: 20,
-    fontFamily: 'Segoe UI',
+    fontFamily: 'NotoSansJP-Medium',
   },
 
   itemImage: {
