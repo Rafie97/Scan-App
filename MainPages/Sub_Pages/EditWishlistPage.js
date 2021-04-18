@@ -14,6 +14,7 @@ import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/Item';
 import SwipeableItem from '../../Models/Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 class EditWishlistPage extends Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class EditWishlistPage extends Component {
       item={item}
       setScrollEnabled={enable => this.setScrollEnabled(enable)}
       deleteItem={this.deleteItem}
-      sourcePage="Wishlist"
+      sourcePage="Account"
       navigation={this.props.navigation}
     />
   );
@@ -90,13 +91,17 @@ class EditWishlistPage extends Component {
     return (
       <ImageBackground
         style={styles.fullBackground}
-        source={require('../../res/android-promotions.png')}>
+        source={require('../../res/grad_3.png')}>
         <View style={styles.backButtonView}>
-          <Button
-            title="go back"
-            onPress={() => navigate('MainWishlistPage')}
-            style={styles.backButton}
-          />
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => navigate('WishlistPage')}>
+            <Ionicon
+              name="arrow-back-circle-outline"
+              size={50}
+              style={{marginLeft: 10, marginTop: 5}}
+            />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.ListNameText}>{this.state.routeListName}</Text>

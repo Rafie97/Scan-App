@@ -28,7 +28,7 @@ function AccountStack() {
         name="EditWishlistPage"
         component={EditWishlistPage}
       />
-      <AccountStackNav.Screen name="WishlistItemPage" component={ItemPage} />
+      <AccountStackNav.Screen name="AccountPageItemPage" component={ItemPage} />
     </AccountStackNav.Navigator>
   );
 }

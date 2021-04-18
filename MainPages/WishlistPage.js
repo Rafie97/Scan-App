@@ -19,6 +19,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import SelectableItem from '../Models/Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 class WishlistPage extends Component {
   constructor(props) {
@@ -41,10 +42,15 @@ class WishlistPage extends Component {
       <ImageBackground
         source={require('../res/grad_3.png')}
         style={styles.fullBackground}>
-        <Button
-          onPress={() => navigate('Account', {screen: 'AccountPage'})}
-          title="Go Back"
-        />
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => navigate('AccountPage')}>
+          <Ionicon
+            name="arrow-back-circle-outline"
+            size={50}
+            style={{marginLeft: 10, marginTop: 5}}
+          />
+        </TouchableOpacity>
         <View style={styles.wishlistGroupView}>
           <FlatList
             data={this.state.wishlists}

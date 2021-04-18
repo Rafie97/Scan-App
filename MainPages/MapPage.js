@@ -31,7 +31,7 @@ function MapPage() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [backSearches, setBackSearches] = useState([]);
   const [markedAisles, setMarkedAisles] = useState([]);
-  const [currentBubble, setCurrentBubble] = useState([]);
+  const [currentBubble, setCurrentBubble] = useState(-1);
   const [items, setItems] = useState([]);
   const [scaleFactor, setScale] = useState(1);
   const [wallData, setWallData] = useState({
@@ -113,7 +113,7 @@ function MapPage() {
       });
       await setBackSearches(matches);
 
-      await setCurrentBubble(matches);
+      //await setCurrentBubble(matches);
       // const BreakException = {};
       // const hebRef = firestore()
       //   .collection('stores')
@@ -138,16 +138,22 @@ function MapPage() {
     }
   }
 
-  function drawCircles() {
+  function DrawCircles() {
     if (markedAisles) {
-      return markedAisles.map(index => {
-        return <MapBubble location={wallData.aisles[index].coordinate} />;
-      });
+      return (
+        <View>
+          {markedAisles.map(index => {
+            return <MapBubble location={wallData.aisles[index].coordinate} />;
+          })}
+        </View>
+      );
+    } else {
+      return <></>;
     }
   }
 
   const ProdBubble = ({prods, coord}) => {
-    if (currentBubble) {
+    if (currentBubble >= 0) {
       return (
         <View
           style={{
@@ -201,23 +207,23 @@ function MapPage() {
             width: wallData.mapSize.width * scaleFactor,
             alignSelf: 'center',
           }}>
-          {/* {markedAisles ? drawCircles() : {}} */}
+          <DrawCircles />
 
-          <Svg /*height="75%" width="100%"*/ style={styles.mapBox}>
+          <Svg style={styles.mapBox}>
             <Rect
-              width={wallData.mapSize.width}
-              height={wallData.mapSize.height}
+              width={wallData.mapSize.width * scaleFactor}
+              height={wallData.mapSize.height * scaleFactor}
               fillOpacity={0.5}
             />
 
-            {currentBubble.map(c => {
-              return (
-                <ProdBubble
-                  prods={wallData.aisles[c].products}
-                  coord={wallData.aisles[c].coordinate}
-                />
-              );
-            })}
+            {currentBubble >= 0 ? (
+              <ProdBubble
+                prods={wallData.aisles[currentBubble].products}
+                coord={wallData.aisles[currentBubble].coordinate}
+              />
+            ) : (
+              <></>
+            )}
 
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
@@ -236,12 +242,11 @@ function MapPage() {
                   <>
                     <G
                       onPress={() => {
-                        setCurrentBubble([]);
-                        setCurrentBubble([index]);
+                        setCurrentBubble(index);
                       }}>
                       <Circle
-                        cx={aisl.coordinate.x}
-                        cy={aisl.coordinate.y}
+                        cx={aisl.coordinate.x * scaleFactor}
+                        cy={aisl.coordinate.y * scaleFactor}
                         r={20}
                         stroke="black"
                         strokeWidth={1}
@@ -350,11 +355,10 @@ const styles = StyleSheet.create({
   },
 
   mapBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderWidth: 0,
     borderColor: 'grey',
     borderRadius: 20,
-
     shadowColor: '#000',
     shadowOpacity: 0.5,
     shadowRadius: 4,
