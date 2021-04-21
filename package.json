@@ -25,6 +25,7 @@
     "react-native-blur": "^3.2.2",
     "react-native-camera": "^3.23.1",
     "react-native-charts-wrapper": "^0.5.7",
+    "react-native-cli": "^2.0.1",
     "react-native-contacts": "^5.2.7",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.6.1",
