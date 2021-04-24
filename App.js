@@ -7,7 +7,8 @@ import {AuthProvider} from './Auth_Components/AuthContext';
 import { createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-
+import config from "./hiddenConfig/config"
+import { firebase } from '@react-native-firebase/firestore';
 
 console.disableYellowBox=true;
 
@@ -22,7 +23,11 @@ class App extends Component {
     }
   }
 
+
   componentDidMount(){
+    if(!firebase.apps.length){
+      firebase.initializeApp(config)
+    }
     auth().onAuthStateChanged(user=>{
       if(user){
         this.setState({isSignedIn:true})
