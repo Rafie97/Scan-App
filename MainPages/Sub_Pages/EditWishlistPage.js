@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'center',
     paddingTop: 60,
-    fontFamily: 'Segoe UI',
   },
   itemBubble: {
     backgroundColor: '#FFFFFF',
@@ -180,7 +179,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 15,
     fontSize: 16,
-    fontFamily: 'Segoe UI',
   },
   itemPrice: {
     alignSelf: 'center',

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.reactnativepayments.ReactNativePaymentsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;

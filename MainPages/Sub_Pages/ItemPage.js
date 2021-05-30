@@ -140,7 +140,6 @@ function ItemPage({route}) {
 
             <Text
               style={{
-                fontFamily: 'Segoe UI Italic',
                 fontSize: 24,
                 color: 'green',
                 marginTop: 50,

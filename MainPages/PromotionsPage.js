@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     textAlign: 'center',
     fontSize: 24,
-    fontFamily: 'Segoe UI',
   },
 
   promoFooter: {

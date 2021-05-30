@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 15,
     fontSize: 16,
-    fontFamily: 'Segoe UI',
   },
   itemPrice: {
     alignSelf: 'center',
@@ -157,7 +156,6 @@ const styles = StyleSheet.create({
     marginTop: 200,
     marginBottom: 10,
     fontSize: 20,
-    fontFamily: 'Segoe UI',
   },
 
   fullBackground: {

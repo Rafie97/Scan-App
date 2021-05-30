@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     alignSelf: 'center',
-    fontFamily: 'Segoe UI',
   },
 
   wishlistGroupView: {
@@ -124,7 +123,6 @@ const styles = StyleSheet.create({
   },
   yourWishlistsText: {
     fontSize: 24,
-    fontFamily: 'Segoe UI',
   },
   textView: {
     marginTop: 40,
@@ -160,8 +158,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
-    fontFamily: 'Segoe UI',
   },
   modalView: {
     backgroundColor: 'white',
@@ -181,6 +177,5 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontFamily: 'Segoe UI',
   },
 });

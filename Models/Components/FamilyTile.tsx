@@ -39,7 +39,7 @@ const FamilyTile = (props: TileProps) => {
       />
 
       <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        <Text style={{fontFamily: 'Segoe UI'}}>{props.name}</Text>
+        <Text style={{}}>{props.name}</Text>
       </View>
     </View>
   );

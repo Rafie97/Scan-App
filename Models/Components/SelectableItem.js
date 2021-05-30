@@ -46,6 +46,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     alignSelf: 'center',
-    fontFamily: 'Segoe UI',
   },
 });
