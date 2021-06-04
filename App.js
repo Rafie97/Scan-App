@@ -9,6 +9,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import config from './hiddenConfig/config';
 import firestore, {firebase} from '@react-native-firebase/firestore';
+import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import Font5Icon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
+MatIcon.loadFont();
+AntIcon.loadFont();
+Font5Icon.loadFont();
+IonIcon.loadFont();
 
 console.disableYellowBox = true;
 

@@ -47,9 +47,6 @@ end
 target 'BigMoney' do
   # Pods for BigMoney
   # pod 'Google'
-  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
-  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
-  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -83,7 +80,6 @@ target 'BigMoney' do
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
   
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'BigMoneyTests' do
     inherit! :complete
