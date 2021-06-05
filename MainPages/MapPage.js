@@ -207,15 +207,14 @@ function MapPage() {
             width: wallData.mapSize.width * scaleFactor,
             alignSelf: 'center',
           }}>
-          <DrawCircles />
-
           <Svg style={styles.mapBox}>
+            <DrawCircles />
             <Rect
               width={wallData.mapSize.width * scaleFactor}
               height={wallData.mapSize.height * scaleFactor}
               fillOpacity={0.5}
             />
-
+            <Circle cx={20} cy={20} r={2} stroke="purple" fill="yellow" />
             {currentBubble >= 0 ? (
               <ProdBubble
                 prods={wallData.aisles[currentBubble].products}
