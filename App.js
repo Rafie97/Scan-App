@@ -26,7 +26,9 @@ const OuterNavigator = createStackNavigator();
 
 class App extends Component {
   constructor(props) {
-    // firebase.initializeApp(config);
+    if (Platform.OS === 'ios') {
+      firebase.initializeApp(config);
+    }
     super(props);
     this.state = {
       isSignedIn: false,

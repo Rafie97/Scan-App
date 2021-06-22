@@ -72,6 +72,17 @@ export default class AccountPage extends Component {
       .doc(userID)
       .collection('Family')
       .onSnapshot(() => {});
+    firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Wishlists')
+      .onSnapshot(() => {});
+
+    firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('items')
+      .onSnapshot(() => {});
     auth().signOut();
   }
 
@@ -92,7 +103,7 @@ export default class AccountPage extends Component {
       .collection('Wishlists');
     wishRef.onSnapshot(snap => {
       this.setState({wishlistSelect: []});
-      snap.forEach((doc, index) => {
+      snap.forEach(doc => {
         this.setState({wishlists: [...this.state.wishlists, doc.id]});
       });
     });
@@ -107,9 +118,10 @@ export default class AccountPage extends Component {
       buttonPositive: 'OK',
       buttonNegative: 'Cancel',
     }).then(() => {
-      Contacts.getCount(async count => {
-        await this.setState({countContacts: count + 1, didCount: true});
-      });
+      console.log('GOT PERMSSIONS');
+      // Contacts.getCount(async count => {
+      //   await this.setState({countContacts: count + 1, didCount: true});
+      // });
     });
   }
 
@@ -354,7 +366,7 @@ export default class AccountPage extends Component {
                   paddingTop: 40,
                   height: 130,
                 }}>
-                No Family to show
+                There is no Family to show
               </Text>
             </View>
           )}
@@ -368,7 +380,7 @@ export default class AccountPage extends Component {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>
-                Which contact would you like to add?
+                Which contacts would you like to add?
               </Text>
               <TextInput
                 placeholder="Search contacts by name"
