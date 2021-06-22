@@ -13,6 +13,7 @@ import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Font5Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import {Platform} from 'react-native';
 
 MatIcon.loadFont();
 AntIcon.loadFont();
@@ -25,7 +26,7 @@ const OuterNavigator = createStackNavigator();
 
 class App extends Component {
   constructor(props) {
-    firebase.initializeApp(config);
+    // firebase.initializeApp(config);
     super(props);
     this.state = {
       isSignedIn: false,
@@ -35,7 +36,9 @@ class App extends Component {
   componentDidMount() {
     if (!firebase.apps.length) {
       console.log('check passed');
-      firebase.initializeApp(config);
+      if (Platform.OS === 'ios') {
+        firebase.initializeApp(config);
+      }
     } else {
       console.log('check failed');
     }
