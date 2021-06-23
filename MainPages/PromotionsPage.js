@@ -30,7 +30,7 @@ class PromotionsPage extends Component {
 
   componentDidMount() {
     this.getItems();
-    //this.getRecipes();
+    this.getRecipes();
   }
 
   async getItems() {
