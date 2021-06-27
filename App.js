@@ -7,6 +7,18 @@ import {AuthProvider} from './Auth_Components/AuthContext';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import config from './hiddenConfig/config';
+import firestore, {firebase} from '@react-native-firebase/firestore';
+import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import Font5Icon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import {Platform} from 'react-native';
+
+MatIcon.loadFont();
+AntIcon.loadFont();
+Font5Icon.loadFont();
+IonIcon.loadFont();
 
 console.disableYellowBox = true;
 
@@ -14,6 +26,9 @@ const OuterNavigator = createStackNavigator();
 
 class App extends Component {
   constructor(props) {
+    if (Platform.OS === 'ios') {
+      firebase.initializeApp(config);
+    }
     super(props);
     this.state = {
       isSignedIn: false,
@@ -21,6 +36,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    if (!firebase.apps.length) {
+      console.log('check passed');
+      if (Platform.OS === 'ios') {
+        firebase.initializeApp(config);
+      }
+    } else {
+      console.log('check failed');
+    }
     auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({isSignedIn: true});

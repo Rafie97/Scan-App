@@ -72,6 +72,17 @@ export default class AccountPage extends Component {
       .doc(userID)
       .collection('Family')
       .onSnapshot(() => {});
+    firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Wishlists')
+      .onSnapshot(() => {});
+
+    firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('items')
+      .onSnapshot(() => {});
     auth().signOut();
   }
 
@@ -92,7 +103,7 @@ export default class AccountPage extends Component {
       .collection('Wishlists');
     wishRef.onSnapshot(snap => {
       this.setState({wishlistSelect: []});
-      snap.forEach((doc, index) => {
+      snap.forEach(doc => {
         this.setState({wishlists: [...this.state.wishlists, doc.id]});
       });
     });
@@ -107,9 +118,10 @@ export default class AccountPage extends Component {
       buttonPositive: 'OK',
       buttonNegative: 'Cancel',
     }).then(() => {
-      Contacts.getCount(async count => {
-        await this.setState({countContacts: count + 1, didCount: true});
-      });
+      console.log('GOT PERMSSIONS');
+      // Contacts.getCount(async count => {
+      //   await this.setState({countContacts: count + 1, didCount: true});
+      // });
     });
   }
 
@@ -262,9 +274,7 @@ export default class AccountPage extends Component {
           <TouchableOpacity
             style={{marginLeft: 50, marginRight: 20, alignSelf: 'center'}}
             onPress={() => this.signOut()}>
-            <Text style={{color: 'blue', fontSize: 16, fontFamily: 'Segoe UI'}}>
-              Sign out
-            </Text>
+            <Text style={{color: 'blue', fontSize: 16}}>Sign out</Text>
           </TouchableOpacity>
         </View>
         <View style={{}}>
@@ -307,9 +317,7 @@ export default class AccountPage extends Component {
         </View>
         <View
           style={{flexDirection: 'column', position: 'absolute', bottom: 60}}>
-          <Text style={{fontSize: 20, fontFamily: 'Segoe UI', marginLeft: 10}}>
-            Your Family
-          </Text>
+          <Text style={{fontSize: 20, marginLeft: 10}}>Your Family</Text>
 
           {this.state.contactsLoading ? (
             <View
@@ -322,9 +330,7 @@ export default class AccountPage extends Component {
                 justifyContent: 'center',
                 margin: 10,
               }}>
-              <Text style={{color: 'white', fontFamily: 'Segoe UI'}}>
-                Loading...
-              </Text>
+              <Text style={{color: 'white'}}>Loading...</Text>
             </View>
           ) : (
             <TouchableOpacity
@@ -338,9 +344,7 @@ export default class AccountPage extends Component {
                 margin: 10,
               }}
               onPress={() => this.setState({contactModal: true})}>
-              <Text style={{color: 'white', fontFamily: 'Segoe UI'}}>
-                Add Family
-              </Text>
+              <Text style={{color: 'white'}}>Add Family</Text>
             </TouchableOpacity>
           )}
           {this.state.selectedNames.length > 0 ? (
@@ -358,11 +362,11 @@ export default class AccountPage extends Component {
               <Text
                 style={{
                   fontSize: 20,
-                  fontFamily: 'Segoe UI',
+
                   paddingTop: 40,
                   height: 130,
                 }}>
-                No Family to show
+                There is no Family to show
               </Text>
             </View>
           )}
@@ -376,7 +380,7 @@ export default class AccountPage extends Component {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>
-                Which contact would you like to add?
+                Which contacts would you like to add?
               </Text>
               <TextInput
                 placeholder="Search contacts by name"
@@ -446,7 +450,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     alignSelf: 'center',
-    fontFamily: 'Segoe UI',
   },
 
   wishlistGroupView: {
@@ -460,7 +463,6 @@ const styles = StyleSheet.create({
   },
   yourWishlistsText: {
     fontSize: 24,
-    fontFamily: 'Segoe UI',
   },
   textView: {
     marginTop: 40,
@@ -497,8 +499,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
-    fontFamily: 'Segoe UI',
   },
   modalView: {
     backgroundColor: 'white',
@@ -518,6 +518,5 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontFamily: 'Segoe UI',
   },
 });

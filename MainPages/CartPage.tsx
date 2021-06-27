@@ -160,7 +160,6 @@ function CartPage() {
           }}>
           <Text
             style={{
-              fontFamily: 'Segoe UI',
               fontSize: 20,
               fontVariant: ['small-caps'],
               color: 'white',
@@ -222,7 +221,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 40,
     marginBottom: 60,
-    fontFamily: 'Segoe UI',
   },
   checkOutButton: {
     marginBottom: 80,
@@ -263,7 +261,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 15,
     fontSize: 16,
-    fontFamily: 'Segoe UI',
   },
   itemPrice: {
     alignSelf: 'center',
@@ -287,6 +284,5 @@ const styles = StyleSheet.create({
   TaxTotal: {
     alignSelf: 'center',
     fontSize: 16,
-    fontFamily: 'Segoe UI',
   },
 });

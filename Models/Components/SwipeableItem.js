@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 15,
     fontSize: 18,
-    fontFamily: 'Roboto',
+    //fontFamily: 'Roboto',
   },
   itemPrice: {
     alignSelf: 'center',

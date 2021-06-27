@@ -16,16 +16,9 @@ const MapBubble = props => {
   const [top, setTop] = useState(null);
 
   useEffect(() => {
-    setLeft(props.location.coordinates.xPos);
-    setTop(props.location.coordinates.yPos);
-
-    console.log(left, top);
-  }, [
-    props.location.coordinates.xPos,
-    props.location.coordinates.yPos,
-    left,
-    top,
-  ]);
+    setLeft(props.location.x);
+    setTop(props.location.y);
+  }, [props.location.x, props.location.y, left, top]);
 
   const styles = StyleSheet.create({
     circle: {

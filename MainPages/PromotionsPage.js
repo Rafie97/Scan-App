@@ -139,7 +139,6 @@ class PromotionsPage extends Component {
                       }}>
                       <Text
                         style={{
-                          fontFamily: 'NotoSansJP-Medium',
                           textAlign: 'center',
                         }}>
                         {item.name}
@@ -202,7 +201,6 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     textAlign: 'center',
     fontSize: 24,
-    fontFamily: 'Segoe UI',
   },
 
   promoFooter: {
@@ -231,7 +229,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginLeft: 20,
     fontSize: 20,
-    fontFamily: 'NotoSansJP-Medium',
   },
 
   itemImage: {

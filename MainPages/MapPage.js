@@ -193,7 +193,7 @@ function MapPage() {
             <Text
               style={{
                 fontSize: 24,
-                fontFamily: 'Segoe UI',
+
                 textAlign: 'center',
               }}>
               Map
@@ -319,7 +319,6 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     textAlign: 'center',
     fontSize: 24,
-    fontFamily: 'Segoe UI',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -343,7 +342,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderWidth: 2,
     borderColor: '#545454',
-    fontFamily: 'Segoe UI',
     fontSize: 20,
     color: 'black',
   },

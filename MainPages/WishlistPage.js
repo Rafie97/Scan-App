@@ -35,6 +35,24 @@ class WishlistPage extends Component {
     this.getLists();
   }
 
+  async getLists() {
+    //Retrieve names of wishlists
+    const userID = auth().currentUser.uid;
+    const wishRef = firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Wishlists');
+    wishRef.onSnapshot(snap => {
+      this.setState({wishlistSelect: []});
+      snap.forEach((doc, index) => {
+        this.setState({wishlists: [...this.state.wishlists, doc.id]});
+        console.log(doc.id);
+      });
+    });
+  }
+
+  renderItem = ({item}) => <SelectableItem name={item} />;
+
   render() {
     const {navigate} = this.props.navigation;
 
@@ -50,8 +68,12 @@ class WishlistPage extends Component {
             size={50}
             style={{marginLeft: 10, marginTop: 5}}
           />
+          <Text style={{marginTop: 60}}>YEEAAA BOII</Text>
         </TouchableOpacity>
+
         <View style={styles.wishlistGroupView}>
+          <Text style={{marginTop: 60}}>YEEAAA BOII</Text>
+
           <FlatList
             data={this.state.wishlists}
             keyExtractor={(item, index) => index.toString()}
@@ -73,23 +95,6 @@ class WishlistPage extends Component {
       </ImageBackground>
     );
   }
-
-  renderItem = ({item}) => <SelectableItem name={item} />;
-
-  async getLists() {
-    //Retrieve names of wishlists
-    const userID = auth().currentUser.uid;
-    const wishRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Wishlists');
-    wishRef.onSnapshot(snap => {
-      this.setState({wishlistSelect: []});
-      snap.forEach((doc, index) => {
-        this.setState({wishlists: [...this.state.wishlists, doc.id]});
-      });
-    });
-  }
 }
 
 export default WishlistPage;
@@ -110,7 +115,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     alignSelf: 'center',
-    fontFamily: 'Segoe UI',
   },
 
   wishlistGroupView: {
@@ -124,7 +128,6 @@ const styles = StyleSheet.create({
   },
   yourWishlistsText: {
     fontSize: 24,
-    fontFamily: 'Segoe UI',
   },
   textView: {
     marginTop: 40,
@@ -160,8 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
-    fontFamily: 'Segoe UI',
   },
   modalView: {
     backgroundColor: 'white',
@@ -181,6 +182,5 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontFamily: 'Segoe UI',
   },
 });

@@ -46,6 +46,7 @@ end
 
 target 'BigMoney' do
   # Pods for BigMoney
+  # pod 'Google'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -64,7 +65,6 @@ target 'BigMoney' do
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text'
   pod 'React-RCTVibration', :path => '../node_modules/react-native/Libraries/Vibration'
   pod 'React-Core/RCTWebSocket', :path => '../node_modules/react-native/'
-  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
   pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
   pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
@@ -77,16 +77,19 @@ target 'BigMoney' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'RNCharts', :path => '../node_modules/react-native-charts-wrapper'
-  pod 'ReactNativePayments', :path => '../node_modules/react-native-payments'
+  
+
 
   target 'BigMoneyTests' do
     inherit! :complete
     # Pods for testing
   end
 
+  #config = 
   use_native_modules!
+  #use_react_native!(path: config['reactNativePath'])
+  #use_flipper!({ 'Flipper-Folly' => '2.3.0' })
 
   # Enables Flipper.
   #
@@ -94,6 +97,11 @@ target 'BigMoney' do
   # you should disable these next few lines.
   add_flipper_pods!
   post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+      end
+     end
     flipper_post_install(installer)
   end
 end
