@@ -277,47 +277,43 @@ export default class AccountPage extends Component {
             <Text style={{color: 'blue', fontSize: 16}}>Sign out</Text>
           </TouchableOpacity>
         </View>
-        <View style={{}}>
-          <TouchableOpacity
-            onPress={e =>
-              navigate('Account', {
-                screen: 'WishlistPage',
-              })
-            }>
-            <Text
-              style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
-              Wishlists
-            </Text>
-          </TouchableOpacity>
-          <View
+
+        <View>
+          <Image
+            source={require('../res/default_profile.jpg')}
             style={{
-              borderBottomColor: '#858585',
-              width: '50%',
-              borderBottomWidth: 1,
-              alignSelf: 'center',
+              width: 150,
+              height: 150,
+              borderRadius: 10,
+              borderColor: '#dddddd',
+              borderWidth: 2,
+              marginLeft: 10,
             }}
           />
-
-          <Text style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
-            Account Details
-          </Text>
-
-          <View
-            style={{
-              borderBottomColor: '#858585',
-              width: '50%',
-              borderBottomWidth: 1,
-              alignSelf: 'center',
-            }}
-          />
-
-          <Text style={{fontSize: 20, alignSelf: 'center', marginVertical: 20}}>
-            Billing History
-          </Text>
         </View>
+
         <View
-          style={{flexDirection: 'column', position: 'absolute', bottom: 60}}>
-          <Text style={{fontSize: 20, marginLeft: 10}}>Your Family</Text>
+          style={{
+            flexDirection: 'column',
+            position: 'absolute',
+            bottom: 60,
+            paddingBottom: 20,
+          }}>
+          <View style={{flexDirection: 'row', marginBottom: 40}}>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text style={{fontSize: 20, alignSelf: 'center'}}>Family</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text style={{fontSize: 20, alignSelf: 'center'}}>Wishlists</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {}} style={{flex: 1}}>
+              <Text style={{fontSize: 20, alignSelf: 'center'}}>Receipts</Text>
+            </TouchableOpacity>
+          </View>
 
           {this.state.contactsLoading ? (
             <View

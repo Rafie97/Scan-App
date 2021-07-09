@@ -205,15 +205,11 @@ function MapPage() {
           style={{
             height: wallData.mapSize.height * scaleFactor,
             width: wallData.mapSize.width * scaleFactor,
-            alignSelf: 'center',
+            backgroundColor: 'yellow',
           }}>
           <Svg style={styles.mapBox}>
-            <DrawCircles />
-            <Rect
-              width={wallData.mapSize.width * scaleFactor}
-              height={wallData.mapSize.height * scaleFactor}
-              fillOpacity={0.5}
-            />
+            {/*<DrawCircles />
+             <Rect fillOpacity={0.5} />
             <Circle cx={20} cy={20} r={2} stroke="purple" fill="yellow" />
             {currentBubble >= 0 ? (
               <ProdBubble
@@ -222,7 +218,7 @@ function MapPage() {
               />
             ) : (
               <></>
-            )}
+            )} */}
 
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
@@ -238,21 +234,13 @@ function MapPage() {
             {wallData.aisles ? (
               wallData.aisles.map((aisl, index) => {
                 return (
-                  <>
-                    <G
-                      onPress={() => {
-                        setCurrentBubble(index);
-                      }}>
-                      <Circle
-                        cx={aisl.coordinate.x * scaleFactor}
-                        cy={aisl.coordinate.y * scaleFactor}
-                        r={20}
-                        stroke="black"
-                        strokeWidth={1}
-                        fill="rgba(0,0,0,0)"
-                      />
-                    </G>
-                  </>
+                  <Aisle
+                    onPress={() => {
+                      setCurrentBubble(index);
+                    }}
+                    aisl={aisl}
+                    scaleFactor={scaleFactor}
+                  />
                 );
               })
             ) : (
@@ -313,6 +301,19 @@ const Wall = ({start, end, scale = 1}) => {
   );
 };
 
+const Aisle = ({aisl, scaleFactor}) => {
+  return (
+    <Circle
+      cx={aisl.coordinate.x * scaleFactor * 1.5}
+      cy={aisl.coordinate.y * scaleFactor * 1.5}
+      r={20}
+      stroke="black"
+      strokeWidth={1}
+      fill="rgba(0,0,0,0)"
+    />
+  );
+};
+
 const styles = StyleSheet.create({
   mapTitleView: {
     marginTop: 40,
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   },
 
   mapBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', //rgba(255, 255, 255, 0.3)
     borderWidth: 0,
     borderColor: 'grey',
     borderRadius: 20,
