@@ -278,20 +278,28 @@ export default class AccountPage extends Component {
           </TouchableOpacity>
         </View>
 
-        <View>
-          <Image
-            source={require('../res/default_profile.jpg')}
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: 10,
-              borderColor: '#dddddd',
-              borderWidth: 2,
-              marginLeft: 10,
-            }}
-          />
+        <View style={{flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={require('../res/default_profile.jpg')}
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 10,
+                borderColor: '#dddddd',
+                borderWidth: 2,
+                marginLeft: 10,
+              }}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text style={styles.personalInfoText}>Rafa Josh</Text>
+              <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
+              <Text style={styles.personalInfoText}>
+                Phone Number: 512-363-8986
+              </Text>
+            </View>
+          </View>
         </View>
-
         <View
           style={{
             flexDirection: 'column',
@@ -514,5 +522,9 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  personalInfoText: {
+    marginVertical: 5,
+    fontSize: 20,
   },
 });
