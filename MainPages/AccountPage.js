@@ -11,7 +11,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 require('react-native-linear-gradient').default;
-import FamilyTile from '../Models/Components/FamilyTile';
+import FamilyTile, {ReceiptTile} from '../Models/Components/FamilyTile';
 import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
@@ -37,21 +37,28 @@ export default class AccountPage extends Component {
 
       selectedNames: [],
       tempSelectedNames: [],
+
+      currentBottomTabIndex: 0,
+
+      receipts: [],
     };
 
     this.getCount = this.getCount.bind(this);
     this.getLists = this.getLists.bind(this);
+    this.getReceipts = this.getReceipts.bind(this);
     this.getLocalContacts = this.getLocalContacts.bind(this);
     this.logItem = this.logItem.bind(this);
     this.pullContactsFirebase = this.pullContactsFirebase.bind(this);
     this.pushContactsFirebase = this.pushContactsFirebase.bind(this);
     this.initialContactState = this.initialContactState.bind(this);
+    this.BottomBarContent = this.BottomBarContent.bind(this);
   }
 
   async componentDidMount() {
     this.pullContactsFirebase();
     this.getCount();
     this.getLists();
+    this.getReceipts();
     setTimeout(() => this.getLocalContacts(), 1000);
   }
 
@@ -93,6 +100,25 @@ export default class AccountPage extends Component {
       initialState={this.initialContactState(item)}
     />
   );
+
+  async getReceipts() {
+    const userID = auth().currentUser.uid;
+    const receiptRef = firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Receipts');
+    receiptRef.onSnapshot(snap => {
+      this.setState({receipts: []});
+      snap.forEach(doc => {
+        this.setState({
+          receipts: [
+            ...this.state.receipts,
+            {id: doc.id, date: doc.data().date, storeId: doc.data().storeId},
+          ],
+        });
+      });
+    });
+  }
 
   async getLists() {
     //Retrieve names of wishlists
@@ -263,66 +289,10 @@ export default class AccountPage extends Component {
     return this.state.selectedNames.includes(name);
   }
 
-  render() {
-    const {navigate} = this.props.navigation;
-    return (
-      <ImageBackground
-        source={require('../res/grad_3.png')}
-        style={styles.fullBackground}>
-        <View style={styles.textView}>
-          <Text style={styles.yourWishlistsText}>Your Account</Text>
-          <TouchableOpacity
-            style={{marginLeft: 50, marginRight: 20, alignSelf: 'center'}}
-            onPress={() => this.signOut()}>
-            <Text style={{color: 'blue', fontSize: 16}}>Sign out</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row'}}>
-            <Image
-              source={require('../res/default_profile.jpg')}
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: 10,
-                borderColor: '#dddddd',
-                borderWidth: 2,
-                marginLeft: 10,
-              }}
-            />
-            <View style={{flexDirection: 'column'}}>
-              <Text style={styles.personalInfoText}>Rafa Josh</Text>
-              <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
-              <Text style={styles.personalInfoText}>
-                Phone Number: 512-363-8986
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'column',
-            position: 'absolute',
-            bottom: 60,
-            paddingBottom: 20,
-          }}>
-          <View style={{flexDirection: 'row', marginBottom: 40}}>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{flex: 1, borderRightWidth: 2}}>
-              <Text style={{fontSize: 20, alignSelf: 'center'}}>Family</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{flex: 1, borderRightWidth: 2}}>
-              <Text style={{fontSize: 20, alignSelf: 'center'}}>Wishlists</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}} style={{flex: 1}}>
-              <Text style={{fontSize: 20, alignSelf: 'center'}}>Receipts</Text>
-            </TouchableOpacity>
-          </View>
-
+  BottomBarContent() {
+    if (this.state.currentBottomTabIndex === 0) {
+      return (
+        <View>
           {this.state.contactsLoading ? (
             <View
               style={{
@@ -375,7 +345,133 @@ export default class AccountPage extends Component {
             </View>
           )}
         </View>
+      );
+    }
 
+    if (
+      this.state.currentBottomTabIndex === 1 &&
+      this.state.receipts.length > 0
+    ) {
+      return (
+        <View>
+          <FlatList
+            data={this.state.receipts}
+            horizontal={true}
+            renderItem={({item}) => <ReceiptTile receipt={item} />}
+          />
+        </View>
+      );
+    }
+  }
+
+  render() {
+    const {navigate} = this.props.navigation;
+    return (
+      <ImageBackground
+        source={require('../res/grad_3.png')}
+        style={styles.fullBackground}>
+        <View style={styles.textView}>
+          <Text style={styles.yourWishlistsText}>Your Account</Text>
+          <TouchableOpacity
+            style={{marginLeft: 50, marginRight: 20, alignSelf: 'center'}}
+            onPress={() => this.signOut()}>
+            <Text style={{color: 'blue', fontSize: 16}}>Sign out</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={require('../res/default_profile.jpg')}
+              style={{
+                width: 140,
+                height: 140,
+                borderRadius: 10,
+                borderColor: '#dddddd',
+                borderWidth: 2,
+                marginHorizontal: 10,
+              }}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text
+                style={[
+                  styles.personalInfoText,
+                  {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
+                ]}>
+                Rafa Josh
+              </Text>
+              <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
+              <Text style={styles.personalInfoText}>
+                Phone Number: 512-363-8986
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            position: 'absolute',
+            bottom: 60,
+            paddingBottom: 180,
+            width: '100%',
+          }}>
+          <View style={{flexDirection: 'row', marginBottom: 40, width: '100%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({currentBottomTabIndex: 0});
+              }}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight:
+                    this.state.currentBottomTabIndex === 0 ? 'bold' : 'normal',
+                }}>
+                Family
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({currentBottomTabIndex: 1});
+              }}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight:
+                    this.state.currentBottomTabIndex === 1 ? 'bold' : 'normal',
+                }}>
+                Wishlists
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({currentBottomTabIndex: 2});
+              }}
+              style={{flex: 1}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight:
+                    this.state.currentBottomTabIndex === 2 ? 'bold' : 'normal',
+                }}>
+                Receipts
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            position: 'absolute',
+            bottom: 60,
+            paddingBottom: 20,
+          }}>
+          {this.BottomBarContent()}
+        </View>
         <Modal
           animationType="slide"
           transparent={true}
@@ -525,6 +621,6 @@ const styles = StyleSheet.create({
   },
   personalInfoText: {
     marginVertical: 5,
-    fontSize: 20,
+    fontSize: 18,
   },
 });

@@ -45,4 +45,36 @@ const FamilyTile = (props: TileProps) => {
   );
 };
 
+type ReceiptTileProps = {
+  item: {date: string};
+};
+const ReceiptTile = (props: ReceiptTileProps) => {
+  return (
+    <View
+      style={{
+        height: 130,
+        width: 100,
+        marginLeft: 10,
+        alignItems: 'flex-end',
+      }}>
+      <Image
+        source={require('../../res/empty-receipt.png')}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 10,
+          borderColor: '#dddddd',
+          borderWidth: 2,
+          marginLeft: 10,
+        }}
+      />
+
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+        {/* <Text style={{}}>{props.item.date}</Text> */}
+      </View>
+    </View>
+  );
+};
+export {ReceiptTile};
+
 export default FamilyTile;
