@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   ImageBackground,
@@ -11,7 +12,10 @@ import {
   AsyncStorage,
 } from 'react-native';
 require('react-native-linear-gradient').default;
-import FamilyTile, {ReceiptTile} from '../Models/Components/FamilyTile';
+import FamilyTile, {
+  ReceiptTile,
+  WishlistTile,
+} from '../Models/Components/FamilyTile';
 import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
@@ -348,8 +352,20 @@ export default class AccountPage extends Component {
       );
     }
 
+    if (this.state.currentBottomTabIndex === 1) {
+      return (
+        <View>
+          <FlatList
+            data={['Christmas', 'Birthday']}
+            horizontal={true}
+            renderItem={({item}) => <WishlistTile name={item} />}
+          />
+        </View>
+      );
+    }
+
     if (
-      this.state.currentBottomTabIndex === 1 &&
+      this.state.currentBottomTabIndex === 2 &&
       this.state.receipts.length > 0
     ) {
       return (

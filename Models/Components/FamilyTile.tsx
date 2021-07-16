@@ -70,11 +70,60 @@ const ReceiptTile = (props: ReceiptTileProps) => {
       />
 
       <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        {/* <Text style={{}}>{props.item.date}</Text> */}
+        <Text
+          style={{
+            shadowColor: '#000',
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+            elevation: 10,
+          }}>
+          {props.item.date}
+        </Text>
       </View>
     </View>
   );
 };
+
+type WishlistTileProps = {
+  name: string;
+};
+const WishlistTile = (props: WishlistTileProps) => {
+  return (
+    <View
+      style={{
+        height: 130,
+        width: 100,
+        marginLeft: 20,
+        alignItems: 'flex-end',
+      }}>
+      <Image
+        source={require('../../res/wishlist-tile.png')}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 10,
+          borderColor: '#dddddd',
+          borderWidth: 2,
+          marginLeft: 10,
+        }}
+      />
+
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+        <Text
+          style={{
+            shadowColor: '#000',
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+            elevation: 10,
+          }}>
+          {props.name}
+        </Text>
+      </View>
+    </View>
+  );
+};
+export {WishlistTile};
+
 export {ReceiptTile};
 
 export default FamilyTile;
