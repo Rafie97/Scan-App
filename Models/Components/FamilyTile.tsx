@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image} from 'react-native';
+import {Receipt} from '../Receipt';
 
 type TileProps = {
   imageSource?: string;
@@ -46,7 +47,7 @@ const FamilyTile = (props: TileProps) => {
 };
 
 type ReceiptTileProps = {
-  item: {date: string};
+  receipt: Receipt;
 };
 const ReceiptTile = (props: ReceiptTileProps) => {
   return (
@@ -77,7 +78,7 @@ const ReceiptTile = (props: ReceiptTileProps) => {
             shadowRadius: 4,
             elevation: 10,
           }}>
-          {props.item.date}
+          {props.receipt.date}
         </Text>
       </View>
     </View>
