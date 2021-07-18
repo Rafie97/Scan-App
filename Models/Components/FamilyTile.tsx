@@ -1,6 +1,7 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {Component} from 'react';
 
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Receipt} from '../Receipt';
 
 type TileProps = {
@@ -89,8 +90,15 @@ type WishlistTileProps = {
   name: string;
 };
 const WishlistTile = (props: WishlistTileProps) => {
+  const nav = useNavigation();
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        nav.navigate('Account', {
+          screen: 'EditWishlistPage',
+          params: {listNameCallback: props.name},
+        });
+      }}
       style={{
         height: 130,
         width: 100,
@@ -120,7 +128,7 @@ const WishlistTile = (props: WishlistTileProps) => {
           {props.name}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 export {WishlistTile};

@@ -95,7 +95,7 @@ class EditWishlistPage extends Component {
         <View style={styles.backButtonView}>
           <TouchableOpacity
             style={{flexDirection: 'row'}}
-            onPress={() => navigate('WishlistPage')}>
+            onPress={() => navigate('AccountPage')}>
             <Ionicon
               name="arrow-back-circle-outline"
               size={50}

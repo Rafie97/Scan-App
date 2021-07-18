@@ -47,15 +47,26 @@ export default function AccountPage() {
 
   const navigate = useNavigation();
 
+  //Get Family
   React.useEffect(() => {
-    async () => {
-      pullContactsFirebase();
-      getCount();
-      //const listSub = await getLists();
-      //getReceipts();
-      setTimeout(() => getLocalContacts(), 1000);
-    };
-  });
+    const userID = auth().currentUser.uid;
+    const famRef = firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Family');
+
+    const sub = famRef.onSnapshot(async snap => {
+      setSelectedNames([]);
+      setTempSelectedNames([]);
+      let newSelectedNames = [];
+      snap.forEach(async doc => {
+        newSelectedNames.push(doc.data().name);
+      });
+      setSelectedNames(newSelectedNames);
+      setTempSelectedNames(newSelectedNames);
+    });
+    return sub;
+  }, []);
 
   //Get Lists
   React.useEffect(() => {
@@ -67,12 +78,14 @@ export default function AccountPage() {
       .collection('Wishlists');
     const sub = wishRef.onSnapshot(snap => {
       setWishlists([]);
+      let newWishlists = [];
       snap.forEach(doc => {
-        setWishlists([...wishlists, doc.id]);
+        newWishlists.push(doc.id);
       });
+      setWishlists(newWishlists);
     });
     return sub;
-  });
+  }, []);
 
   //Get Receipts
   React.useEffect(() => {
@@ -81,16 +94,20 @@ export default function AccountPage() {
       .collection('users')
       .doc(userID)
       .collection('Receipts');
-    return receiptRef.onSnapshot(snap => {
+    const sub = receiptRef.onSnapshot(snap => {
       setReceipts([]);
+      let newReceipts = [];
       snap.forEach(doc => {
-        setReceipts([
-          ...receipts,
-          {id: doc.id, date: doc.data().date, storeId: doc.data().storeId},
-        ]);
+        newReceipts.push({
+          id: doc.id,
+          date: doc.data().date,
+          storeId: doc.data().storeId,
+        });
       });
+      setReceipts(newReceipts);
     });
-  });
+    return sub;
+  }, []);
 
   async function signOut() {
     // const userID = auth().currentUser.uid;
@@ -224,23 +241,7 @@ export default function AccountPage() {
       setTempSelectedNames(tempNames);
     }
   }
-
-  async function pullContactsFirebase() {
-    const userID = auth().currentUser.uid;
-    const famRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family');
-
-    const sub = famRef.onSnapshot(async snap => {
-      setSelectedNames([]);
-      setTempSelectedNames([]);
-      snap.forEach(async doc => {
-        setSelectedNames([...selectedNames, doc.data().name]);
-        setTempSelectedNames([...tempSelectedNames, doc.data().name]);
-      });
-    });
-  }
+  // ============================== END CONTACT METHODS ====================================
 
   async function pushContactsFirebase() {
     setContactModal(false);

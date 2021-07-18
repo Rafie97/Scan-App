@@ -5,7 +5,6 @@ import ScanPage from '../MainPages/ScanPage';
 import CartPage from '../MainPages/CartPage';
 import MapPage from '../MainPages/MapPage';
 import PromotionsPage from '../MainPages/PromotionsPage';
-import WishlistPage from '../MainPages/WishlistPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
 import ItemPage from '../MainPages/Sub_Pages/ItemPage';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
@@ -23,7 +22,6 @@ function AccountStack() {
   return (
     <AccountStackNav.Navigator initialRouteName="AccountPage" headerMode="none">
       <AccountStackNav.Screen name="AccountPage" component={AccountPage} />
-      <AccountStackNav.Screen name="WishlistPage" component={WishlistPage} />
       <AccountStackNav.Screen
         name="EditWishlistPage"
         component={EditWishlistPage}
