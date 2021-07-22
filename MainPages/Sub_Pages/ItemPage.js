@@ -28,9 +28,9 @@ function ItemPage({route}) {
 
   const navigate = useNavigation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     setThing(route.params.itemIDCallback);
-  });
+  }, []);
 
   async function getLists() {
     //Retrieve names of wishlists

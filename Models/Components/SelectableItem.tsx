@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-function SelectableItem(props) {
+type SelectableItemProps = {
+  initialState: boolean;
+  name: string;
+  logItem: (n: string, s: boolean) => void;
+};
+
+function SelectableItem(props: SelectableItemProps) {
   const [isSelected, setIsSelected] = React.useState(props.initialState);
 
   async function selectItem() {

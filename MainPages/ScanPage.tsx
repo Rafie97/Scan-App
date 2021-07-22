@@ -11,18 +11,17 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import {FlatList} from 'react-native-gesture-handler';
 import Item from '../Models/Item';
+import {useNavigation} from '@react-navigation/native';
 
-class ScanPage extends Component {
-  constructor() {
-    super();
+function ScanPage() {
+  const [loading, setLoading] = React.useState(true);
+  const [scannedItems, setScannedItems] = React.useState([]);
+  const camera = React.useRef();
 
-    this.state = {
-      loading: true,
-      scannedItems: [],
-    };
-  }
+  const navigate = useNavigation();
 
-  async fetchByBarcode(barcode) {
+  async function fetchByBarcode(barcode) {
+    console.log('Barcode', barcode);
     const hebRef = firestore()
       .collection('stores')
       .doc('HEB')
@@ -30,70 +29,32 @@ class ScanPage extends Component {
     const barQuery = hebRef.where('barcode', '==', barcode);
     const BreakException = {};
     await barQuery.get().then(async qSnap => {
+      const newScannedItems = [];
       try {
         qSnap.forEach(async (doc, index) => {
           const item = new Item(doc);
 
-          if (this.state.scannedItems.find(e => e.docID === item.docID)) {
+          if (scannedItems.find(e => e.docID === item.docID)) {
             throw BreakException;
           } else {
-            await this.setState({
-              scannedItems: [...this.state.scannedItems, item],
-              loading: false,
-            });
+            newScannedItems.push(item);
           }
         });
+        setScannedItems(newScannedItems);
+        setLoading(false);
       } catch (e) {
         if (e !== BreakException) throw e;
       }
     });
   }
 
-  render() {
-    const {navigate} = this.props.navigation;
-    return (
-      <ImageBackground
-        source={require('../res/grad_3.png')}
-        style={styles.fullBackground}>
-        <View style={styles.scanContainer}>
-          <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            style={styles.cameraWindow}
-            ratio="1:1"
-            onGoogleVisionBarcodesDetected={this.barcodeRecognized}
-            autoFocus="on"
-            captureAudio={false}
-          />
-          <View style={styles.underCam}>
-            {this.state.loading && this.state.scannedItems.length == 0 ? (
-              <Text style={styles.scannedItemsText}>
-                Scan a barcode to show products
-              </Text>
-            ) : (
-              <View style={styles.underCam}>
-                <Text style={styles.scannedItemsText}>Scanned Items</Text>
-                <FlatList
-                  data={this.state.scannedItems}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={this.renderItem}
-                />
-              </View>
-            )}
-          </View>
-        </View>
-      </ImageBackground>
-    );
-  }
-
-  renderItem = ({item}) => (
+  const renderItem = ({item}) => (
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={() =>
-        this.props.navigation.navigate('Scan', {
+        navigate.navigate('Scan', {
           screen: 'ScanItemPage',
-          params: {itemIDCallback: this.state.scannedItems[0]},
+          params: {itemIDCallback: scannedItems[0]},
         })
       }>
       <View style={styles.itemBubble}>
@@ -104,14 +65,47 @@ class ScanPage extends Component {
     </TouchableOpacity>
   );
 
-  barcodeRecognized = ({barcodes}) => {
+  const barcodeRecognized = ({barcodes}) => {
     barcodes.forEach(barcode => {
       if (!barcode.data.startsWith('{')) {
         //Filter out errors
-        this.fetchByBarcode(barcode.data);
+        fetchByBarcode(barcode.data);
       }
     });
   };
+
+  return (
+    <ImageBackground
+      source={require('../res/grad_3.png')}
+      style={styles.fullBackground}>
+      <View style={styles.scanContainer}>
+        <RNCamera
+          ref={camera}
+          style={styles.cameraWindow}
+          ratio="1:1"
+          onGoogleVisionBarcodesDetected={barcodeRecognized}
+          autoFocus="on"
+          captureAudio={false}
+        />
+        <View style={styles.underCam}>
+          {loading && scannedItems.length == 0 ? (
+            <Text style={styles.scannedItemsText}>
+              Scan a barcode to show products
+            </Text>
+          ) : (
+            <View style={styles.underCam}>
+              <Text style={styles.scannedItemsText}>Scanned Items</Text>
+              <FlatList
+                data={scannedItems}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderItem}
+              />
+            </View>
+          )}
+        </View>
+      </View>
+    </ImageBackground>
+  );
 }
 
 export default ScanPage;
