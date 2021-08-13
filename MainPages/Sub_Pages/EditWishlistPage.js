@@ -12,7 +12,7 @@ import {
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/Item';
-import SwipeableItem from '../../Models/Components/SwipeableItem';
+import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 

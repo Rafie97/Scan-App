@@ -12,16 +12,13 @@ import {
   AsyncStorage,
 } from 'react-native';
 require('react-native-linear-gradient').default;
-import FamilyTile, {
-  ReceiptTile,
-  WishlistTile,
-} from '../Models/Components/FamilyTile';
+import FamilyTile, {ReceiptTile, WishlistTile} from '../Components/Tiles';
 import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import {TextInput} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import SelectableItem from '../Models/Components/SelectableItem';
+import SelectableItem from '../Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import {Receipt} from '../Models/Receipt';

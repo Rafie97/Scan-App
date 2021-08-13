@@ -12,14 +12,14 @@ import {
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
-import FamilyTile from '../Models/Components/FamilyTile';
-import {BlurView} from 'react-native-blur';
+import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
+import {BlurView} from '@react-native-community/blur';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
-  const [promoItems, setPromoItems] = useState([]);
+  const [promoItems, setPromoItems] = useState<PromoTileProps[]>([]);
   const [recipes, setRecipes] = useState([]);
 
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ function PromotionsPage() {
 
     hebRef.onSnapshot(snap => {
       setPromoItems([]);
-      const newPromoItems = [];
+      const newPromoItems: PromoTileProps[] = [];
       snap.forEach(async doc => {
         const item = new Item(doc);
         newPromoItems.push(item);
@@ -61,28 +61,6 @@ function PromotionsPage() {
     });
   }, []);
 
-  const renderItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        style={styles.itemBox}
-        activeOpacity={0.5}
-        onPress={() =>
-          navigation.navigate('Promo', {
-            screen: 'PromoItemPage',
-            params: {itemIDCallback: item},
-          })
-        }>
-        <Image style={styles.itemImage} source={{uri: item.imageLink}} />
-
-        <Text style={[styles.itemTitleText, {fontWeight: 'bold'}]}>
-          ${item.price}
-        </Text>
-
-        <Text style={styles.itemTitleText}>{item.name}</Text>
-      </TouchableOpacity>
-    );
-  };
-
   // let arr = [];
   // state.promoItems.forEach(i => {
   //   arr = [...arr, i.name];
@@ -90,8 +68,8 @@ function PromotionsPage() {
 
   return (
     <ImageBackground
-      source={require('../res/grad_3.png')}
-      style={styles.fullBackground}>
+      style={{backgroundColor: 'white', flexGrow: 1, justifyContent: 'center'}}
+      source={require('../res/login-background-crop.png')}>
       <ScrollView style={styles.promoPageContainer}>
         <Text style={styles.promoTitle}>Today's Best Deals</Text>
 
@@ -108,7 +86,16 @@ function PromotionsPage() {
           <FlatList
             data={promoItems}
             horizontal={true}
-            renderItem={renderItem}
+            renderItem={({item}) => {
+              return (
+                <PromoItemTile
+                  imageLink={item.imageLink}
+                  name={item.name}
+                  price={item.price}
+                />
+              );
+            }}
+            style={{backgroundColor: 'transparent'}}
           />
         </View>
         <View style={{height: 20}} />
@@ -200,38 +187,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#c8e8e4',
     justifyContent: 'space-around',
-  },
-
-  itemBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderWidth: 1,
-    borderColor: 'grey',
-    borderRadius: 20,
-    marginHorizontal: 10,
-    width: 200,
-    maxHeight: 240,
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 10,
-  },
-
-  itemTitleText: {
-    textAlign: 'left',
-    marginVertical: 5,
-    marginLeft: 20,
-    fontSize: 20,
-  },
-
-  itemImage: {
-    marginTop: 5,
-    marginBottom: 20,
-    marginHorizontal: 5,
-    borderRadius: 2,
-    top: 0,
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-    alignSelf: 'center',
   },
 });

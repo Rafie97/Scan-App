@@ -3,7 +3,7 @@ import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import Item from '../Models/Item';
-import SwipeableItem from '../Models/Components/SwipeableItem';
+import SwipeableItem from '../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 
 import Ticker, {Tick} from 'react-native-ticker';
