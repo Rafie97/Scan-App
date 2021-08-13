@@ -27,6 +27,8 @@ import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
 import MapBubble from '../Models/Components/MapBubble';
 
+export default MapPage;
+
 function MapPage() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [backSearches, setBackSearches] = useState([]);
@@ -113,73 +115,11 @@ function MapPage() {
       });
       await setBackSearches(matches);
 
-      //await setCurrentBubble(matches);
-      // const BreakException = {};
-      // const hebRef = firestore()
-      //   .collection('stores')
-      //   .doc('HEB')
-      //   .collection('items');
-      // await hebRef.get().then(async qSnap => {
-      //   try {
-      //     qSnap.forEach(async (doc, index) => {
-      //       if (doc.data().name.includes(val)) {
-      //         const item = new Item(doc);
-      //         await setBackSearches([...backSearches, item]);
-      //       }
-      //     });
-      //   } catch (e) {
-      //     if (e !== BreakException) throw e;
-      //   }
-      // });
-    }
-
-    if (backSearches) {
-      await setMarkedAisles(backSearches);
+      if (backSearches) {
+        await setMarkedAisles(backSearches);
+      }
     }
   }
-
-  function DrawCircles() {
-    if (markedAisles) {
-      return (
-        <View>
-          {markedAisles.map(index => {
-            return <MapBubble location={wallData.aisles[index].coordinate} />;
-          })}
-        </View>
-      );
-    } else {
-      return <></>;
-    }
-  }
-
-  const ProdBubble = ({prods, coord}) => {
-    if (currentBubble >= 0) {
-      return (
-        <View
-          style={{
-            flexDirection: 'column',
-            position: 'relative',
-            left: coord.x,
-            top: coord.y,
-            backgroundColor: 'white',
-            maxWidth: 100,
-          }}>
-          {prods.map(p => {
-            const match = items.findIndex(i => {
-              return i.docID === p;
-            });
-            if (match > -1) {
-              return <Text>{items[match].name}</Text>;
-            } else {
-              return <></>;
-            }
-          })}
-        </View>
-      );
-    } else {
-      return <></>;
-    }
-  };
 
   return (
     <ImageBackground
@@ -193,7 +133,6 @@ function MapPage() {
             <Text
               style={{
                 fontSize: 24,
-
                 textAlign: 'center',
               }}>
               Map
@@ -208,18 +147,6 @@ function MapPage() {
             backgroundColor: 'yellow',
           }}>
           <Svg style={styles.mapBox}>
-            {/*<DrawCircles />
-             <Rect fillOpacity={0.5} />
-            <Circle cx={20} cy={20} r={2} stroke="purple" fill="yellow" />
-            {currentBubble >= 0 ? (
-              <ProdBubble
-                prods={wallData.aisles[currentBubble].products}
-                coord={wallData.aisles[currentBubble].coordinate}
-              />
-            ) : (
-              <></>
-            )} */}
-
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall
@@ -236,7 +163,12 @@ function MapPage() {
                 return (
                   <Aisle
                     onPress={() => {
-                      setCurrentBubble(index);
+                      console.log(
+                        'Coords',
+                        wallData.aisles[index].coordinate.x,
+                        wallData.aisles[index].coordinate.y,
+                      );
+                      // setCurrentBubble(index);
                     }}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
@@ -265,8 +197,6 @@ function MapPage() {
     </ImageBackground>
   );
 }
-
-export default MapPage;
 
 const Wall = ({start, end, scale = 1}) => {
   return (
@@ -301,12 +231,13 @@ const Wall = ({start, end, scale = 1}) => {
   );
 };
 
-const Aisle = ({aisl, scaleFactor}) => {
+const Aisle = ({aisl, scaleFactor, onPress}) => {
   return (
     <Circle
-      cx={aisl.coordinate.x * scaleFactor * 1.5}
-      cy={aisl.coordinate.y * scaleFactor * 1.5}
-      r={20}
+      onPress={onPress}
+      cx={aisl.coordinate.x * scaleFactor}
+      cy={aisl.coordinate.y * scaleFactor}
+      r={10}
       stroke="black"
       strokeWidth={1}
       fill="rgba(0,0,0,0)"
@@ -331,7 +262,6 @@ const styles = StyleSheet.create({
 
   searchBarView: {
     alignItems: 'center',
-    // marginBottom: 10,
     flex: 1,
   },
 
