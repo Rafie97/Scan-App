@@ -25,7 +25,6 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
-import MapBubble from '../Models/Components/MapBubble';
 
 export default MapPage;
 
@@ -88,6 +87,8 @@ function MapPage() {
   }, []);
 
   useEffect(() => {
+    console.log('WINDOW ', Dimensions.get('window').width);
+    console.log('MAP SIZE ', wallData.mapSize.width);
     const f = Dimensions.get('window').width / (wallData.mapSize.width * 1.05);
     setScale(f);
   }, [wallData.mapSize.width]);
@@ -232,11 +233,12 @@ const Wall = ({start, end, scale = 1}) => {
 };
 
 const Aisle = ({aisl, scaleFactor, onPress}) => {
+  console.log(scaleFactor);
   return (
     <Circle
       onPress={onPress}
-      cx={aisl.coordinate.x * scaleFactor}
-      cy={aisl.coordinate.y * scaleFactor}
+      cx={aisl.coordinate.x * scaleFactor * 2 - 100 / scaleFactor} // need to scale and subtract. Decide how to compare phone map size and admin map size
+      cy={aisl.coordinate.y * scaleFactor * 2 - 100 / scaleFactor}
       r={10}
       stroke="black"
       strokeWidth={1}
