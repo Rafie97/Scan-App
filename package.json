@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/blur": "^3.6.0",
     "@react-native-community/cli-platform-ios": "^5.0.1-alpha.2",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
@@ -23,7 +24,6 @@
     "node-fetch": "^2.6.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-blur": "^3.2.2",
     "react-native-camera": "^3.23.1",
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-cli": "^2.0.1",
