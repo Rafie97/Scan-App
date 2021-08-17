@@ -89,7 +89,7 @@ function MapPage() {
   useEffect(() => {
     console.log('WINDOW ', Dimensions.get('window').width);
     console.log('MAP SIZE ', wallData.mapSize.width);
-    const f = Dimensions.get('window').width / (wallData.mapSize.width * 1.05);
+    const f = Dimensions.get('window').width / wallData.mapSize.width;
     setScale(f);
   }, [wallData.mapSize.width]);
 
@@ -147,7 +147,7 @@ function MapPage() {
             width: wallData.mapSize.width * scaleFactor,
             backgroundColor: 'yellow',
           }}>
-          <Svg style={styles.mapBox}>
+          <Svg style={styles.mapBox} onPress={() => console.log('svg')}>
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall
@@ -173,6 +173,7 @@ function MapPage() {
                     }}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
+                    wallData={wallData}
                   />
                 );
               })
@@ -232,13 +233,20 @@ const Wall = ({start, end, scale = 1}) => {
   );
 };
 
-const Aisle = ({aisl, scaleFactor, onPress}) => {
-  console.log(scaleFactor);
+const Aisle = ({aisl, wallData, scaleFactor, onPress}) => {
+  const newX =
+    aisl.coordinate.x * scaleFactor -
+    (wallData.mapSize.width * scaleFactor) / 2;
+  const newY =
+    -aisl.coordinate.y * scaleFactor +
+    (wallData.mapSize.height * scaleFactor) / 2;
+
+  console.log(newX, newY);
   return (
     <Circle
       onPress={onPress}
-      cx={aisl.coordinate.x * scaleFactor * 2 - 100 / scaleFactor} // need to scale and subtract. Decide how to compare phone map size and admin map size
-      cy={aisl.coordinate.y * scaleFactor * 2 - 100 / scaleFactor}
+      cx={newX * 2 + (wallData.mapSize.width * scaleFactor) / 2}
+      cy={newY * 2 + (wallData.mapSize.height * scaleFactor) / 2}
       r={10}
       stroke="black"
       strokeWidth={1}
