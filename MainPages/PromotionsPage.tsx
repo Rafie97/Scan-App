@@ -69,7 +69,7 @@ function PromotionsPage() {
   return (
     <ImageBackground
       style={{backgroundColor: 'white', flexGrow: 1, justifyContent: 'center'}}
-      source={require('../res/login-background-crop.png')}>
+      source={require('../res/grad_3.png')}>
       <ScrollView style={styles.promoPageContainer}>
         <Text style={styles.promoTitle}>Today's Best Deals</Text>
 

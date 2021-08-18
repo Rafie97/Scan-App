@@ -87,8 +87,6 @@ function MapPage() {
   }, []);
 
   useEffect(() => {
-    console.log('WINDOW ', Dimensions.get('window').width);
-    console.log('MAP SIZE ', wallData.mapSize.width);
     const f = Dimensions.get('window').width / wallData.mapSize.width;
     setScale(f);
   }, [wallData.mapSize.width]);
@@ -122,6 +120,61 @@ function MapPage() {
     }
   }
 
+  const ProdBubble = ({prods, coord}) => {
+    return (
+      <View
+        style={{
+          flexDirection: 'column',
+          position: 'relative',
+          left: coord.x,
+          top: coord.y,
+          backgroundColor: 'white',
+          maxWidth: 100,
+        }}>
+        {prods.map(p => {
+          const match = items.findIndex(i => {
+            return i.docID === p;
+          });
+          if (match > -1) {
+            return <Text>{items[match].name}</Text>;
+          } else {
+            return <></>;
+          }
+        })}
+      </View>
+    );
+  };
+
+  const Aisle = ({aisl, wallData, scaleFactor, onPress, index}) => {
+    const shiftedX = aisl.coordinate.x - wallData.mapSize.width / 2;
+    const shiftedY = -aisl.coordinate.y + wallData.mapSize.height / 2;
+
+    const newX =
+      shiftedX * scaleFactor + (wallData.mapSize.width * scaleFactor) / 2;
+    const newY =
+      shiftedY * scaleFactor + (wallData.mapSize.height * scaleFactor) / 2;
+
+    return (
+      <View>
+        <Circle
+          onPress={onPress}
+          cx={newX}
+          cy={newY}
+          r={10}
+          stroke="black"
+          strokeWidth={1}
+          fill="rgba(0,0,0,0)"
+        />
+        {currentBubble === index && (
+          <ProdBubble
+            prods={wallData.aisles[currentBubble].products}
+            coord={{x: newX, y: newY}}
+          />
+        )}
+      </View>
+    );
+  };
+
   return (
     <ImageBackground
       source={require('../res/grad_3.png')}
@@ -147,7 +200,7 @@ function MapPage() {
             width: wallData.mapSize.width * scaleFactor,
             backgroundColor: 'yellow',
           }}>
-          <Svg style={styles.mapBox} onPress={() => console.log('svg')}>
+          <Svg style={styles.mapBox}>
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall
@@ -164,13 +217,9 @@ function MapPage() {
                 return (
                   <Aisle
                     onPress={() => {
-                      console.log(
-                        'Coords',
-                        wallData.aisles[index].coordinate.x,
-                        wallData.aisles[index].coordinate.y,
-                      );
-                      // setCurrentBubble(index);
+                      setCurrentBubble(index);
                     }}
+                    index={index}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
                     wallData={wallData}
@@ -230,28 +279,6 @@ const Wall = ({start, end, scale = 1}) => {
         fill="#283d6d"
       />
     </G>
-  );
-};
-
-const Aisle = ({aisl, wallData, scaleFactor, onPress}) => {
-  const newX =
-    aisl.coordinate.x * scaleFactor -
-    (wallData.mapSize.width * scaleFactor) / 2;
-  const newY =
-    -aisl.coordinate.y * scaleFactor +
-    (wallData.mapSize.height * scaleFactor) / 2;
-
-  console.log(newX, newY);
-  return (
-    <Circle
-      onPress={onPress}
-      cx={newX * 2 + (wallData.mapSize.width * scaleFactor) / 2}
-      cy={newY * 2 + (wallData.mapSize.height * scaleFactor) / 2}
-      r={10}
-      stroke="black"
-      strokeWidth={1}
-      fill="rgba(0,0,0,0)"
-    />
   );
 };
 
