@@ -145,7 +145,7 @@ function MapPage() {
     );
   };
 
-  const Aisle = ({aisl, wallData, scaleFactor, onPress, index}) => {
+  const Aisle = ({index, aisl, wallData, scaleFactor}) => {
     const shiftedX = aisl.coordinate.x - wallData.mapSize.width / 2;
     const shiftedY = -aisl.coordinate.y + wallData.mapSize.height / 2;
 
@@ -153,11 +153,12 @@ function MapPage() {
       shiftedX * scaleFactor + (wallData.mapSize.width * scaleFactor) / 2;
     const newY =
       shiftedY * scaleFactor + (wallData.mapSize.height * scaleFactor) / 2;
-
     return (
       <View>
         <Circle
-          onPress={onPress}
+          onPress={() => {
+            setCurrentBubble(index);
+          }}
           cx={newX}
           cy={newY}
           r={10}
@@ -207,7 +208,7 @@ function MapPage() {
                   scale={scaleFactor}
                   start={coordinates.start}
                   end={coordinates.end}
-                  key={index}
+                  wallData={wallData}
                 />
               );
             })}
@@ -216,9 +217,6 @@ function MapPage() {
               wallData.aisles.map((aisl, index) => {
                 return (
                   <Aisle
-                    onPress={() => {
-                      setCurrentBubble(index);
-                    }}
                     index={index}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
@@ -249,21 +247,35 @@ function MapPage() {
   );
 }
 
-const Wall = ({start, end, scale = 1}) => {
+const Wall = ({start, end, scale = 1, wallData}) => {
+  const shiftedStartX = start.x - wallData.mapSize.width / 2;
+  const shiftedStartY = -start.y + wallData.mapSize.height / 2;
+
+  const newStartX =
+    shiftedStartX * scale + (wallData.mapSize.width * scale) / 2;
+  const newStartY =
+    shiftedStartY * scale + (wallData.mapSize.height * scale) / 2;
+
+  const shiftedEndX = end.x - wallData.mapSize.width / 2;
+  const shiftedEndY = -end.y + wallData.mapSize.height / 2;
+
+  const newEndX = shiftedEndX * scale + (wallData.mapSize.width * scale) / 2;
+  const newEndY = shiftedEndY * scale + (wallData.mapSize.height * scale) / 2;
+
   return (
     <G>
       <Line
-        x1={scale * start.x}
-        y1={scale * start.y}
-        x2={scale * end.x}
-        y2={scale * end.y}
+        x1={newStartX}
+        y1={newStartY}
+        x2={newEndX}
+        y2={newEndY}
         stroke="black"
         strokeWidth={2}
       />
 
       <Circle
-        cx={scale * start.x}
-        cy={scale * start.y}
+        cx={newStartX}
+        cy={newStartY}
         r={2}
         stroke="white"
         strokeWidth={1}
@@ -271,8 +283,8 @@ const Wall = ({start, end, scale = 1}) => {
       />
 
       <Circle
-        cx={scale * end.x}
-        cy={scale * end.y}
+        cx={newEndX}
+        cy={newEndY}
         r={2}
         stroke="white"
         strokeWidth={1}
