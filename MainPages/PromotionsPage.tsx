@@ -15,7 +15,6 @@ import Item from '../Models/Item';
 import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
-import {BlurView} from '@react-native-community/blur';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);

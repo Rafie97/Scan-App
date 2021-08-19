@@ -1,16 +1,6 @@
 import React, {Component, useEffect, useState} from 'react';
 
-import Svg, {
-  Circle,
-  Path,
-  Line,
-  G,
-  Rect,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Pattern,
-} from 'react-native-svg';
+import Svg, {Circle, Line, G} from 'react-native-svg';
 
 import {
   StyleSheet,
@@ -18,13 +8,14 @@ import {
   Text,
   TextInput,
   ImageBackground,
-  Image,
-  Animated,
-  FlatList,
+  TouchableOpacity,
+  TouchableHighlight,
   Dimensions,
 } from 'react-native';
+
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
+import {BlurView} from '@react-native-community/blur';
 
 export default MapPage;
 
@@ -130,16 +121,24 @@ function MapPage() {
           top: coord.y,
           backgroundColor: 'white',
           maxWidth: 100,
+          borderRadius: 10,
         }}>
-        {prods.map(p => {
-          const match = items.findIndex(i => {
-            return i.docID === p;
+        {prods.map(prod => {
+          const match = items.findIndex(item => {
+            return item.docID === prod;
           });
-          if (match > -1) {
-            return <Text>{items[match].name}</Text>;
-          } else {
-            return <></>;
-          }
+
+          return (
+            match > -1 && (
+              <TouchableHighlight
+                activeOpacity={0.6}
+                underlayColor="black"
+                onPress={() => console.log('Pressed!')}
+                style={{paddingVertical: 7, paddingLeft: 6, fontSize: 15}}>
+                <Text>{items[match].name}</Text>
+              </TouchableHighlight>
+            )
+          );
         })}
       </View>
     );
@@ -194,41 +193,41 @@ function MapPage() {
             </Text>
           </View>
         )}
-
-        <View
-          style={{
-            height: wallData.mapSize.height * scaleFactor,
-            width: wallData.mapSize.width * scaleFactor,
-            backgroundColor: 'yellow',
-          }}>
-          <Svg style={styles.mapBox}>
-            {wallData.wallCoordinates.map((coordinates, index) => {
-              return (
-                <Wall
-                  scale={scaleFactor}
-                  start={coordinates.start}
-                  end={coordinates.end}
-                  wallData={wallData}
-                />
-              );
-            })}
-
-            {wallData.aisles ? (
-              wallData.aisles.map((aisl, index) => {
+        <BlurView blurType="light" blurAmount={1}>
+          <View
+            style={{
+              height: wallData.mapSize.height * scaleFactor,
+              width: wallData.mapSize.width * scaleFactor,
+            }}>
+            <Svg style={styles.mapBox}>
+              {wallData.wallCoordinates.map((coordinates, index) => {
                 return (
-                  <Aisle
-                    index={index}
-                    aisl={aisl}
-                    scaleFactor={scaleFactor}
+                  <Wall
+                    scale={scaleFactor}
+                    start={coordinates.start}
+                    end={coordinates.end}
                     wallData={wallData}
                   />
                 );
-              })
-            ) : (
-              <></>
-            )}
-          </Svg>
-        </View>
+              })}
+
+              {wallData.aisles ? (
+                wallData.aisles.map((aisl, index) => {
+                  return (
+                    <Aisle
+                      index={index}
+                      aisl={aisl}
+                      scaleFactor={scaleFactor}
+                      wallData={wallData}
+                    />
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </Svg>
+          </View>
+        </BlurView>
 
         <View style={styles.searchBarView}>
           <TextInput
