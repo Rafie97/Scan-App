@@ -15,6 +15,7 @@ import Item from '../Models/Item';
 import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
+import {Recipe} from '../Models/Recipe';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
@@ -51,9 +52,8 @@ function PromotionsPage() {
       const newRecipes = [];
       snap.forEach(async doc => {
         const item = {
-          imageLink: doc.data().imageLink,
-          name: doc.data().name,
-        };
+          ...doc.data(),
+        } as Recipe;
         newRecipes.push(item);
       });
       setRecipes(newRecipes);
@@ -71,6 +71,36 @@ function PromotionsPage() {
       source={require('../res/grad_3.png')}>
       <ScrollView style={styles.promoPageContainer}>
         <Text style={styles.promoTitle}>Today's Best Deals</Text>
+        <Text
+          style={{
+            fontSize: 18,
+            fontWeight: 'bold',
+            marginLeft: 20,
+            marginBottom: 10,
+          }}>
+          Explore our take-and-make recipes
+        </Text>
+
+        <View style={{height: 280}}>
+          <FlatList
+            data={recipes}
+            horizontal={true}
+            renderItem={({item}) => {
+              const link = item.imageLink;
+
+              return (
+                <PromoItemTile
+                  imageLink={item.imageLink}
+                  name={item.name}
+                  price={item.price}
+                  feeds={item.feeds}
+                  isRecipe={true}
+                />
+              );
+            }}
+          />
+        </View>
+        <View style={{height: 20}} />
 
         <Text
           style={{
@@ -83,7 +113,7 @@ function PromotionsPage() {
         </Text>
         <View style={{height: 240}}>
           <FlatList
-            data={promoItems}
+            data={promoItems.slice(0, 10)}
             horizontal={true}
             renderItem={({item}) => {
               return (
@@ -91,64 +121,11 @@ function PromotionsPage() {
                   imageLink={item.imageLink}
                   name={item.name}
                   price={item.price}
+                  isRecipe={false}
                 />
               );
             }}
             style={{backgroundColor: 'transparent'}}
-          />
-        </View>
-        <View style={{height: 20}} />
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            marginLeft: 20,
-            marginBottom: 10,
-          }}>
-          Explore our take-and-make recipes
-        </Text>
-        <View style={{height: 160}}>
-          <FlatList
-            data={recipes}
-            horizontal={true}
-            renderItem={({item}) => {
-              const link = item.imageLink;
-
-              return (
-                <View
-                  style={{
-                    height: 130,
-                    width: 100,
-                    marginLeft: 10,
-                    alignItems: 'flex-end',
-                  }}>
-                  <Image
-                    source={{uri: link}}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: 10,
-                      borderColor: '#dddddd',
-                      borderWidth: 2,
-                      marginLeft: 10,
-                    }}
-                  />
-
-                  <View
-                    style={{
-                      flex: 1,
-                      alignSelf: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                      }}>
-                      {item.name}
-                    </Text>
-                  </View>
-                </View>
-              );
-            }}
           />
         </View>
       </ScrollView>

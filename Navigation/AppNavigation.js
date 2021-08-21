@@ -76,11 +76,9 @@ class AppNavigation extends Component {
           style: {
             position: 'absolute',
             alignItems: 'center',
-            bottom: -5,
-            left: 0,
-            backgroundColor: 'transparent',
-            borderTopColor: 'transparent',
-            elevation: 0,
+            backgroundColor: 'white',
+            borderTopWidth: 2,
+            borderTopColor: 'black',
             height: 60,
           },
         }}

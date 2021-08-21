@@ -161,7 +161,7 @@ function MapPage() {
           r={10}
           stroke="black"
           strokeWidth={1}
-          fill={markedAisles.includes(index) ? 'red' : 'white'}
+          fill={markedAisles.includes(index) ? 'red' : 'rgba(0,0,0,0)'}
         />
         {currentBubble === index && (
           <ProdBubble
@@ -191,41 +191,41 @@ function MapPage() {
             </Text>
           </View>
         )}
-        <BlurView blurType="light" blurAmount={1}>
-          <View
-            style={{
-              height: wallData.mapSize.height * scaleFactor,
-              width: wallData.mapSize.width * scaleFactor,
-            }}>
-            <Svg style={styles.mapBox}>
-              {wallData.wallCoordinates.map((coordinates, index) => {
+        {/* <BlurView blurType="light" blurAmount={1}> */}
+        <View
+          style={{
+            height: wallData.mapSize.height * scaleFactor,
+            width: wallData.mapSize.width * scaleFactor,
+          }}>
+          <Svg style={styles.mapBox}>
+            {wallData.wallCoordinates.map((coordinates, index) => {
+              return (
+                <Wall
+                  scale={scaleFactor}
+                  start={coordinates.start}
+                  end={coordinates.end}
+                  wallData={wallData}
+                />
+              );
+            })}
+
+            {wallData.aisles ? (
+              wallData.aisles.map((aisl, index) => {
                 return (
-                  <Wall
-                    scale={scaleFactor}
-                    start={coordinates.start}
-                    end={coordinates.end}
+                  <Aisle
+                    index={index}
+                    aisl={aisl}
+                    scaleFactor={scaleFactor}
                     wallData={wallData}
                   />
                 );
-              })}
-
-              {wallData.aisles ? (
-                wallData.aisles.map((aisl, index) => {
-                  return (
-                    <Aisle
-                      index={index}
-                      aisl={aisl}
-                      scaleFactor={scaleFactor}
-                      wallData={wallData}
-                    />
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </Svg>
-          </View>
-        </BlurView>
+              })
+            ) : (
+              <></>
+            )}
+          </Svg>
+        </View>
+        {/* </BlurView> */}
 
         <View style={styles.searchBarView}>
           <TextInput

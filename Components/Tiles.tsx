@@ -137,31 +137,42 @@ export type PromoTileProps = {
   imageLink: string;
   name: string;
   price: string;
+  feeds?: number;
+  isRecipe?: boolean;
 };
 
 const PromoItemTile = (item: PromoTileProps) => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.itemView}>
-      <BlurView blurType="light" blurAmount={1}>
-        <TouchableOpacity
-          style={styles.itemBox}
-          onPress={() =>
-            navigation.navigate('Promo', {
-              screen: 'PromoItemPage',
-              params: {itemIDCallback: item},
-            })
-          }>
-          <Image style={styles.itemImage} source={{uri: item.imageLink}} />
+    <View style={{marginHorizontal: 10, width: item.isRecipe ? 200 : 140}}>
+      {/* <BlurView blurType="light" blurAmount={1}> */}
+      <TouchableOpacity
+        style={styles.itemBox}
+        onPress={() =>
+          navigation.navigate('Promo', {
+            screen: 'PromoItemPage',
+            params: {itemIDCallback: item},
+          })
+        }>
+        <Image style={styles.itemImage} source={{uri: item.imageLink}} />
 
-          <Text style={[styles.itemTitleText, {fontWeight: 'bold'}]}>
-            ${item.price}
+        <Text
+          style={[
+            styles.itemTitleText,
+            {fontWeight: 'bold', marginVertical: 0},
+          ]}>
+          ${item.price}
+        </Text>
+        {item.feeds && (
+          <Text style={{fontWeight: 'bold', marginLeft: 20}}>
+            Feeds: {item.feeds}
           </Text>
-
-          <Text style={styles.itemTitleText}>{item.name}</Text>
-        </TouchableOpacity>
-      </BlurView>
+        )}
+        <Text style={styles.itemTitleText}>{item.name}</Text>
+        <View style={{height: 10}} />
+      </TouchableOpacity>
+      {/* </BlurView> */}
     </View>
   );
 };
@@ -172,15 +183,7 @@ export {PromoItemTile};
 export default FamilyTile;
 
 const styles = StyleSheet.create({
-  itemView: {
-    marginHorizontal: 10,
-    width: 200,
-    maxHeight: 240,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.5,
-    // shadowRadius: 4,
-    // elevation: 10,
-  },
+  itemView: {},
 
   itemBlurView: {},
 
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
 
   itemImage: {
     marginTop: 5,
-    marginBottom: 20,
+    marginBottom: 10,
     marginHorizontal: 5,
     borderRadius: 2,
     top: 0,
