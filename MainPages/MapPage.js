@@ -95,10 +95,8 @@ function MapPage() {
             const match = items.findIndex(i => {
               return i.docID === p;
             });
-            if (match > -1) {
-              if (items[match].name.includes(val)) {
-                matches.push(index);
-              }
+            if (match >= 0 && items[match].name.includes(val)) {
+              matches.push(index);
             }
           });
         }
@@ -163,7 +161,7 @@ function MapPage() {
           r={10}
           stroke="black"
           strokeWidth={1}
-          fill="rgba(0,0,0,0)"
+          fill={markedAisles.includes(index) ? 'red' : 'white'}
         />
         {currentBubble === index && (
           <ProdBubble
