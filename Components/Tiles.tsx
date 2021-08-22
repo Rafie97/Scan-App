@@ -160,7 +160,12 @@ const PromoItemTile = (item: PromoTileProps) => {
         <Text
           style={[
             styles.itemTitleText,
-            {fontWeight: 'bold', marginVertical: 0},
+            {
+              fontWeight: 'bold',
+              marginVertical: 0,
+              fontSize: 24,
+              textAlign: 'center',
+            },
           ]}>
           ${item.price}
         </Text>
@@ -169,7 +174,17 @@ const PromoItemTile = (item: PromoTileProps) => {
             Feeds: {item.feeds}
           </Text>
         )}
-        <Text style={styles.itemTitleText}>{item.name}</Text>
+        <Text
+          numberOfLines={2}
+          style={[
+            styles.itemTitleText,
+            {
+              marginLeft: item.isRecipe ? 20 : 0,
+              textAlign: item.isRecipe ? 'left' : 'center',
+            },
+          ]}>
+          {item.name + `\n`}
+        </Text>
         <View style={{height: 10}} />
       </TouchableOpacity>
       {/* </BlurView> */}
@@ -194,9 +209,7 @@ const styles = StyleSheet.create({
   },
 
   itemTitleText: {
-    textAlign: 'left',
     marginVertical: 5,
-    marginLeft: 20,
     fontSize: 20,
   },
 

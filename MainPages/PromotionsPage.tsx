@@ -60,11 +60,6 @@ function PromotionsPage() {
     });
   }, []);
 
-  // let arr = [];
-  // state.promoItems.forEach(i => {
-  //   arr = [...arr, i.name];
-  // });
-
   return (
     <ImageBackground
       style={{backgroundColor: 'white', flexGrow: 1, justifyContent: 'center'}}
@@ -81,13 +76,12 @@ function PromotionsPage() {
           Explore our take-and-make recipes
         </Text>
 
-        <View style={{height: 280}}>
+        <View>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={recipes}
             horizontal={true}
             renderItem={({item}) => {
-              const link = item.imageLink;
-
               return (
                 <PromoItemTile
                   imageLink={item.imageLink}
@@ -111,8 +105,9 @@ function PromotionsPage() {
           }}>
           Explore our coupons
         </Text>
-        <View style={{height: 240}}>
+        <View>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={promoItems.slice(0, 10)}
             horizontal={true}
             renderItem={({item}) => {
