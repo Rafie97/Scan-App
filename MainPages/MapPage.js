@@ -16,6 +16,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
 import {BlurView} from '@react-native-community/blur';
+import {useNavigation} from '@react-navigation/native';
 
 export default MapPage;
 
@@ -34,6 +35,8 @@ function MapPage() {
     },
     wallCoordinates: [],
   });
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const mapRef = firestore()
@@ -133,7 +136,11 @@ function MapPage() {
                 // activeOpacity={0.6}
                 underlayColor="black"
                 onPress={() => {
-                  console.log('Pressed!');
+                  navigation.navigate('Promo', {
+                    screen: 'PromoItemPage',
+                    initial: false,
+                    params: {itemIDCallback: items[match], isRecipe: true},
+                  });
                 }}
                 style={{
                   paddingVertical: 7,
