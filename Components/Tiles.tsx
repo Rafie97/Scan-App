@@ -137,6 +137,7 @@ export type PromoTileProps = {
   imageLink: string;
   name: string;
   price: string;
+  priceHistory: number[];
   feeds?: number;
   isRecipe?: boolean;
 };
@@ -152,7 +153,7 @@ const PromoItemTile = (item: PromoTileProps) => {
         onPress={() =>
           navigation.navigate('Promo', {
             screen: 'PromoItemPage',
-            params: {itemIDCallback: item},
+            params: {itemIDCallback: item, isRecipe: item.isRecipe},
           })
         }>
         <Image style={styles.itemImage} source={{uri: item.imageLink}} />

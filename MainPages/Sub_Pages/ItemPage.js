@@ -30,7 +30,7 @@ function ItemPage({route}) {
 
   React.useEffect(() => {
     setThing(route.params.itemIDCallback);
-  }, []);
+  }, [route.params.itemIDCallback]);
 
   async function getLists() {
     //Retrieve names of wishlists
@@ -92,7 +92,8 @@ function ItemPage({route}) {
 
   let vals = [];
 
-  if (thing) {
+  if (!route.params.isRecipe && thing) {
+    console.log('THING', route.params.itemIDCallback);
     const entries = Object.entries(thing.priceHistory);
     entries.forEach(entry => {
       vals.push({
@@ -103,7 +104,6 @@ function ItemPage({route}) {
 
     data1.dataSets[0].values = vals;
   }
-
   return (
     <ImageBackground
       source={require('../../res/grad_3.png')}
@@ -129,14 +129,16 @@ function ItemPage({route}) {
 
             <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             <Text style={styles.itemPriceText}>${thing.price}</Text>
-            <Card style={styles.chartCard} title="Price History">
-              <LineChart
-                style={styles.priceChart}
-                data={data1}
-                xAxis={{enabled: false}}
-              />
-              <Text>Here are the stonks for this item</Text>
-            </Card>
+            {!route.params.isRecipe && (
+              <Card style={styles.chartCard} title="Price History">
+                <LineChart
+                  style={styles.priceChart}
+                  data={data1}
+                  xAxis={{enabled: false}}
+                />
+                <Text>Here are the stonks for this item</Text>
+              </Card>
+            )}
 
             <Text
               style={{

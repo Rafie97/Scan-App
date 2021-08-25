@@ -8,11 +8,11 @@ import {
   Text,
   TextInput,
   ImageBackground,
-  TouchableOpacity,
   TouchableHighlight,
   Dimensions,
 } from 'react-native';
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/Item';
 import {BlurView} from '@react-native-community/blur';
@@ -84,7 +84,8 @@ function MapPage() {
 
   async function searchItems(val) {
     if (val === '' || val === ' ') {
-      await setBackSearches([]);
+      setBackSearches([]);
+      setMarkedAisles([]);
     } else if (val !== '') {
       await setBackSearches([]);
 
@@ -114,7 +115,7 @@ function MapPage() {
       <View
         style={{
           flexDirection: 'column',
-          position: 'relative',
+          //position: 'relative',
           left: coord.x,
           top: coord.y,
           backgroundColor: 'white',
@@ -128,13 +129,19 @@ function MapPage() {
 
           return (
             match > -1 && (
-              <TouchableHighlight
-                activeOpacity={0.6}
+              <TouchableOpacity
+                // activeOpacity={0.6}
                 underlayColor="black"
-                onPress={() => console.log('Pressed!')}
-                style={{paddingVertical: 7, paddingLeft: 6, fontSize: 15}}>
+                onPress={() => {
+                  console.log('Pressed!');
+                }}
+                style={{
+                  paddingVertical: 7,
+                  paddingLeft: 6,
+                  fontSize: 15,
+                }}>
                 <Text>{items[match].name}</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             )
           );
         })}
@@ -163,6 +170,7 @@ function MapPage() {
           strokeWidth={1}
           fill={markedAisles.includes(index) ? 'red' : 'rgba(0,0,0,0)'}
         />
+
         {currentBubble === index && (
           <ProdBubble
             prods={wallData.aisles[currentBubble].products}

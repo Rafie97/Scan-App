@@ -304,6 +304,7 @@ export default function AccountPage() {
           )}
           {selectedNames.length > 0 ? (
             <FlatList
+              showsHorizontalScrollIndicator={false}
               data={selectedNames}
               horizontal={true}
               renderItem={({item}) => <FamilyTile name={item} />}
@@ -333,6 +334,7 @@ export default function AccountPage() {
       return (
         <View>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={wishlists}
             horizontal={true}
             renderItem={({item}) => <WishlistTile name={item} />}
@@ -345,6 +347,7 @@ export default function AccountPage() {
       return (
         <View>
           <FlatList
+            showsHorizontalScrollIndicator={false}
             data={receipts}
             horizontal={true}
             renderItem={({item}) => <ReceiptTile receipt={item} />}
@@ -473,6 +476,7 @@ export default function AccountPage() {
             />
 
             <FlatList
+              showsHorizontalScrollIndicator={false}
               data={filteredContactNames}
               initialNumToRender={100}
               renderItem={renderItem}

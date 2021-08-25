@@ -87,6 +87,7 @@ function PromotionsPage() {
                   imageLink={item.imageLink}
                   name={item.name}
                   price={item.price}
+                  priceHistory={item.priceHistory}
                   feeds={item.feeds}
                   isRecipe={true}
                 />
@@ -116,6 +117,7 @@ function PromotionsPage() {
                   imageLink={item.imageLink}
                   name={item.name}
                   price={item.price}
+                  priceHistory={item.priceHistory}
                   isRecipe={false}
                 />
               );
