@@ -397,6 +397,38 @@ export default function AccountPage() {
             </Text>
           </View>
         </View>
+        <View>
+          <TouchableOpacity style={{marginBottom: 30, marginTop: 60}}>
+            <Text
+              style={{
+                alignSelf: 'center',
+                borderRadius: 15,
+                borderWidth: 2,
+                fontSize: 20,
+                textAlign: 'center',
+                height: 50,
+                width: '90%',
+                paddingVertical: 10,
+              }}>
+              Edit Profile
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text
+              style={{
+                alignSelf: 'center',
+                borderRadius: 15,
+                borderWidth: 2,
+                fontSize: 20,
+                textAlign: 'center',
+                height: 50,
+                width: '90%',
+                paddingVertical: 10,
+              }}>
+              Payment Info
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View
         style={{

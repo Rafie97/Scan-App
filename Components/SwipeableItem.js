@@ -74,6 +74,7 @@ export default class SwipeableItem extends React.PureComponent {
   }
 
   render() {
+    console.log(this.state.position);
     return (
       <View>
         <Animated.View
@@ -92,7 +93,10 @@ export default class SwipeableItem extends React.PureComponent {
               onPress={() => this.props.deleteItem(this.props.item.docID)}>
               <Animated.View
                 style={{
-                  backgroundColor: '#D93F12',
+                  backgroundColor:
+                    this.state.position.x < -15
+                      ? 'rgba(217, 63, 18, 0.5)'
+                      : '#D93F12', //'#D93F12'
                   width: 40,
                   height: 40,
                   alignItems: 'center',
@@ -110,19 +114,36 @@ export default class SwipeableItem extends React.PureComponent {
               left: this.state.position.x,
             }}
             {...this.panResponder.panHandlers}>
-            <TouchableOpacity
-              style={styles.itemBubble}
-              onPress={this.navToItem}
-              activeOpacity={0.5}>
+            <View style={styles.itemBubble}>
               <Image
                 source={{uri: this.props.item.imageLink}}
                 style={styles.itemImage}
               />
-              <View style={{marginVertical: 10}}>
+              <TouchableOpacity
+                onPress={this.navToItem}
+                activeOpacity={0.5}
+                style={{
+                  marginVertical: 10,
+                  width: '40%',
+                  height: '75%',
+                }}>
                 <Text style={styles.itemLabel}>{this.props.item.name}</Text>
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignSelf: 'center',
+                }}>
+                <View style={{flexDirection: 'row', marginBottom: 5}}>
+                  <EvilIcons name="minus" size={30} />
+                  <Text style={{alignSelf: 'center', marginHorizontal: 2}}>
+                    x2
+                  </Text>
+                  <EvilIcons name="plus" size={30} />
+                </View>
+                <Text style={styles.itemPrice}>${this.props.item.price}</Text>
               </View>
-              <Text style={styles.itemPrice}>${this.props.item.price}</Text>
-            </TouchableOpacity>
+            </View>
           </Animated.View>
         </Animated.View>
       </View>
@@ -132,7 +153,6 @@ export default class SwipeableItem extends React.PureComponent {
 
 const styles = StyleSheet.create({
   itemBubble: {
-    backgroundColor: '#d4d4d4',
     borderWidth: 2,
     borderRadius: 20,
     flexDirection: 'row',
@@ -146,7 +166,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 9.11,
-    elevation: 5,
   },
   itemImage: {
     alignSelf: 'center',
@@ -159,15 +178,12 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
   },
   itemLabel: {
-    alignSelf: 'center',
     marginLeft: 15,
     fontSize: 18,
     //fontFamily: 'Roboto',
   },
   itemPrice: {
-    alignSelf: 'center',
-    textAlign: 'right',
-    marginLeft: 'auto',
-    marginRight: 10,
+    textAlign: 'center',
+    fontSize: 16,
   },
 });

@@ -172,31 +172,6 @@ function CartPage() {
   );
 }
 
-// function Blur() {
-//   return (
-//     <View style={{position: 'absolute', bottom: 0, left: 0, right: 0}}>
-//       <BlurView
-//         blurRadius={25}
-//         overlayColor=""
-//         blurAmount={3}
-//         blurType="dark"
-//         style={{height: 80, backgroundColor: 'yellow'}}
-//       />
-//       <View
-//         style={{
-//           position: 'absolute',
-//           bottom: 400,
-//           right: 0,
-//           flexDirection: 'row',
-//           justifyContent: 'space-around',
-//           left: 0,
-//         }}>
-//         <Text>BLUR THIS</Text>
-//       </View>
-//     </View>
-//   );
-// }
-
 const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 
 export default CartPage;
