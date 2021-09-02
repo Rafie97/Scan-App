@@ -53,9 +53,10 @@ type ReceiptTileProps = {
 };
 const ReceiptTile = (props: ReceiptTileProps) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {}}
       style={{
-        height: 130,
+        height: 150,
         width: 100,
         marginLeft: 10,
         alignItems: 'flex-end',
@@ -72,18 +73,21 @@ const ReceiptTile = (props: ReceiptTileProps) => {
         }}
       />
 
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        <Text
-          style={{
-            shadowColor: '#000',
-            shadowOpacity: 0.5,
-            shadowRadius: 4,
-            elevation: 10,
-          }}>
-          {props.receipt.date}
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          alignSelf: 'center',
+          shadowColor: '#000',
+          shadowOpacity: 0.5,
+          shadowRadius: 4,
+        }}>
+        <Text style={{textAlign: 'center', marginVertical: 5}}>
+          {props.receipt.storeId}
         </Text>
+        <Text style={{textAlign: 'center'}}>{props.receipt.date}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

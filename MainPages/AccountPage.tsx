@@ -107,33 +107,6 @@ export default function AccountPage() {
   }, []);
 
   async function signOut() {
-    // const userID = auth().currentUser.uid;
-    // firestore()
-    //   .collection('users')
-    //   .doc(userID)
-    //   .collection('Cart')
-    //   .onSnapshot(() => {});
-    // firestore()
-    //   .collection('users')
-    //   .doc(userID)
-    //   .collection('Wishlist')
-    //   .onSnapshot(() => {});
-    // firestore()
-    //   .collection('users')
-    //   .doc(userID)
-    //   .collection('Family')
-    //   .onSnapshot(() => {});
-    // firestore()
-    //   .collection('users')
-    //   .doc(userID)
-    //   .collection('Wishlists')
-    //   .onSnapshot(() => {});
-
-    // firestore()
-    //   .collection('stores')
-    //   .doc('HEB')
-    //   .collection('items')
-    //   .onSnapshot(() => {});
     auth().signOut();
   }
 
@@ -296,7 +269,8 @@ export default function AccountPage() {
                 width: 100,
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: 10,
+                marginBottom: 10,
+                marginLeft: 10,
               }}
               onPress={() => setContactModal(true)}>
               <Text style={{color: 'white'}}>Add Family</Text>
@@ -432,66 +406,71 @@ export default function AccountPage() {
       </View>
       <View
         style={{
-          flexDirection: 'column',
-          position: 'absolute',
-          bottom: 60,
-          paddingBottom: 180,
+          height: '30%',
           width: '100%',
+          position: 'absolute',
+          bottom: 40,
         }}>
-        <View style={{flexDirection: 'row', marginBottom: 40, width: '100%'}}>
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentBottomTabIndex(0);
-            }}
-            style={{flex: 1, borderRightWidth: 2}}>
-            <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'center',
-                fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
-              }}>
-              Family
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentBottomTabIndex(1);
-            }}
-            style={{flex: 1, borderRightWidth: 2}}>
-            <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'center',
-                fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
-              }}>
-              Wishlists
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setCurrentBottomTabIndex(2);
-            }}
-            style={{flex: 1}}>
-            <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'center',
-                fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
-              }}>
-              Receipts
-            </Text>
-          </TouchableOpacity>
+        <View
+          style={{
+            width: '100%',
+          }}>
+          <View style={{flexDirection: 'row', width: '100%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                setCurrentBottomTabIndex(0);
+              }}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
+                }}>
+                Family
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCurrentBottomTabIndex(1);
+              }}
+              style={{flex: 1, borderRightWidth: 2}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
+                }}>
+                Wishlists
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCurrentBottomTabIndex(2);
+              }}
+              style={{flex: 1}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: 'center',
+                  fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
+                }}>
+                Receipts
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            width: '100%',
+            height: '80%',
+            padding: 20,
+          }}>
+          {BottomBarContent()}
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'column',
-          position: 'absolute',
-          bottom: 60,
-          paddingBottom: 20,
-        }}>
-        {BottomBarContent()}
-      </View>
+
       <Modal
         animationType="slide"
         transparent={true}
