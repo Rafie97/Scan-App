@@ -11,6 +11,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const {width} = Dimensions.get('window');
 
@@ -64,6 +66,24 @@ function SwipeableItem(props) {
       screen: props.sourcePage + 'ItemPage',
       params: {itemIDCallback: props.item},
     });
+  }
+
+  function incrementQuantity(increment) {
+    const userID = auth().currentUser.uid;
+    const cartRef = firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Cart')
+      .doc(props.item.docID);
+
+    if (increment === 1 && props.item.quantity < 99) {
+      const newQuan = props.item.quantity + 1;
+      cartRef.update({quantity: newQuan});
+    }
+    if (increment === -1 && props.item.quantity > 1) {
+      const newQuan = props.item.quantity - 1;
+      cartRef.update({quantity: newQuan});
+    }
   }
 
   return (
@@ -123,11 +143,15 @@ function SwipeableItem(props) {
                 alignSelf: 'center',
               }}>
               <View style={{flexDirection: 'row', marginBottom: 5}}>
-                <EvilIcons name="minus" size={30} />
+                <TouchableOpacity onPress={() => incrementQuantity(-1)}>
+                  <EvilIcons name="minus" size={30} />
+                </TouchableOpacity>
                 <Text style={{alignSelf: 'center', marginHorizontal: 2}}>
-                  x2
+                  x{props.item.quantity}
                 </Text>
-                <EvilIcons name="plus" size={30} />
+                <TouchableOpacity onPress={() => incrementQuantity(1)}>
+                  <EvilIcons name="plus" size={30} />
+                </TouchableOpacity>
               </View>
               <Text style={styles.itemPrice}>${props.item.price}</Text>
             </View>

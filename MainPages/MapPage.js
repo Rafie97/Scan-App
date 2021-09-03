@@ -85,6 +85,11 @@ function MapPage() {
     setScale(f);
   }, [wallData.mapSize.width]);
 
+  //on dismount
+  useEffect(() => {
+    return () => setCurrentBubble(-1);
+  });
+
   async function searchItems(val) {
     if (val === '' || val === ' ') {
       setBackSearches([]);
@@ -208,6 +213,7 @@ function MapPage() {
         )}
         {/* <BlurView blurType="light" blurAmount={1}> */}
         <View
+          onPress={() => setCurrentBubble(-1)}
           style={{
             height: wallData.mapSize.height * scaleFactor,
             width: wallData.mapSize.width * scaleFactor,

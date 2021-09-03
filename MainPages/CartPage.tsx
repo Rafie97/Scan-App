@@ -46,6 +46,7 @@ function CartPage() {
       const tempItems: Item[] = [];
       snap.forEach(async doc => {
         const item = new Item(doc);
+        item.quantity = doc.data().quantity;
         tempItems.push(item);
       });
       setCartItems(tempItems);

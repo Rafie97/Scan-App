@@ -58,7 +58,7 @@ function ItemPage({route}) {
       .doc(userID)
       .collection('Cart');
     const item = new Item(thing);
-
+    item.quantity = 1;
     cartRef.add(item);
     navigate.navigate('Cart');
   }

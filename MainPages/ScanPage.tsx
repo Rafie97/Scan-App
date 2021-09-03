@@ -15,13 +15,15 @@ import {useNavigation} from '@react-navigation/native';
 
 function ScanPage() {
   const [loading, setLoading] = React.useState(true);
-  const [scannedItems, setScannedItems] = React.useState([]);
+  const [scannedItems, setScannedItems] = React.useState(
+    new Map<number, Item>(),
+  );
   const camera = React.useRef();
 
   const navigate = useNavigation();
-
   async function fetchByBarcode(barcode) {
-    console.log('Barcode', barcode);
+    console.log(barcode);
+
     const hebRef = firestore()
       .collection('stores')
       .doc('HEB')
@@ -29,15 +31,15 @@ function ScanPage() {
     const barQuery = hebRef.where('barcode', '==', barcode);
     const BreakException = {};
     await barQuery.get().then(async qSnap => {
-      const newScannedItems = [];
+      const newScannedItems = new Map<number, Item>();
       try {
         qSnap.forEach(async (doc, index) => {
           const item = new Item(doc);
 
-          if (scannedItems.find(e => e.docID === item.docID)) {
+          if (scannedItems.has(item.docID)) {
             throw BreakException;
           } else {
-            newScannedItems.push(item);
+            newScannedItems.set(item.docID, item);
           }
         });
         setScannedItems(newScannedItems);
@@ -65,14 +67,15 @@ function ScanPage() {
     </TouchableOpacity>
   );
 
-  const barcodeRecognized = ({barcodes}) => {
-    barcodes.forEach(barcode => {
-      if (!barcode.data.startsWith('{')) {
+  function barcodeRecognized({barcodes}) {
+    barcodes.length > 0 &&
+      barcodes.forEach(barcode => {
         //Filter out errors
-        fetchByBarcode(barcode.data);
-      }
-    });
-  };
+        if (!barcode.data.startsWith('{')) {
+          fetchByBarcode(barcode.data);
+        }
+      });
+  }
 
   return (
     <ImageBackground
@@ -83,12 +86,13 @@ function ScanPage() {
           ref={camera}
           style={styles.cameraWindow}
           ratio="1:1"
+          // onBarCodeRead={() => barcodeRecognized}
           onGoogleVisionBarcodesDetected={barcodeRecognized}
           autoFocus="on"
           captureAudio={false}
         />
         <View style={styles.underCam}>
-          {loading && scannedItems.length == 0 ? (
+          {loading && scannedItems.size == 0 ? (
             <Text style={styles.scannedItemsText}>
               Scan a barcode to show products
             </Text>
@@ -96,7 +100,7 @@ function ScanPage() {
             <View style={styles.underCam}>
               <Text style={styles.scannedItemsText}>Scanned Items</Text>
               <FlatList
-                data={scannedItems}
+                data={Array.from(scannedItems.values())}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
               />
@@ -126,7 +130,6 @@ const styles = StyleSheet.create({
     height: 45,
     marginLeft: 20,
     marginRight: 0,
-    backgroundColor: 'purple',
   },
   itemLabel: {
     alignSelf: 'center',
@@ -147,8 +150,8 @@ const styles = StyleSheet.create({
   },
 
   scannedItemsText: {
-    marginTop: 200,
-    marginBottom: 10,
+    marginTop: 40,
+    marginBottom: 20,
     fontSize: 20,
   },
 
