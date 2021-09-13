@@ -27,6 +27,7 @@
     "react-native-charts-wrapper": "^0.5.7",
     "react-native-cli": "^2.0.1",
     "react-native-contacts": "^5.2.7",
+    "react-native-dropdown-picker": "^5.1.25",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-grid-component": "^2.0.1",

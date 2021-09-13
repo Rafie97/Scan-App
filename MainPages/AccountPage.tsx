@@ -11,6 +11,9 @@ import {
   Modal,
   AsyncStorage,
 } from 'react-native';
+
+import DropDownPicker from 'react-native-dropdown-picker';
+
 require('react-native-linear-gradient').default;
 import FamilyTile, {ReceiptTile, WishlistTile} from '../Components/Tiles';
 import firestore from '@react-native-firebase/firestore';
@@ -42,11 +45,23 @@ export default function AccountPage() {
 
   const [receipts, setReceipts] = React.useState<Receipt[]>([]);
 
+  const [editProfile, setEditProfile] = React.useState<boolean>(false);
+  const [userName, setUserName] = React.useState<string>();
+  const [typedName, setTypedName] = React.useState<string>();
+  const userID = auth().currentUser.uid;
+
   const navigate = useNavigation();
+
+  //Get User Info
+  React.useEffect(() => {
+    const userRef = firestore()
+      .collection('users')
+      .doc(userID);
+    userRef.get().then(data => setUserName(data.data().name));
+  }, []);
 
   //Get Family
   React.useEffect(() => {
-    const userID = auth().currentUser.uid;
     const famRef = firestore()
       .collection('users')
       .doc(userID)
@@ -65,10 +80,17 @@ export default function AccountPage() {
     return sub;
   }, []);
 
+  React.useEffect(() => {
+    async () => {
+      pullContactsFirebase();
+      getCount();
+      setTimeout(() => getLocalContacts(), 1000);
+    };
+  });
+
   //Get Lists
   React.useEffect(() => {
     //Retrieve names of wishlists
-    const userID = auth().currentUser.uid;
     const wishRef = firestore()
       .collection('users')
       .doc(userID)
@@ -86,7 +108,6 @@ export default function AccountPage() {
 
   //Get Receipts
   React.useEffect(() => {
-    const userID = auth().currentUser.uid;
     const receiptRef = firestore()
       .collection('users')
       .doc(userID)
@@ -211,6 +232,24 @@ export default function AccountPage() {
       setTempSelectedNames(tempNames);
     }
   }
+
+  async function pullContactsFirebase() {
+    const userID = auth().currentUser.uid;
+    const famRef = firestore()
+      .collection('users')
+      .doc(userID)
+      .collection('Family');
+
+    famRef.onSnapshot(async snap => {
+      setSelectedNames([]);
+      setTempSelectedNames([]);
+      snap.forEach(async doc => {
+        setSelectedNames([...selectedNames, doc.data().name]);
+        setTempSelectedNames([...tempSelectedNames, doc.data().name]);
+      });
+    });
+  }
+
   // ============================== END CONTACT METHODS ====================================
 
   async function pushContactsFirebase() {
@@ -244,6 +283,8 @@ export default function AccountPage() {
   }
 
   function BottomBarContent() {
+    const [selected, setSelected] = React.useState('');
+    const [dropdownOpen, setDropdownOpen] = React.useState(false);
     if (currentBottomTabIndex === 0) {
       return (
         <View>
@@ -307,6 +348,19 @@ export default function AccountPage() {
     if (currentBottomTabIndex === 1) {
       return (
         <View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#1B263B',
+              borderWidth: 1,
+              height: 30,
+              width: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
+              marginLeft: 10,
+            }}>
+            <Text style={{color: 'white'}}>Add Wishlist</Text>
+          </TouchableOpacity>
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={wishlists}
@@ -320,6 +374,37 @@ export default function AccountPage() {
     if (currentBottomTabIndex === 2 && receipts.length > 0) {
       return (
         <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              height: 30,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
+              marginLeft: 10,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{fontSize: 18}}>Sort: </Text>
+              <DropDownPicker
+                items={[
+                  {label: 'Date', value: 'date'},
+                  {label: 'Store Name', value: 'store'},
+                ]}
+                open={dropdownOpen}
+                setOpen={op => setDropdownOpen(op)}
+                value={selected}
+                setValue={setSelected}
+                style={{height: 40}}
+                containerStyle={{width: 160}}
+              />
+            </View>
+          </View>
           <FlatList
             showsHorizontalScrollIndicator={false}
             data={receipts}
@@ -349,8 +434,8 @@ export default function AccountPage() {
           <Image
             source={require('../res/default_profile.jpg')}
             style={{
-              width: 140,
-              height: 140,
+              width: 130,
+              height: 130,
               borderRadius: 10,
               borderColor: '#dddddd',
               borderWidth: 2,
@@ -358,21 +443,44 @@ export default function AccountPage() {
             }}
           />
           <View style={{flexDirection: 'column'}}>
-            <Text
-              style={[
-                styles.personalInfoText,
-                {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
-              ]}>
-              Rafa Josh
-            </Text>
-            <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
+            {editProfile ? (
+              <TextInput
+                placeholder="Name"
+                style={{fontSize: 18, borderWidth: 1, marginBottom: 8}}
+                onChangeText={val => setTypedName(val)}
+              />
+            ) : (
+              <Text
+                style={[
+                  styles.personalInfoText,
+                  {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
+                ]}>
+                {userName}
+              </Text>
+            )}
+
             <Text style={styles.personalInfoText}>
-              Phone Number: 512-363-8986
+              Phone Number: 512.363.8986
             </Text>
+
+            <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
           </View>
         </View>
         <View>
-          <TouchableOpacity style={{marginBottom: 30, marginTop: 60}}>
+          <TouchableOpacity
+            onPress={() => {
+              if (editProfile && typedName && typedName !== userName) {
+                setUserName(typedName);
+                const userRef = firestore()
+                  .collection('users')
+                  .doc(userID);
+                userRef.set({
+                  name: typedName,
+                });
+              }
+              setEditProfile(!editProfile);
+            }}
+            style={{marginBottom: 30, marginTop: 60}}>
             <Text
               style={{
                 alignSelf: 'center',
@@ -384,7 +492,7 @@ export default function AccountPage() {
                 width: '90%',
                 paddingVertical: 10,
               }}>
-              Edit Profile
+              {editProfile ? 'Save Profile' : 'Edit Profile'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity>
@@ -408,8 +516,7 @@ export default function AccountPage() {
         style={{
           height: '30%',
           width: '100%',
-          position: 'absolute',
-          bottom: 40,
+          marginTop: 100,
         }}>
         <View
           style={{
@@ -535,6 +642,7 @@ export default function AccountPage() {
 const styles = StyleSheet.create({
   fullBackground: {
     flex: 1,
+    flexDirection: 'column',
     width: '100%',
     height: '100%',
   },

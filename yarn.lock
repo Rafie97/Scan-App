@@ -5905,6 +5905,11 @@ react-native-contacts@^5.2.7:
   resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-5.2.8.tgz#280fce6b10ad1be4dc58f78f1c118be436ee98a0"
   integrity sha512-HqY2jWGjAnSdkLrEBz1rW7ruEatqR0p+a4avVof1HxG31Isp21AHvnpd3PAwm70e+3SEAfmLA/OcNWoK9KSvgw==
 
+react-native-dropdown-picker@^5.1.25:
+  version "5.1.25"
+  resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-5.1.25.tgz#58bc05891767f8485d12f1f0ee5809f049fce6f2"
+  integrity sha512-A1yVL62IEfFHRdRC73ojEcSt7Z+U3hndLu8/q0xVO4rVQVMjFhIgB5g6Cze53Ap3y5LKsrVS8Ma/gc4oaQoSsQ==
+
 react-native-elements@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.2.7.tgz#1eca2db715c41722aeb67aea62bd2a4621adb134"

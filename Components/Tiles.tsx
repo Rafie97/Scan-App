@@ -5,138 +5,6 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Receipt} from '../Models/Receipt';
 
-type TileProps = {
-  imageLink?: string;
-  name: string;
-};
-
-const FamilyTile = (props: TileProps) => {
-  const [sauce, setSauce] = React.useState();
-
-  React.useEffect(() => {
-    if (props.imageLink || props.imageLink === '') {
-      // setSauce(require('../../res/' + props.imageLink));
-    } else {
-      // setSauce(require('../../res/default_profile.jpg'));
-    }
-  });
-
-  return (
-    <View
-      style={{
-        height: 130,
-        width: 100,
-        marginLeft: 10,
-        alignItems: 'flex-end',
-      }}>
-      <Image
-        source={require('../res/default_profile.jpg')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#dddddd',
-          borderWidth: 2,
-          marginLeft: 10,
-        }}
-      />
-
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        <Text style={{}}>{props.name}</Text>
-      </View>
-    </View>
-  );
-};
-
-type ReceiptTileProps = {
-  receipt: Receipt;
-};
-const ReceiptTile = (props: ReceiptTileProps) => {
-  return (
-    <TouchableOpacity
-      onPress={() => {}}
-      style={{
-        height: 150,
-        width: 100,
-        marginLeft: 10,
-        alignItems: 'flex-end',
-      }}>
-      <Image
-        source={require('../res/empty-receipt.png')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#dddddd',
-          borderWidth: 2,
-          marginLeft: 10,
-        }}
-      />
-
-      <View
-        style={{
-          flex: 1,
-          width: '100%',
-          alignSelf: 'center',
-          shadowColor: '#000',
-          shadowOpacity: 0.5,
-          shadowRadius: 4,
-        }}>
-        <Text style={{textAlign: 'center', marginVertical: 5}}>
-          {props.receipt.storeId}
-        </Text>
-        <Text style={{textAlign: 'center'}}>{props.receipt.date}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-type WishlistTileProps = {
-  name: string;
-};
-const WishlistTile = (props: WishlistTileProps) => {
-  const nav = useNavigation();
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        nav.navigate('Account', {
-          screen: 'EditWishlistPage',
-          params: {listNameCallback: props.name},
-        });
-      }}
-      style={{
-        height: 130,
-        width: 100,
-        marginLeft: 20,
-        alignItems: 'flex-end',
-      }}>
-      <Image
-        source={require('../res/wishlist-tile.png')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#dddddd',
-          borderWidth: 2,
-          marginLeft: 10,
-        }}
-      />
-
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        <Text
-          style={{
-            shadowColor: '#000',
-            shadowOpacity: 0.5,
-            shadowRadius: 4,
-            elevation: 10,
-          }}>
-          {props.name}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
 export type PromoTileProps = {
   imageLink: string;
   name: string;
@@ -145,6 +13,8 @@ export type PromoTileProps = {
   feeds?: number;
   isRecipe?: boolean;
 };
+
+//PROMO TILE
 
 const PromoItemTile = (item: PromoTileProps) => {
   const navigation = useNavigation();
@@ -194,6 +64,138 @@ const PromoItemTile = (item: PromoTileProps) => {
       </TouchableOpacity>
       {/* </BlurView> */}
     </View>
+  );
+};
+
+type TileProps = {
+  imageLink?: string;
+  name: string;
+};
+
+const FamilyTile = (props: TileProps) => {
+  const [sauce, setSauce] = React.useState();
+
+  React.useEffect(() => {
+    if (props.imageLink || props.imageLink === '') {
+      // setSauce(require('../../res/' + props.imageLink));
+    } else {
+      // setSauce(require('../../res/default_profile.jpg'));
+    }
+  });
+
+  return (
+    <View
+      style={{
+        height: 130,
+        width: 100,
+        marginLeft: 10,
+        alignItems: 'flex-end',
+      }}>
+      <Image
+        source={require('../res/default_profile.jpg')}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 10,
+          borderColor: '#dddddd',
+          borderWidth: 2,
+          marginLeft: 10,
+        }}
+      />
+
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+        <Text style={{}}>{props.name}</Text>
+      </View>
+    </View>
+  );
+};
+
+type WishlistTileProps = {
+  name: string;
+};
+const WishlistTile = (props: WishlistTileProps) => {
+  const nav = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        nav.navigate('Account', {
+          screen: 'EditWishlistPage',
+          params: {listNameCallback: props.name},
+        });
+      }}
+      style={{
+        height: 130,
+        width: 100,
+        marginLeft: 10,
+        alignItems: 'flex-end',
+      }}>
+      <Image
+        source={require('../res/wishlist-tile.png')}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 10,
+          borderColor: '#dddddd',
+          borderWidth: 2,
+          marginLeft: 10,
+        }}
+      />
+
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+        <Text
+          style={{
+            shadowColor: '#000',
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+            elevation: 10,
+          }}>
+          {props.name}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+type ReceiptTileProps = {
+  receipt: Receipt;
+};
+const ReceiptTile = (props: ReceiptTileProps) => {
+  return (
+    <TouchableOpacity
+      onPress={() => {}}
+      style={{
+        height: 150,
+        width: 100,
+        marginLeft: 10,
+        alignItems: 'flex-end',
+      }}>
+      <Image
+        source={require('../res/empty-receipt.png')}
+        style={{
+          width: 100,
+          height: 100,
+          borderRadius: 10,
+          borderColor: '#dddddd',
+          borderWidth: 2,
+          marginLeft: 10,
+        }}
+      />
+
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          alignSelf: 'center',
+          shadowColor: '#000',
+          shadowOpacity: 0.5,
+          shadowRadius: 4,
+        }}>
+        <Text style={{textAlign: 'center', marginTop: 3}}>
+          {props.receipt.storeId}
+        </Text>
+        <Text style={{textAlign: 'center'}}>{props.receipt.date}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
