@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -16,29 +16,20 @@ import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {Recipe} from '../Models/Recipe';
+import {mainReducer} from '../Reducers/mainReducer';
+import {StateContext} from '../Navigation/AppNavigation';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
   const [promoItems, setPromoItems] = useState<PromoTileProps[]>([]);
   const [recipes, setRecipes] = useState([]);
 
+  const overallState = useContext(StateContext);
+
   const navigation = useNavigation();
 
   useEffect(() => {
-    const hebRef = firestore()
-      .collection('stores')
-      .doc('HEB')
-      .collection('items');
-
-    hebRef.onSnapshot(snap => {
-      setPromoItems([]);
-      const newPromoItems: PromoTileProps[] = [];
-      snap.forEach(async doc => {
-        const item = new Item(doc);
-        newPromoItems.push(item);
-      });
-      setPromoItems(newPromoItems);
-    });
+    setPromoItems(overallState.products);
   }, []);
 
   useEffect(() => {

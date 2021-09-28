@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import Item from '../Models/Item';
-import SwipeableItem from '../Components/SwipeableItem';
+import Item from '../../Models/Item';
+import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 
 import Ticker, {Tick} from 'react-native-ticker';
@@ -11,7 +11,7 @@ import Ticker, {Tick} from 'react-native-ticker';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-function CartPage() {
+function ReceiptPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);
   const [isScrollEnabled, setScrollEnabled] = React.useState(true);
   const [cartSum, setCartSum] = React.useState<number[]>(undefined);
@@ -90,7 +90,7 @@ function CartPage() {
 
   return (
     <ImageBackground
-      source={require('../res/grad_3.png')}
+      source={require('../../res/grad_3.png')}
       style={styles.fullBackground}>
       <View style={styles.TotalPricesView}>
         <Text
@@ -135,30 +135,13 @@ function CartPage() {
         renderItem={renderItem}
         data={cartItems}
       />
-
-      <View style={{position: 'absolute', right: 0, bottom: 0}}>
-        <TouchableOpacity
-          style={styles.checkOutButton}
-          onPress={() => {
-            return;
-          }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontVariant: ['small-caps'],
-              color: 'white',
-            }}>
-            Check out
-          </Text>
-        </TouchableOpacity>
-      </View>
     </ImageBackground>
   );
 }
 
 const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 
-export default CartPage;
+export default ReceiptPage;
 
 const styles = StyleSheet.create({
   fullBackground: {

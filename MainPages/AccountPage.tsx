@@ -310,7 +310,7 @@ export default function AccountPage() {
                 width: 100,
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: 10,
+                marginBottom: 20,
                 marginLeft: 10,
               }}
               onPress={() => setContactModal(true)}>
@@ -356,7 +356,7 @@ export default function AccountPage() {
               width: 100,
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: 10,
+              marginBottom: 20,
               marginLeft: 10,
             }}>
             <Text style={{color: 'white'}}>Add Wishlist</Text>
@@ -381,16 +381,16 @@ export default function AccountPage() {
               width: '100%',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: 10,
+              marginBottom: 20,
               marginLeft: 10,
             }}>
             <View
               style={{
+                width: '100%',
                 flexDirection: 'row',
-                justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 18}}>Sort: </Text>
+              <Text style={{fontSize: 16}}>Sort: </Text>
               <DropDownPicker
                 items={[
                   {label: 'Date', value: 'date'},
@@ -400,7 +400,7 @@ export default function AccountPage() {
                 setOpen={op => setDropdownOpen(op)}
                 value={selected}
                 setValue={setSelected}
-                style={{height: 40}}
+                style={{height: 35}}
                 containerStyle={{width: 160}}
               />
             </View>
@@ -514,9 +514,9 @@ export default function AccountPage() {
       </View>
       <View
         style={{
-          height: '30%',
+          height: '40%',
           width: '100%',
-          marginTop: 100,
+          marginTop: 80,
         }}>
         <View
           style={{

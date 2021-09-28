@@ -160,9 +160,16 @@ type ReceiptTileProps = {
   receipt: Receipt;
 };
 const ReceiptTile = (props: ReceiptTileProps) => {
+  const nav = useNavigation();
+
   return (
     <TouchableOpacity
-      onPress={() => {}}
+      onPress={() => {
+        nav.navigate('Account', {
+          screen: 'ReceiptPage',
+          // params: {listNameCallback: props.name},
+        });
+      }}
       style={{
         height: 150,
         width: 100,
