@@ -105,12 +105,14 @@ function SwipeableItem(props) {
               style={{
                 backgroundColor:
                   position.x < -15 ? 'rgba(217, 63, 18, 0.5)' : '#D93F12', //'#D93F12'
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 60,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 10,
-                borderWidth: 2,
+                elevation: 20,
+
+                // borderWidth: 2,
               }}>
               <EvilIcons name="trash" size={30} color="black" />
             </Animated.View>
@@ -134,26 +136,37 @@ function SwipeableItem(props) {
                 marginVertical: 10,
                 width: '40%',
                 height: '75%',
+                justifyContent: 'center',
               }}>
               <Text style={styles.itemLabel}>{props.item.name}</Text>
+              <Text style={styles.itemPrice}>
+                ${props.item.price * props.item.quantity}
+              </Text>
             </TouchableOpacity>
             <View
               style={{
-                flexDirection: 'column',
                 alignSelf: 'center',
+                position: 'absolute',
+                right: 0,
+                marginRight: 20,
               }}>
-              <View style={{flexDirection: 'row', marginBottom: 5}}>
-                <TouchableOpacity onPress={() => incrementQuantity(-1)}>
-                  <EvilIcons name="minus" size={30} />
+              <View style={{flexDirection: 'column', marginBottom: 5}}>
+                <TouchableOpacity onPress={() => incrementQuantity(1)}>
+                  <EvilIcons name="plus" size={35} color="#0073FE" />
                 </TouchableOpacity>
-                <Text style={{alignSelf: 'center', marginHorizontal: 2}}>
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    marginl: 10,
+                    fontWeight: 'bold',
+                    width: 20,
+                  }}>
                   x{props.item.quantity}
                 </Text>
-                <TouchableOpacity onPress={() => incrementQuantity(1)}>
-                  <EvilIcons name="plus" size={30} />
+                <TouchableOpacity onPress={() => incrementQuantity(-1)}>
+                  <EvilIcons name="minus" size={35} />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.itemPrice}>${props.item.price}</Text>
             </View>
           </View>
         </Animated.View>
@@ -166,37 +179,43 @@ export default SwipeableItem;
 
 const styles = StyleSheet.create({
   itemBubble: {
-    borderWidth: 2,
-    borderRadius: 20,
+    backgroundColor: 'white',
+    // borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 10,
     flexDirection: 'row',
-    width: 300,
-    height: 70,
+    width: 350,
+    height: 100,
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 7,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 1,
     shadowRadius: 9.11,
+    elevation: 5,
   },
   itemImage: {
     alignSelf: 'center',
-    width: 45,
-    height: 45,
+    width: 70,
+    height: 70,
     marginLeft: 10,
     marginRight: 0,
     borderRadius: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'grey',
   },
   itemLabel: {
-    marginLeft: 15,
-    fontSize: 18,
+    marginLeft: 20,
+    marginBottom: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
     //fontFamily: 'Roboto',
   },
   itemPrice: {
-    textAlign: 'center',
+    marginLeft: 20,
+
     fontSize: 16,
   },
 });

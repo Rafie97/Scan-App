@@ -89,36 +89,54 @@ function CartPage() {
   );
 
   return (
-    <ImageBackground
-      source={require('../res/grad_3.png')}
-      style={styles.fullBackground}>
+    <View style={styles.fullBackground}>
       <View style={styles.TotalPricesView}>
-        <Text
-          style={[
-            styles.FirstTotal,
-            {position: 'absolute', left: 20, top: -2},
-          ]}>
-          Total:
-        </Text>
-        {cartSum ? (
+        <View style={{flexDirection: 'column', marginTop: 15, marginLeft: 30}}>
+          {cartSum ? (
+            <View style={{flexDirection: 'row'}}>
+              <Ticker
+                textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}
+                duration={500}>
+                ${Math.trunc(cartSum[1]).toString() || 0}
+              </Ticker>
+              <Ticker
+                duration={250}
+                textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}>
+                {(cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4) ||
+                  0}
+              </Ticker>
+            </View>
+          ) : (
+            <></>
+          )}
+          <Text style={{color: 'white'}}>Total Balance</Text>
+        </View>
+        <TouchableOpacity
+          style={{width: '200%', height: '100%', justifyContent: 'center'}}>
           <View
-            style={{flexDirection: 'row', marginLeft: 0, alignSelf: 'center'}}>
-            <Ticker textStyle={{fontSize: 40}} duration={500}>
-              ${Math.trunc(cartSum[1]).toString() || 0}
-            </Ticker>
-            <Ticker duration={250} textStyle={{fontSize: 40}}>
-              {(cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4) ||
-                0}
-            </Ticker>
+            style={{
+              width: 115,
+              height: 40,
+              backgroundColor: 'white',
+              borderRadius: 10,
+              alignSelf: 'flex-end',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                color: '#0073FE',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
+              Check Out
+            </Text>
           </View>
-        ) : (
-          <></>
-        )}
+        </TouchableOpacity>
       </View>
-      <Text style={styles.TaxTotal}>
+      {/* <Text style={styles.TaxTotal}>
         {' '}
         <B>${cartSum ? cartSum[0] : 0}</B> without tax
-      </Text>
+      </Text> */}
 
       <TouchableOpacity
         style={{margin: 15, position: 'relative', top: 0, right: 0}}>
@@ -136,7 +154,7 @@ function CartPage() {
         data={cartItems}
       />
 
-      <View style={{position: 'absolute', right: 0, bottom: 0}}>
+      <View style={{width: '50%'}}>
         <TouchableOpacity
           style={styles.checkOutButton}
           onPress={() => {
@@ -144,15 +162,16 @@ function CartPage() {
           }}>
           <Text
             style={{
+              textAlign: 'center',
               fontSize: 20,
-              fontVariant: ['small-caps'],
+              fontWeight: 'bold',
               color: 'white',
             }}>
             Check out
           </Text>
         </TouchableOpacity>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -166,6 +185,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+    backgroundColor: '#fafafa',
   },
 
   flatContainer: {
@@ -183,7 +203,7 @@ const styles = StyleSheet.create({
   },
   checkOutButton: {
     marginBottom: 80,
-    backgroundColor: 'black',
+    backgroundColor: '#0073FE',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -191,11 +211,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 9.11,
-    padding: 10,
+    padding: 15,
     elevation: 20,
-    borderWidth: 2,
-    borderRadius: 100,
-    borderColor: 'white',
+    // borderWidth: 2,
+    borderRadius: 40,
+    // borderColor: 'white',
   },
 
   itemBubble: {
@@ -229,11 +249,12 @@ const styles = StyleSheet.create({
   },
 
   TotalPricesView: {
-    alignSelf: 'center',
-    width: '100%',
+    width: '90%',
+    height: '12%',
     marginTop: 30,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    backgroundColor: '#0073FE',
+    borderRadius: 10,
   },
 
   FirstTotal: {
