@@ -88,7 +88,7 @@ function MapPage() {
   //on dismount
   useEffect(() => {
     return () => setCurrentBubble(-1);
-  });
+  }, []);
 
   async function searchItems(val) {
     if (val === '' || val === ' ') {
