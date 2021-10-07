@@ -18,6 +18,10 @@ function CartPage() {
   const navigation = useNavigation();
 
   React.useEffect(() => {
+    console.log('cart side', isScrollEnabled);
+  }, [isScrollEnabled]);
+
+  React.useEffect(() => {
     const userID = auth().currentUser.uid;
     const cartRef = firestore()
       .collection('users')
@@ -81,7 +85,7 @@ function CartPage() {
   const renderItem = ({item}) => (
     <SwipeableItem
       item={item}
-      setScrollEnabled={enable => setScrollEnabled(enable)}
+      // setScrollEnabled={enable => setScrollEnabled(enable)}
       deleteItem={deleteItem}
       sourcePage="Cart"
       navigation={navigation}
@@ -90,86 +94,136 @@ function CartPage() {
 
   return (
     <View style={styles.fullBackground}>
-      <View style={styles.TotalPricesView}>
-        <View style={{flexDirection: 'column', marginTop: 15, marginLeft: 30}}>
-          {cartSum ? (
-            <View style={{flexDirection: 'row'}}>
-              <Ticker
-                textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}
-                duration={500}>
-                ${Math.trunc(cartSum[1]).toString() || 0}
-              </Ticker>
-              <Ticker
-                duration={250}
-                textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}>
-                {(cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4) ||
-                  0}
-              </Ticker>
-            </View>
-          ) : (
-            <></>
-          )}
-          <Text style={{color: 'white'}}>Total Balance</Text>
-        </View>
-        <TouchableOpacity
-          style={{width: '200%', height: '100%', justifyContent: 'center'}}>
+      <View style={styles.blueHeaderContainer}>
+        <View style={styles.blueHeader}>
           <View
-            style={{
-              width: 115,
-              height: 40,
-              backgroundColor: 'white',
-              borderRadius: 10,
-              alignSelf: 'flex-end',
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                color: '#0073FE',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}>
-              Check Out
-            </Text>
+            style={{flexDirection: 'column', marginTop: 15, marginLeft: 30}}>
+            {cartSum ? (
+              <View style={{flexDirection: 'row'}}>
+                <Ticker
+                  textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}
+                  duration={500}>
+                  ${Math.trunc(cartSum[1]).toString() || 0}
+                </Ticker>
+                <Ticker
+                  duration={250}
+                  textStyle={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                    color: 'white',
+                  }}>
+                  {(cartSum[1] - Math.trunc(cartSum[1]))
+                    .toString()
+                    .slice(1, 4) || 0}
+                </Ticker>
+              </View>
+            ) : (
+              <></>
+            )}
+            <Text style={{color: 'white'}}>Total Balance</Text>
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{width: '200%', height: '100%', justifyContent: 'center'}}>
+            <View
+              style={{
+                width: 115,
+                height: 40,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                alignSelf: 'flex-end',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#0073FE',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
+                Check Out
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-      {/* <Text style={styles.TaxTotal}>
-        {' '}
-        <B>${cartSum ? cartSum[0] : 0}</B> without tax
-      </Text> */}
-
-      <TouchableOpacity
-        style={{margin: 15, position: 'relative', top: 0, right: 0}}>
-        <Text style={{color: 'blue', right: 0, position: 'relative'}}>
-          About this store
-        </Text>
-      </TouchableOpacity>
 
       <FlatList
-        scrollEnabled={isScrollEnabled}
-        contentContainerStyle={{alignItems: 'center', marginBottom: 80}}
+        contentContainerStyle={{
+          alignItems: 'center',
+          marginBottom: 20,
+          paddingTop: 5,
+        }}
         style={styles.flatContainer}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         data={cartItems}
       />
-
-      <View style={{width: '50%'}}>
-        <TouchableOpacity
-          style={styles.checkOutButton}
-          onPress={() => {
-            return;
+      <View
+        style={{
+          height: 200,
+          width: '100%',
+          flexDirection: 'column',
+          marginBottom: 60,
+          borderTopWidth: 1,
+          borderColor: '#E6E6E6',
+        }}>
+        <View
+          style={{
+            height: '60%',
+            width: '100%',
+            flexDirection: 'column',
           }}>
-          <Text
+          <View
             style={{
-              textAlign: 'center',
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: 'white',
+              flexDirection: 'row',
+              width: '100%',
             }}>
-            Check out
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.totalTitles}>{'  '}Subtotal</Text>
+            <Text style={styles.totalNumbersText}>${cartSum[0]}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              borderBottomWidth: 1,
+              borderColor: '#E6E6E6',
+            }}>
+            <Text style={styles.totalTitles}>{'  '}Tax</Text>
+            <Text style={styles.totalNumbersText}>
+              +${Math.round(100 * (cartSum[1] - cartSum[0])) / 100}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+            }}>
+            <Text style={styles.totalTitles}>{'  '}Total</Text>
+            <Text style={styles.totalNumbersText}>${cartSum[1]}</Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            height: '30%',
+            // backgroundColor: 'purple',
+          }}>
+          <TouchableOpacity
+            style={styles.checkOutButton}
+            onPress={() => {
+              return;
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: 'white',
+              }}>
+              Check out
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -180,6 +234,20 @@ const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 export default CartPage;
 
 const styles = StyleSheet.create({
+  blueHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#0073FE',
+    borderRadius: 10,
+  },
+  blueHeaderContainer: {
+    width: '100%',
+    height: '12%',
+    borderBottomWidth: 1,
+    borderColor: '#E6E6E6',
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+  },
   fullBackground: {
     flex: 1,
     width: '100%',
@@ -189,10 +257,7 @@ const styles = StyleSheet.create({
   },
 
   flatContainer: {
-    marginTop: 30,
-    flex: 1,
     width: '100%',
-    marginBottom: 60,
   },
 
   YourCartText: {
@@ -202,7 +267,8 @@ const styles = StyleSheet.create({
     marginBottom: 60,
   },
   checkOutButton: {
-    marginBottom: 80,
+    alignSelf: 'center',
+    width: '50%',
     backgroundColor: '#0073FE',
     shadowColor: '#000',
     shadowOffset: {
@@ -248,13 +314,21 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 
-  TotalPricesView: {
-    width: '90%',
-    height: '12%',
-    marginTop: 30,
-    flexDirection: 'row',
-    backgroundColor: '#0073FE',
-    borderRadius: 10,
+  totalTitles: {
+    textAlign: 'left',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
+    marginVertical: 8,
+    flex: 1,
+  },
+
+  totalNumbersText: {
+    textAlign: 'right',
+    fontSize: 16,
+    marginHorizontal: 20,
+    marginVertical: 5,
+    flex: 1,
   },
 
   FirstTotal: {

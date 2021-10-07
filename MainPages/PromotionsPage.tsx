@@ -30,7 +30,7 @@ function PromotionsPage() {
 
   useEffect(() => {
     setPromoItems(overallState.products);
-  }, []);
+  }, [overallState.products]);
 
   useEffect(() => {
     const hebRef = firestore()

@@ -28,7 +28,7 @@ function SwipeableItem(props) {
       onPanResponderTerminationRequest: (evt, gestureState) => false,
       onPanResponderMove: (evt, gestureState) => {
         if (gestureState.dx < -15) {
-          setScrollViewEnabled(false);
+          // setScrollViewEnabled(false);
           let newX = gestureState.dx + gestureDelay;
           position.setValue({x: newX, y: 0});
         }
@@ -39,7 +39,7 @@ function SwipeableItem(props) {
             toValue: {x: -50, y: 0},
             duration: 150,
           }).start(() => {
-            setScrollViewEnabled(true);
+            // setScrollViewEnabled(true);
           });
         }
         if (gestureState.dx > -50) {
@@ -47,19 +47,20 @@ function SwipeableItem(props) {
             toValue: {x: 0, y: 0},
             duration: 150,
           }).start(() => {
-            setScrollViewEnabled(true);
+            // setScrollViewEnabled(true);
           });
         }
       },
     }),
   ).current;
 
-  function setScrollViewEnabled(enabled) {
-    if (scrollViewEnabled !== enabled) {
-      props.setScrollEnabled(enabled);
-      setScrollEnabled(enabled);
-    }
-  }
+  // function setScrollViewEnabled(enabled) {
+  //   if (scrollViewEnabled !== enabled) {
+  //     props.setScrollEnabled(enabled);
+  //     setScrollEnabled(enabled);
+  //     console.log('scroll: ', enabled);
+  //   }
+  // }
 
   function navToItem() {
     props.navigation.navigate(props.sourcePage, {
@@ -138,7 +139,9 @@ function SwipeableItem(props) {
                 height: '75%',
                 justifyContent: 'center',
               }}>
-              <Text style={styles.itemLabel}>{props.item.name}</Text>
+              <Text style={styles.itemLabel} numberOfLines={2}>
+                {props.item.name}
+              </Text>
               <Text style={styles.itemPrice}>
                 ${props.item.price * props.item.quantity}
               </Text>
@@ -185,8 +188,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     width: 350,
-    height: 100,
-    marginBottom: 20,
+    height: 90,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 20,
     fontWeight: 'bold',
+    width: '120%',
     //fontFamily: 'Roboto',
   },
   itemPrice: {

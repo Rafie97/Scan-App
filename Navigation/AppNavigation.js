@@ -87,15 +87,15 @@ export default function AppNavigation() {
       .collection('items');
 
     hebRef.onSnapshot(snap => {
-      dispatch({type: 'SET_PRODUCTS', payload: []});
-
       const newPromoItems = [];
 
       snap.forEach(async doc => {
         const item = new Item(doc);
         newPromoItems.push(item);
       });
+
       dispatch({type: 'SET_PRODUCTS', payload: newPromoItems});
+      // console.log(state.products);
     });
   }, []);
 
