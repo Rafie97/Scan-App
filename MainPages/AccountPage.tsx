@@ -25,6 +25,9 @@ import SelectableItem from '../Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import {Receipt} from '../Models/Receipt';
+import FontAwe from 'react-native-vector-icons/FontAwesome';
+import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
+import Ion from 'react-native-vector-icons/Ionicons';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -291,7 +294,7 @@ export default function AccountPage() {
           {contactsLoading ? (
             <View
               style={{
-                backgroundColor: '#1B263B',
+                backgroundColor: '#0073FE',
                 borderWidth: 1,
                 height: 30,
                 width: 100,
@@ -304,17 +307,17 @@ export default function AccountPage() {
           ) : (
             <TouchableOpacity
               style={{
-                backgroundColor: '#1B263B',
-                borderWidth: 1,
                 height: 30,
-                width: 100,
+                width: '40%',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 20,
-                marginLeft: 10,
               }}
               onPress={() => setContactModal(true)}>
-              <Text style={{color: 'white'}}>Add Family</Text>
+              <Text style={{color: '#0073FE', fontSize: 18}}>
+                <FontAwe name="plus-square" size={18} color="#0073FE" /> Add
+                Family
+              </Text>
             </TouchableOpacity>
           )}
           {selectedNames.length > 0 ? (
@@ -350,16 +353,16 @@ export default function AccountPage() {
         <View>
           <TouchableOpacity
             style={{
-              backgroundColor: '#1B263B',
-              borderWidth: 1,
               height: 30,
-              width: 100,
+              width: '40%',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: 20,
-              marginLeft: 10,
             }}>
-            <Text style={{color: 'white'}}>Add Wishlist</Text>
+            <Text style={{color: '#0073FE', fontSize: 18}}>
+              <FontAwe name="plus-square" size={18} color="#0073FE" /> Add
+              Wishlist
+            </Text>
           </TouchableOpacity>
           <FlatList
             showsHorizontalScrollIndicator={false}
@@ -417,27 +420,40 @@ export default function AccountPage() {
   }
 
   return (
-    <ImageBackground
-      source={require('../res/grad_3.png')}
-      style={styles.fullBackground}>
+    <View style={styles.fullBackground}>
       <View style={styles.textView}>
         <Text style={styles.yourWishlistsText}>Your Account</Text>
         <TouchableOpacity
-          style={{marginLeft: 50, marginRight: 20, alignSelf: 'center'}}
+          style={{
+            marginRight: 20,
+            alignSelf: 'center',
+            flex: 1,
+            justifyContent: 'center',
+          }}
           onPress={() => signOut()}>
-          <Text style={{color: 'blue', fontSize: 16}}>Sign out</Text>
+          <Text
+            style={{
+              color: '#0073FE',
+              fontSize: 18,
+              textAlign: 'right',
+              paddingVertical: 5,
+            }}>
+            <Ion name="md-exit-outline" size={24} color="#0073FE" />
+            {'  '}
+            Sign out
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <View style={{flexDirection: 'column'}}>
-        <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'column', width: '100%'}}>
+        <View style={styles.personalInfoCard}>
           <Image
             source={require('../res/default_profile.jpg')}
             style={{
               width: 130,
               height: 130,
               borderRadius: 10,
-              borderColor: '#dddddd',
+              borderColor: '#0073FE',
               borderWidth: 2,
               marginHorizontal: 10,
             }}
@@ -460,10 +476,16 @@ export default function AccountPage() {
             )}
 
             <Text style={styles.personalInfoText}>
-              Phone Number: 512.363.8986
+              <FontAwe name="phone" size={18} color="#0073FE" />
+              {'   '}
+              512.363.8986
             </Text>
 
-            <Text style={styles.personalInfoText}>Main Shop: H-E-B</Text>
+            <Text style={styles.personalInfoText}>
+              <Ion name="location-sharp" size={18} color="#0073FE" />
+              {'  '}
+              H-E-B
+            </Text>
           </View>
         </View>
         <View>
@@ -480,17 +502,20 @@ export default function AccountPage() {
               }
               setEditProfile(!editProfile);
             }}
-            style={{marginBottom: 30, marginTop: 60}}>
+            style={{marginBottom: 30, marginTop: 20}}>
             <Text
               style={{
                 alignSelf: 'center',
-                borderRadius: 15,
-                borderWidth: 2,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#0073FE',
                 fontSize: 20,
                 textAlign: 'center',
-                height: 50,
+                height: 60,
                 width: '90%',
-                paddingVertical: 10,
+                paddingVertical: 15,
+                color: '#0073FE',
+                fontWeight: 'bold',
               }}>
               {editProfile ? 'Save Profile' : 'Edit Profile'}
             </Text>
@@ -499,25 +524,21 @@ export default function AccountPage() {
             <Text
               style={{
                 alignSelf: 'center',
-                borderRadius: 15,
-                borderWidth: 2,
+                borderRadius: 10,
+                borderWidth: 1,
                 fontSize: 20,
                 textAlign: 'center',
-                height: 50,
+                height: 60,
                 width: '90%',
-                paddingVertical: 10,
+                paddingVertical: 15,
+                fontWeight: 'bold',
               }}>
               Payment Info
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View
-        style={{
-          height: '40%',
-          width: '100%',
-          marginTop: 80,
-        }}>
+      <View style={styles.fullBottomCard}>
         <View
           style={{
             width: '100%',
@@ -531,10 +552,11 @@ export default function AccountPage() {
               <Text
                 style={{
                   fontSize: 20,
-                  alignSelf: 'center',
+                  alignSelf: 'stretch',
+                  textAlign: 'center',
                   fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
                 }}>
-                Family
+                <Ion name="people" color="#0073FE" size={20} /> Family
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -545,10 +567,11 @@ export default function AccountPage() {
               <Text
                 style={{
                   fontSize: 20,
-                  alignSelf: 'center',
+                  alignSelf: 'stretch',
+                  textAlign: 'center',
                   fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
                 }}>
-                Wishlists
+                <FontAwe name="heart" color="#0073FE" size={18} /> Wishlists
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -559,10 +582,11 @@ export default function AccountPage() {
               <Text
                 style={{
                   fontSize: 20,
-                  alignSelf: 'center',
+                  alignSelf: 'stretch',
+                  textAlign: 'center',
                   fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
                 }}>
-                Receipts
+                <FontAwe5 name="receipt" color="#0073FE" size={18} /> Receipts
               </Text>
             </TouchableOpacity>
           </View>
@@ -571,7 +595,6 @@ export default function AccountPage() {
           style={{
             flexDirection: 'column',
             width: '100%',
-            height: '80%',
             padding: 20,
           }}>
           {BottomBarContent()}
@@ -635,16 +658,34 @@ export default function AccountPage() {
           </View>
         </View>
       </Modal>
-    </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   fullBackground: {
     flex: 1,
-    flexDirection: 'column',
     width: '100%',
     height: '100%',
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
+  },
+
+  fullBottomCard: {
+    width: '90%',
+    paddingTop: 10,
+    marginTop: 30,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 9.11,
+    elevation: 5,
   },
 
   wishlistButton: {
@@ -668,13 +709,15 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   yourWishlistsText: {
+    flex: 1,
     fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   textView: {
-    marginTop: 40,
-    marginBottom: 50,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    width: '100%',
+    marginTop: 30,
+    marginBottom: 40,
     flexDirection: 'row',
   },
   ItemImage: {
@@ -724,6 +767,26 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+
+  personalInfoCard: {
+    flexDirection: 'row',
+    width: '90%',
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    // borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 10,
+    marginBottom: 10,
+    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 9.11,
+    elevation: 5,
   },
   personalInfoText: {
     marginVertical: 5,

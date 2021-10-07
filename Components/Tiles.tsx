@@ -97,7 +97,7 @@ const FamilyTile = (props: TileProps) => {
           width: 100,
           height: 100,
           borderRadius: 10,
-          borderColor: '#dddddd',
+          borderColor: '#0073FE',
           borderWidth: 2,
           marginLeft: 10,
         }}

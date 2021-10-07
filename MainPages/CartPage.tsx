@@ -14,7 +14,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);
   const [isScrollEnabled, setScrollEnabled] = React.useState(true);
-  const [cartSum, setCartSum] = React.useState<number[]>(undefined);
+  const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -51,6 +51,7 @@ function CartPage() {
     if (tempSum > 0) {
       setCartSum([
         Math.round(100 * tempSum) / 100,
+        Math.round(100 * 0.0825 * tempSum) / 100,
         Math.round(100 * 1.0825 * tempSum) / 100,
       ]);
     }
@@ -103,7 +104,7 @@ function CartPage() {
                 <Ticker
                   textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}
                   duration={500}>
-                  ${Math.trunc(cartSum[1]).toString() || 0}
+                  ${Math.trunc(cartSum[2]).toString() || 0}
                 </Ticker>
                 <Ticker
                   duration={250}
@@ -112,7 +113,7 @@ function CartPage() {
                     fontWeight: 'bold',
                     color: 'white',
                   }}>
-                  {(cartSum[1] - Math.trunc(cartSum[1]))
+                  {(cartSum[2] - Math.trunc(cartSum[2]))
                     .toString()
                     .slice(1, 4) || 0}
                 </Ticker>
@@ -188,9 +189,7 @@ function CartPage() {
               borderColor: '#E6E6E6',
             }}>
             <Text style={styles.totalTitles}>{'  '}Tax</Text>
-            <Text style={styles.totalNumbersText}>
-              +${Math.round(100 * (cartSum[1] - cartSum[0])) / 100}
-            </Text>
+            <Text style={styles.totalNumbersText}>+${cartSum[1]}</Text>
           </View>
           <View
             style={{
@@ -198,7 +197,7 @@ function CartPage() {
               width: '100%',
             }}>
             <Text style={styles.totalTitles}>{'  '}Total</Text>
-            <Text style={styles.totalNumbersText}>${cartSum[1]}</Text>
+            <Text style={styles.totalNumbersText}>${cartSum[2]}</Text>
           </View>
         </View>
 
