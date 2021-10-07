@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {Component, useEffect} from 'react';
 import ScanPage from '../MainPages/ScanPage';
 import CartPage from '../MainPages/CartPage';
-import MapPage from '../MainPages/MapPage';
+import MapPage from '../MainPages/Map/MapPage';
 import PromotionsPage from '../MainPages/PromotionsPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
 import ReceiptPage from '../MainPages/Sub_Pages/ReceiptPage';

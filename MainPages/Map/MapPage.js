@@ -14,9 +14,12 @@ import {
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../Models/Item';
+import Item from '../../Models/Item';
 import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
+import globalStyles from '../../Styles/globalStyles';
+import Wall from './MapComponents/Wall';
+import SearchBar from '../../Components/SearchBar';
 
 export default MapPage;
 
@@ -126,7 +129,7 @@ function MapPage() {
           //position: 'relative',
           left: coord.x,
           top: coord.y,
-          backgroundColor: 'white',
+          backgroundColor: '#0073FE',
           maxWidth: 100,
           borderRadius: 10,
         }}>
@@ -152,7 +155,7 @@ function MapPage() {
                   paddingLeft: 6,
                   fontSize: 15,
                 }}>
-                <Text>{items[match].name}</Text>
+                <Text style={{color: 'white'}}>{items[match].name}</Text>
               </TouchableOpacity>
             )
           );
@@ -194,31 +197,23 @@ function MapPage() {
   };
 
   return (
-    <ImageBackground
-      source={require('../res/grad_3.png')}
-      style={styles.fullBackground}>
+    <View style={globalStyles.fullBackground}>
       <View style={styles.mapPageContainer}>
-        {searchFocused ? (
-          <></>
-        ) : (
-          <View style={styles.mapTitleView}>
-            <Text
-              style={{
-                fontSize: 24,
-                textAlign: 'center',
-              }}>
-              Map
-            </Text>
+        {!searchFocused && (
+          <View>
+            <Text style={globalStyles.header}>Map</Text>
           </View>
         )}
-        {/* <BlurView blurType="light" blurAmount={1}> */}
         <View
           onPress={() => setCurrentBubble(-1)}
-          style={{
-            height: wallData.mapSize.height * scaleFactor,
-            width: wallData.mapSize.width * scaleFactor,
-          }}>
-          <Svg style={styles.mapBox}>
+          style={[
+            styles.mapBox,
+            {
+              height: wallData.mapSize.height * scaleFactor - 40,
+              width: wallData.mapSize.width * scaleFactor - 40,
+            },
+          ]}>
+          <Svg>
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall
@@ -246,117 +241,29 @@ function MapPage() {
             )}
           </Svg>
         </View>
-        {/* </BlurView> */}
-
-        <View style={styles.searchBarView}>
-          <TextInput
-            style={styles.searchInput}
-            onChangeText={val => {
-              searchItems(val);
-            }}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            placeholderTextColor="#545454"
-            placeholder="Search this store"
-          />
-        </View>
+        <SearchBar
+          searchItems={searchItems}
+          setSearchFocused={setSearchFocused}
+        />
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
-const Wall = ({start, end, scale = 1, wallData}) => {
-  const shiftedStartX = start.x - wallData.mapSize.width / 2;
-  const shiftedStartY = -start.y + wallData.mapSize.height / 2;
-
-  const newStartX =
-    shiftedStartX * scale + (wallData.mapSize.width * scale) / 2;
-  const newStartY =
-    shiftedStartY * scale + (wallData.mapSize.height * scale) / 2;
-
-  const shiftedEndX = end.x - wallData.mapSize.width / 2;
-  const shiftedEndY = -end.y + wallData.mapSize.height / 2;
-
-  const newEndX = shiftedEndX * scale + (wallData.mapSize.width * scale) / 2;
-  const newEndY = shiftedEndY * scale + (wallData.mapSize.height * scale) / 2;
-
-  return (
-    <G>
-      <Line
-        x1={newStartX}
-        y1={newStartY}
-        x2={newEndX}
-        y2={newEndY}
-        stroke="black"
-        strokeWidth={2}
-      />
-
-      <Circle
-        cx={newStartX}
-        cy={newStartY}
-        r={2}
-        stroke="white"
-        strokeWidth={1}
-        fill="#283d6d"
-      />
-
-      <Circle
-        cx={newEndX}
-        cy={newEndY}
-        r={2}
-        stroke="white"
-        strokeWidth={1}
-        fill="#283d6d"
-      />
-    </G>
-  );
-};
-
 const styles = StyleSheet.create({
-  mapTitleView: {
-    marginTop: 40,
-    marginBottom: 60,
-    textAlign: 'center',
-    fontSize: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   mapPageContainer: {
     width: '100%',
     height: '100%',
   },
 
-  searchBarView: {
-    alignItems: 'center',
-    flex: 1,
-  },
-
-  searchInput: {
-    width: '65%',
-    paddingLeft: 5,
-    paddingRight: 5,
-    borderRadius: 25,
-    textAlign: 'center',
-    borderWidth: 2,
-    borderColor: '#545454',
-    fontSize: 20,
-    color: 'black',
-  },
-
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-  },
-
   mapBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)', //rgba(255, 255, 255, 0.3)
-    borderWidth: 0,
-    borderColor: 'grey',
-    borderRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginHorizontal: 20,
+    marginTop: 20,
   },
 });

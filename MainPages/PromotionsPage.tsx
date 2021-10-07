@@ -18,6 +18,7 @@ import {useEffect} from 'react';
 import {Recipe} from '../Models/Recipe';
 import {mainReducer} from '../Reducers/mainReducer';
 import {StateContext} from '../Navigation/AppNavigation';
+import globalStyles from '../Styles/globalStyles';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
@@ -52,9 +53,7 @@ function PromotionsPage() {
   }, []);
 
   return (
-    <ImageBackground
-      style={{backgroundColor: 'white', flexGrow: 1, justifyContent: 'center'}}
-      source={require('../res/grad_3.png')}>
+    <View style={globalStyles.fullBackground}>
       <ScrollView style={styles.promoPageContainer}>
         <Text style={styles.promoTitle}>Today's Best Deals</Text>
         <Text
@@ -63,12 +62,16 @@ function PromotionsPage() {
             fontWeight: 'bold',
             marginLeft: 20,
             marginBottom: 10,
+            color: '#0073FE',
           }}>
           Explore our take-and-make recipes
         </Text>
 
         <View>
           <FlatList
+            contentContainerStyle={{
+              paddingVertical: 10,
+            }}
             showsHorizontalScrollIndicator={false}
             data={recipes}
             horizontal={true}
@@ -94,11 +97,15 @@ function PromotionsPage() {
             fontWeight: 'bold',
             marginLeft: 20,
             marginBottom: 10,
+            color: '#0073FE',
           }}>
           Explore our coupons
         </Text>
         <View>
           <FlatList
+            contentContainerStyle={{
+              paddingVertical: 10,
+            }}
             showsHorizontalScrollIndicator={false}
             data={promoItems.slice(0, 10)}
             horizontal={true}
@@ -117,18 +124,13 @@ function PromotionsPage() {
           />
         </View>
       </ScrollView>
-    </ImageBackground>
+    </View>
   );
 }
 
 export default PromotionsPage;
 
 const styles = StyleSheet.create({
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-  },
-
   promoPageContainer: {
     width: '100%',
     height: '100%',
@@ -140,9 +142,11 @@ const styles = StyleSheet.create({
   },
 
   promoTitle: {
-    marginTop: 40,
-    marginBottom: 60,
-    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 40,
+    marginLeft: 20,
+    fontWeight: 'bold',
+    textAlign: 'left',
     fontSize: 24,
   },
 

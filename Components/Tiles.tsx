@@ -20,8 +20,11 @@ const PromoItemTile = (item: PromoTileProps) => {
   const navigation = useNavigation();
 
   return (
-    <View style={{marginHorizontal: 10, width: item.isRecipe ? 200 : 140}}>
-      {/* <BlurView blurType="light" blurAmount={1}> */}
+    <View
+      style={{
+        marginHorizontal: 10,
+        width: item.isRecipe ? 200 : 140,
+      }}>
       <TouchableOpacity
         style={styles.itemBox}
         onPress={() =>
@@ -212,14 +215,17 @@ export {PromoItemTile};
 export default FamilyTile;
 
 const styles = StyleSheet.create({
-  itemView: {},
-
-  itemBlurView: {},
-
   itemBox: {
-    borderWidth: 2,
     borderColor: 'black',
-    borderRadius: 20,
+    backgroundColor: 'white',
+    elevation: 5,
+    borderRadius: 10,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 9.11,
   },
 
   itemTitleText: {

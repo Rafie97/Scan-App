@@ -426,9 +426,6 @@ export default function AccountPage() {
         <TouchableOpacity
           style={{
             marginRight: 20,
-            alignSelf: 'center',
-            flex: 1,
-            justifyContent: 'center',
           }}
           onPress={() => signOut()}>
           <Text
@@ -436,7 +433,9 @@ export default function AccountPage() {
               color: '#0073FE',
               fontSize: 18,
               textAlign: 'right',
+              flex: 1,
               paddingVertical: 5,
+              alignSelf: 'stretch',
             }}>
             <Ion name="md-exit-outline" size={24} color="#0073FE" />
             {'  '}
@@ -712,13 +711,16 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
+    alignSelf: 'stretch',
+    textAlign: 'left',
+    marginLeft: 20,
   },
   textView: {
     width: '100%',
     marginTop: 30,
     marginBottom: 40,
     flexDirection: 'row',
+    alignSelf: 'stretch',
   },
   ItemImage: {
     alignSelf: 'flex-start',
