@@ -55,15 +55,8 @@ function PromotionsPage() {
   return (
     <View style={globalStyles.fullBackground}>
       <ScrollView style={styles.promoPageContainer}>
-        <Text style={styles.promoTitle}>Today's Best Deals</Text>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            marginLeft: 20,
-            marginBottom: 10,
-            color: '#0073FE',
-          }}>
+        <Text style={globalStyles.header}>Today's Best Deals</Text>
+        <Text style={styles.exploreRecipesText}>
           Explore our take-and-make recipes
         </Text>
 
@@ -91,16 +84,7 @@ function PromotionsPage() {
         </View>
         <View style={{height: 20}} />
 
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 'bold',
-            marginLeft: 20,
-            marginBottom: 10,
-            color: '#0073FE',
-          }}>
-          Explore our coupons
-        </Text>
+        <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
         <View>
           <FlatList
             contentContainerStyle={{
@@ -120,7 +104,6 @@ function PromotionsPage() {
                 />
               );
             }}
-            style={{backgroundColor: 'transparent'}}
           />
         </View>
       </ScrollView>
@@ -131,23 +114,26 @@ function PromotionsPage() {
 export default PromotionsPage;
 
 const styles = StyleSheet.create({
+  exploreCouponsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginBottom: 10,
+    color: '#0073FE',
+  },
+
+  exploreRecipesText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginBottom: 10,
+    color: '#0073FE',
+  },
+
   promoPageContainer: {
     width: '100%',
     height: '100%',
     marginBottom: 60,
-  },
-  gridContainer: {
-    width: 400,
-    marginBottom: 60,
-  },
-
-  promoTitle: {
-    marginTop: 30,
-    marginBottom: 40,
-    marginLeft: 20,
-    fontWeight: 'bold',
-    textAlign: 'left',
-    fontSize: 24,
   },
 
   promoFooter: {

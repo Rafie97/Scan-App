@@ -20,6 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 import {LineChart} from 'react-native-charts-wrapper';
 import auth from '@react-native-firebase/auth';
 import Item from '../../Models/Item';
+import globalStyles from '../../Styles/globalStyles';
 
 function ItemPage({route}) {
   const [thing, setThing] = useState(null);
@@ -93,7 +94,6 @@ function ItemPage({route}) {
   let vals = [];
 
   if (!route.params.isRecipe && thing) {
-    console.log('THING', route.params.itemIDCallback);
     const entries = Object.entries(thing.priceHistory);
     entries.forEach(entry => {
       vals.push({
@@ -105,9 +105,7 @@ function ItemPage({route}) {
     data1.dataSets[0].values = vals;
   }
   return (
-    <ImageBackground
-      source={require('../../res/grad_3.png')}
-      style={styles.fullBackground}>
+    <View style={globalStyles.fullBackground}>
       <View style={styles.backButtonView}>
         <TouchableOpacity
           style={{flexDirection: 'row'}}
@@ -127,7 +125,9 @@ function ItemPage({route}) {
           <View style={styles.bigApple}>
             <Text style={styles.itemNameText}>{thing.name} </Text>
 
-            <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
+            <View syle={styles.imageContainer}>
+              <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
+            </View>
             <Text style={styles.itemPriceText}>${thing.price}</Text>
             {!route.params.isRecipe && (
               <Card style={styles.chartCard} title="Price History">
@@ -140,37 +140,21 @@ function ItemPage({route}) {
               </Card>
             )}
 
-            <Text
-              style={{
-                fontSize: 24,
-                color: 'green',
-                marginTop: 50,
-              }}>
-              Reviews
-            </Text>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: 'green',
-                width: 300,
-                height: 200,
-                marginTop: 20,
-                marginBottom: 30,
-              }}
-            />
+            <Text style={styles.reviewText}>Reviews</Text>
+            <View style={styles.reviewBox} />
 
             <TouchableOpacity
               style={styles.bottomButtons}
               title="Add to Wishlist"
               onPress={getLists}>
-              <Text style={styles.title}> Add to Wishlist</Text>
+              <Text style={styles.addButtonText}> Add to Wishlist</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.bottomButtons}
               title="Add to Cart"
               onPress={addToCart}>
-              <Text style={styles.title}>Add to Cart</Text>
+              <Text style={styles.addButtonText}>Add to Cart</Text>
             </TouchableOpacity>
 
             <View style={{height: 60}} />
@@ -214,21 +198,17 @@ function ItemPage({route}) {
           </View>
         </View>
       </Modal>
-    </ImageBackground>
+    </View>
   );
 }
 
 export default ItemPage;
 
 const styles = StyleSheet.create({
-  priceChart: {
-    height: 250,
-    width: 350,
-  },
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
+  addButtonText: {
+    color: 'white',
+    fontSize: 18,
+    alignSelf: 'center',
   },
 
   bigApple: {
@@ -241,28 +221,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 200,
     height: 60,
-    backgroundColor: '#b3d6db',
+    backgroundColor: '#0073FE',
     justifyContent: 'center',
-    borderWidth: 2,
-  },
-  itemImage: {
-    marginBottom: 50,
-    flex: 1,
-    width: 150,
-    height: 150,
-  },
-  itemNameText: {
-    fontSize: 30,
-    paddingBottom: 50,
-  },
-  itemPriceText: {
-    fontSize: 35,
-    paddingBottom: 50,
+    borderRadius: 10,
+    elevation: 5,
   },
 
-  spacer: {
-    height: 20,
-  },
   backButton: {
     flex: 1,
   },
@@ -281,6 +245,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 22,
   },
+
+  imageContainer: {
+    backgroundColor: 'yellow',
+    marginBottom: 50,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+
+  itemImage: {
+    width: 150,
+    height: 150,
+  },
+  itemNameText: {
+    fontSize: 30,
+    paddingBottom: 50,
+  },
+  itemPriceText: {
+    fontSize: 35,
+    paddingBottom: 50,
+  },
+
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -297,15 +287,30 @@ const styles = StyleSheet.create({
     elevation: 5,
     height: 350,
   },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
+
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+
+  priceChart: {
+    height: 250,
+    width: 350,
+  },
+
+  reviewText: {
+    fontSize: 24,
+    color: 'green',
+    marginTop: 50,
+  },
+
+  reviewBox: {
+    borderWidth: 1,
+    borderColor: 'green',
+    width: 300,
+    height: 200,
+    marginTop: 20,
+    marginBottom: 30,
   },
 
   wishlistSelect: {
@@ -316,9 +321,5 @@ const styles = StyleSheet.create({
     width: 200,
     textAlign: 'center',
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 18,
-    alignSelf: 'center',
   },
 });

@@ -10,6 +10,7 @@ import Ticker, {Tick} from 'react-native-ticker';
 
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import globalStyles from '../Styles/globalStyles';
 
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);
@@ -86,7 +87,6 @@ function CartPage() {
   const renderItem = ({item}) => (
     <SwipeableItem
       item={item}
-      // setScrollEnabled={enable => setScrollEnabled(enable)}
       deleteItem={deleteItem}
       sourcePage="Cart"
       navigation={navigation}
@@ -94,7 +94,7 @@ function CartPage() {
   );
 
   return (
-    <View style={styles.fullBackground}>
+    <View style={globalStyles.fullBackground}>
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
           <View
@@ -247,24 +247,11 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 20,
   },
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    backgroundColor: '#fafafa',
-  },
 
   flatContainer: {
     width: '100%',
   },
 
-  YourCartText: {
-    fontSize: 24,
-    alignSelf: 'center',
-    marginTop: 40,
-    marginBottom: 60,
-  },
   checkOutButton: {
     alignSelf: 'center',
     width: '50%',
@@ -283,36 +270,6 @@ const styles = StyleSheet.create({
     // borderColor: 'white',
   },
 
-  itemBubble: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderRadius: 20,
-    flexDirection: 'row',
-    width: 300,
-    height: 60,
-    marginTop: 20,
-  },
-  itemImage: {
-    alignSelf: 'center',
-    width: 45,
-    height: 45,
-    marginLeft: 10,
-    marginRight: 0,
-    borderRadius: 10,
-    borderWidth: 10,
-  },
-  itemLabel: {
-    alignSelf: 'center',
-    marginLeft: 15,
-    fontSize: 16,
-  },
-  itemPrice: {
-    alignSelf: 'center',
-    textAlign: 'right',
-    marginLeft: 'auto',
-    marginRight: 10,
-  },
-
   totalTitles: {
     textAlign: 'left',
     fontSize: 16,
@@ -328,14 +285,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 5,
     flex: 1,
-  },
-
-  FirstTotal: {
-    fontSize: 40,
-  },
-
-  TaxTotal: {
-    alignSelf: 'center',
-    fontSize: 16,
   },
 });

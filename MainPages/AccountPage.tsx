@@ -28,6 +28,7 @@ import {Receipt} from '../Models/Receipt';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons';
+import globalStyles from '../Styles/globalStyles';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -420,7 +421,7 @@ export default function AccountPage() {
   }
 
   return (
-    <View style={styles.fullBackground}>
+    <View style={globalStyles.fullBackground}>
       <View style={styles.textView}>
         <Text style={styles.yourWishlistsText}>Your Account</Text>
         <TouchableOpacity
@@ -662,14 +663,6 @@ export default function AccountPage() {
 }
 
 const styles = StyleSheet.create({
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    backgroundColor: '#fafafa',
-  },
-
   fullBottomCard: {
     width: '90%',
     paddingTop: 10,
@@ -687,26 +680,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  wishlistButton: {
-    backgroundColor: 'grey',
-    marginStart: 20,
-    marginEnd: 20,
-    marginBottom: 20,
-  },
   title: {
     fontSize: 18,
     alignSelf: 'center',
   },
 
-  wishlistGroupView: {
-    padding: 30,
-    paddingTop: 20,
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  buttonText: {
-    color: 'black',
-  },
   yourWishlistsText: {
     flex: 1,
     fontSize: 24,
@@ -722,30 +700,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'stretch',
   },
-  ItemImage: {
-    alignSelf: 'flex-start',
-    width: 30,
-    height: 30,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 10,
-  },
-  itemLabel: {
-    alignSelf: 'center',
-    marginLeft: 40,
-    fontSize: 16,
-  },
-  wishlistSelect: {
-    borderWidth: 2,
-    marginLeft: 20,
-    marginTop: 20,
-    height: 40,
-    width: 250,
-    textAlign: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-  },
-
   centeredView: {
     flex: 1,
     justifyContent: 'center',

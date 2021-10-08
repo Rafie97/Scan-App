@@ -264,6 +264,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 20,
   },
 });
