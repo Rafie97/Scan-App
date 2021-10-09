@@ -84,7 +84,27 @@ function PromotionsPage() {
         </View>
         <View style={{height: 20}} />
 
-        <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
+          <View
+            style={{
+              borderWidth: 1,
+              borderRadius: 20,
+              borderColor: '#0073FE',
+              width: 80,
+              justifyContent: 'center',
+              marginRight: 10,
+            }}>
+            <Text
+              style={{
+                color: '#0073FE',
+                alignSelf: 'stretch',
+                textAlign: 'center',
+              }}>
+              See All
+            </Text>
+          </View>
+        </View>
         <View>
           <FlatList
             contentContainerStyle={{
@@ -115,6 +135,8 @@ export default PromotionsPage;
 
 const styles = StyleSheet.create({
   exploreCouponsText: {
+    alignSelf: 'stretch',
+    flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 20,

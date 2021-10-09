@@ -23,7 +23,7 @@ const PromoItemTile = (item: PromoTileProps) => {
     <View
       style={{
         marginHorizontal: 10,
-        width: item.isRecipe ? 200 : 140,
+        width: item.isRecipe ? 200 : 180,
       }}>
       <TouchableOpacity
         style={styles.itemBox}
@@ -35,37 +35,47 @@ const PromoItemTile = (item: PromoTileProps) => {
         }>
         <Image style={styles.itemImage} source={{uri: item.imageLink}} />
 
-        <Text
-          style={[
-            styles.itemTitleText,
-            {
-              fontWeight: 'bold',
-              marginVertical: 0,
-              fontSize: 24,
-              textAlign: 'center',
-            },
-          ]}>
-          ${item.price}
-        </Text>
-        {item.feeds && (
-          <Text style={{fontWeight: 'bold', marginLeft: 20}}>
-            Feeds: {item.feeds}
+        <View
+          style={{
+            height: 35,
+            width: 90,
+            borderRadius: 20,
+            backgroundColor: '#0073FE',
+            justifyContent: 'center',
+            marginLeft: 10,
+          }}>
+          <Text
+            style={[
+              styles.itemTitleText,
+              {
+                fontWeight: 'bold',
+                marginVertical: 0,
+                fontSize: 16,
+                textAlign: 'center',
+                color: 'white',
+              },
+            ]}>
+            ${item.price}
           </Text>
-        )}
+        </View>
+
         <Text
           numberOfLines={2}
           style={[
             styles.itemTitleText,
             {
-              marginLeft: item.isRecipe ? 20 : 0,
-              textAlign: item.isRecipe ? 'left' : 'center',
+              marginLeft: 18,
+              textAlign: 'left',
+              fontWeight: 'bold',
             },
           ]}>
           {item.name + `\n`}
         </Text>
+        {item.feeds && (
+          <Text style={{marginLeft: 20}}>Feeds: {item.feeds}</Text>
+        )}
         <View style={{height: 10}} />
       </TouchableOpacity>
-      {/* </BlurView> */}
     </View>
   );
 };
