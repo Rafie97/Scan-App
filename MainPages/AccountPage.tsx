@@ -61,7 +61,7 @@ export default function AccountPage() {
     const userRef = firestore()
       .collection('users')
       .doc(userID);
-    userRef.get().then(data => setUserName(data.data().name));
+    userRef.get().then(data => setUserName(data.data().name || 'default'));
   }, []);
 
   //Get Family

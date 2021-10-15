@@ -1,7 +1,7 @@
 import {CartItem} from '../Models/CartItem';
 import Item from '../Models/Item';
 
-export type stateType = {
+export type StateType = {
   user: string;
   products: Item[];
   cart: Item[];

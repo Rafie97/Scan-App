@@ -86,23 +86,8 @@ function PromotionsPage() {
 
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
-          <View
-            style={{
-              borderWidth: 1,
-              borderRadius: 20,
-              borderColor: '#0073FE',
-              width: 80,
-              justifyContent: 'center',
-              marginRight: 10,
-            }}>
-            <Text
-              style={{
-                color: '#0073FE',
-                alignSelf: 'stretch',
-                textAlign: 'center',
-              }}>
-              See All
-            </Text>
+          <View style={styles.seeAllView}>
+            <Text style={styles.seeAllText}>See All</Text>
           </View>
         </View>
         <View>
@@ -163,5 +148,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#c8e8e4',
     justifyContent: 'space-around',
+  },
+  seeAllView: {
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: '#0073FE',
+    width: 80,
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  seeAllText: {
+    color: '#0073FE',
+    alignSelf: 'stretch',
+    textAlign: 'center',
   },
 });

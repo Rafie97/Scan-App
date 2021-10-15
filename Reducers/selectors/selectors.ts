@@ -1,3 +1,3 @@
-import {stateType} from '../mainReducer';
+import {StateType} from '../mainReducer';
 
-export const productsSelector = (state: stateType) => state.products;
+export const productsSelector = (state: StateType) => state.products;
