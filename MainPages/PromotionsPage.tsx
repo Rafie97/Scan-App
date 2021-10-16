@@ -29,9 +29,26 @@ function PromotionsPage() {
 
   const navigation = useNavigation();
 
+  // useEffect(() => {
+  //   setPromoItems(overallState.products);
+  // }, [overallState.products]);
+
   useEffect(() => {
-    setPromoItems(overallState.products);
-  }, [overallState.products]);
+    const hebRef = firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('items');
+
+    hebRef.onSnapshot(snap => {
+      setPromoItems([]);
+      const newPromoItems: PromoTileProps[] = [];
+      snap.forEach(async doc => {
+        const item = new Item(doc);
+        newPromoItems.push(item);
+      });
+      setPromoItems(newPromoItems);
+    });
+  }, []);
 
   useEffect(() => {
     const hebRef = firestore()

@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Card, LinearGradient} from 'react-native-elements';
-
+import {Card} from 'react-native-elements';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import Ant from 'react-native-vector-icons/AntDesign';
 import {
-  ImageBackground,
   Image,
   StyleSheet,
   View,
@@ -13,19 +10,40 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import {LineChart} from 'react-native-charts-wrapper';
+import {LineChart} from 'react-native-chart-kit';
 import auth from '@react-native-firebase/auth';
 import Item from '../../Models/Item';
 import globalStyles from '../../Styles/globalStyles';
 
-function ItemPage({route}) {
-  const [thing, setThing] = useState(null);
+type LineChartDataType = {
+  labels: string[];
+  datasets: [
+    {
+      data: number[];
+    }
+  ];
+};
+
+type ItemPageParams = {
+  route: {
+    params: {
+      itemIDCallback: Item;
+      isRecipe: boolean;
+    };
+  };
+};
+
+function ItemPage({route}: ItemPageParams) {
+  const [thing, setThing] = useState<Item>();
   const [wishlistModal, setWishlistModal] = useState(false);
   const [wishlists, setWishlists] = useState([]);
+  const [lineChartData, setLineChartData] = useState<LineChartDataType>({
+    labels: [],
+    datasets: [{data: []}],
+  });
 
   const navigate = useNavigation();
 
@@ -59,6 +77,7 @@ function ItemPage({route}) {
       .doc(userID)
       .collection('Cart');
     const item = new Item(thing);
+    //@ts-ignore
     item.quantity = 1;
     cartRef.add(item);
     navigate.navigate('Cart');
@@ -81,29 +100,28 @@ function ItemPage({route}) {
     });
   }
 
-  let data1 = {
-    dataSets: [
-      {
-        label: 'prices',
-        values: null,
-        config: {drawValues: false, drawCircles: false, linewidth: 2},
-      },
-    ],
-  };
-
-  let vals = [];
-
-  if (!route.params.isRecipe && thing) {
-    const entries = Object.entries(thing.priceHistory);
-    entries.forEach(entry => {
-      vals.push({
-        x: Math.floor(parseFloat(entry[0])),
-        y: Math.round(entry[1] * 100),
+  useEffect(() => {
+    let vals = [];
+    let labels = [];
+    if (!route.params.isRecipe && thing) {
+      const entries: [string, number][] = Object.entries(thing.priceHistory);
+      entries.forEach((entry: [string, number]) => {
+        vals.push(Math.round(entry[1] * 100));
+        const labelNum = Math.floor(parseFloat(entry[0]) / 100000) / 10;
+        labels.push(`${labelNum}`);
       });
-    });
 
-    data1.dataSets[0].values = vals;
-  }
+      const dataObj: LineChartDataType = {
+        labels: labels,
+        datasets: [{data: vals}],
+      };
+
+      setLineChartData(dataObj);
+
+      console.log('LABELS', dataObj.labels);
+    }
+  }, [route.params.isRecipe, thing]);
+
   return (
     <View style={globalStyles.fullBackground}>
       <View style={styles.backButtonView}>
@@ -123,19 +141,41 @@ function ItemPage({route}) {
       ) : (
         <ScrollView>
           <View style={styles.bigApple}>
-            <Text style={styles.itemNameText}>{thing.name} </Text>
+            <Text style={styles.itemNameText}>{thing.name}</Text>
 
-            <View syle={styles.imageContainer}>
+            <View style={styles.imageContainer}>
               <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             </View>
             <Text style={styles.itemPriceText}>${thing.price}</Text>
-            {!route.params.isRecipe && (
+            {!route.params.isRecipe && lineChartData.labels.length && (
               <Card style={styles.chartCard} title="Price History">
                 <LineChart
                   style={styles.priceChart}
-                  data={data1}
-                  xAxis={{enabled: false}}
+                  width={350}
+                  height={250}
+                  data={lineChartData}
+                  xAxisLabel="Time"
+                  yAxisLabel="Price"
+                  yAxisInterval={1}
+                  chartConfig={{
+                    backgroundColor: '#e26a00',
+                    backgroundGradientFrom: '#fb8c00',
+                    backgroundGradientTo: '#ffa726',
+                    decimalPlaces: 2, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) =>
+                      `rgba(255, 255, 255, ${opacity})`,
+                    style: {
+                      borderRadius: 16,
+                    },
+                    propsForDots: {
+                      r: '6',
+                      strokeWidth: '2',
+                      stroke: '#ffa726',
+                    },
+                  }}
                 />
+
                 <Text>Here are the stonks for this item</Text>
               </Card>
             )}
@@ -143,17 +183,11 @@ function ItemPage({route}) {
             <Text style={styles.reviewText}>Reviews</Text>
             <View style={styles.reviewBox} />
 
-            <TouchableOpacity
-              style={styles.bottomButtons}
-              title="Add to Wishlist"
-              onPress={getLists}>
+            <TouchableOpacity style={styles.bottomButtons} onPress={getLists}>
               <Text style={styles.addButtonText}> Add to Wishlist</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.bottomButtons}
-              title="Add to Cart"
-              onPress={addToCart}>
+            <TouchableOpacity style={styles.bottomButtons} onPress={addToCart}>
               <Text style={styles.addButtonText}>Add to Cart</Text>
             </TouchableOpacity>
 

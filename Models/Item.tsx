@@ -1,3 +1,13 @@
+interface ItemInterface {
+  docID: string;
+  name: string;
+  price: number;
+  imageLink: string;
+  barcode: string;
+  promo: boolean;
+  priceHistory;
+}
+
 class Item {
   constructor(doc) {
     if (typeof doc.data == 'function') {
