@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {View, Text, ImageBackground, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import Item from '../../Models/Item';
+import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 
 import Ticker, {Tick} from 'react-native-ticker';
 
 import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 
 function ReceiptPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);

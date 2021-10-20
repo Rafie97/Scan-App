@@ -1,25 +1,14 @@
-import React, {Component, useEffect, useState} from 'react';
-
-import Svg, {Circle, Line, G} from 'react-native-svg';
-
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  ImageBackground,
-  TouchableHighlight,
-  Dimensions,
-} from 'react-native';
-
+import React, {useEffect, useState} from 'react';
+import Svg, {Circle} from 'react-native-svg';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../../Models/Item';
-import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
+
+import Item from '../../Models/ItemModels/Item';
 import globalStyles from '../../Styles/globalStyles';
-import Wall from './MapComponents/Wall';
 import SearchBar from '../../Components/SearchBar';
+import Wall from './MapComponents/Wall';
 
 export default MapPage;
 
@@ -84,7 +73,7 @@ function MapPage() {
   }, []);
 
   useEffect(() => {
-    const f = Dimensions.get('window').width / wallData.mapSize.width;
+    const f = (Dimensions.get('window').width - 40) / wallData.mapSize.width;
     setScale(f);
   }, [wallData.mapSize.width]);
 
@@ -142,7 +131,7 @@ function MapPage() {
             match > -1 && (
               <TouchableOpacity
                 // activeOpacity={0.6}
-                underlayColor="black"
+                // underlayColor="black"
                 onPress={() => {
                   navigation.navigate('Promo', {
                     screen: 'PromoItemPage',
@@ -153,7 +142,7 @@ function MapPage() {
                 style={{
                   paddingVertical: 7,
                   paddingLeft: 6,
-                  fontSize: 15,
+                  // fontSize: 15,
                 }}>
                 <Text style={{color: 'white'}}>{items[match].name}</Text>
               </TouchableOpacity>
@@ -183,7 +172,7 @@ function MapPage() {
           r={10}
           stroke="black"
           strokeWidth={1}
-          fill={markedAisles.includes(index) ? 'red' : 'rgba(0,0,0,0)'}
+          fill={markedAisles.includes(index) ? '#0073FE' : 'rgba(0,0,0,0)'}
         />
 
         {currentBubble === index && (
@@ -205,12 +194,12 @@ function MapPage() {
           </View>
         )}
         <View
-          onPress={() => setCurrentBubble(-1)}
+          // onPress={() => setCurrentBubble(-1)}
           style={[
             styles.mapBox,
             {
-              height: wallData.mapSize.height * scaleFactor - 40,
-              width: wallData.mapSize.width * scaleFactor - 40,
+              height: wallData.mapSize.height * scaleFactor,
+              width: wallData.mapSize.width * scaleFactor,
             },
           ]}>
           <Svg>

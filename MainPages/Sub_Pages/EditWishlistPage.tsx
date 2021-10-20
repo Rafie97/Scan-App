@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Button, Icon, LinearGradient} from 'react-native-elements';
 import {
   ImageBackground,
   StyleSheet,
@@ -11,53 +10,49 @@ import {
 } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../../Models/Item';
+import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-class EditWishlistPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      listItems: [],
-      isScrollEnabled: true,
-      routeListName: this.props.route.params.listNameCallback,
-    };
-    this.deleteItem = this.deleteItem.bind(this);
-    this.getItems = this.getItems.bind(this);
-    this.setScrollEnabled = this.setScrollEnabled.bind(this);
-  }
+function EditWishlistPage(props: any) {
+  const [listItems, setListItems] = React.useState<Item[]>([]);
 
-  componentDidMount() {
-    this.getItems();
-  }
+  const routeListName = props.route.params.listNameCallback;
 
-  async getItems() {
+  const {navigate} = props.navigation;
+
+  React.useEffect(() => {
+    getItems();
+  }, []);
+
+  async function getItems(): Promise<void> {
     const userID = auth().currentUser.uid;
     const wishRef = firestore()
       .collection('users')
       .doc(userID)
       .collection('Wishlists')
-      .doc(this.state.routeListName)
+      .doc(routeListName)
       .collection('items');
 
     await wishRef.onSnapshot(snap => {
-      this.setState({listItems: []});
+      const tempItems: Item[] = [];
+      setListItems([]);
       snap.forEach(doc => {
         const item = new Item(doc);
-        this.setState({listItems: [...this.state.listItems, item]});
+        tempItems.push(item);
       });
+      setListItems(tempItems);
     });
   }
 
-  deleteItem(itemID) {
+  function deleteItem(itemID) {
     const userID = auth().currentUser.uid;
     const cartRef = firestore()
       .collection('users')
       .doc(userID)
       .collection('Wishlists')
-      .doc(this.state.routeListName)
+      .doc(routeListName)
       .collection('items');
 
     cartRef
@@ -71,54 +66,44 @@ class EditWishlistPage extends Component {
       });
   }
 
-  setScrollEnabled(enable) {
-    this.setState({isScrollEnabled: enable});
-  }
-
-  renderItem = ({item}) => (
+  const renderItem = ({item}) => (
     <SwipeableItem
       item={item}
-      setScrollEnabled={enable => this.setScrollEnabled(enable)}
-      deleteItem={this.deleteItem}
+      deleteItem={deleteItem}
       sourcePage="Account"
-      navigation={this.props.navigation}
+      navigation={props.navigation}
     />
   );
 
-  render() {
-    const {navigate} = this.props.navigation;
+  return (
+    <ImageBackground
+      style={styles.fullBackground}
+      source={require('../../res/grad_3.png')}>
+      <View style={styles.backButtonView}>
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => navigate('AccountPage')}>
+          <Ionicon
+            name="arrow-back-circle-outline"
+            size={50}
+            style={{marginLeft: 10, marginTop: 5}}
+          />
+        </TouchableOpacity>
+      </View>
 
-    return (
-      <ImageBackground
-        style={styles.fullBackground}
-        source={require('../../res/grad_3.png')}>
-        <View style={styles.backButtonView}>
-          <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            onPress={() => navigate('AccountPage')}>
-            <Ionicon
-              name="arrow-back-circle-outline"
-              size={50}
-              style={{marginLeft: 10, marginTop: 5}}
-            />
-          </TouchableOpacity>
+      <Text style={styles.ListNameText}>{routeListName}</Text>
+
+      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+        <View style={styles.wishlistGroupView}>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={listItems}
+            renderItem={renderItem}
+          />
         </View>
-
-        <Text style={styles.ListNameText}>{this.state.routeListName}</Text>
-
-        <View
-          style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-          <View style={styles.wishlistGroupView}>
-            <FlatList
-              keyExtractor={(item, index) => index.toString()}
-              data={this.state.listItems}
-              renderItem={this.renderItem}
-            />
-          </View>
-        </View>
-      </ImageBackground>
-    );
-  }
+      </View>
+    </ImageBackground>
+  );
 }
 
 export default EditWishlistPage;

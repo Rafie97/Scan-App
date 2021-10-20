@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {LineChart} from 'react-native-chart-kit';
 import auth from '@react-native-firebase/auth';
-import Item from '../../Models/Item';
+import Item from '../../Models/ItemModels/Item';
 import globalStyles from '../../Styles/globalStyles';
 
 type LineChartDataType = {

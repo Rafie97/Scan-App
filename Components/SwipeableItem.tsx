@@ -19,7 +19,7 @@ import ItemBubble from './ItemBubble';
 const {width} = Dimensions.get('window');
 
 function SwipeableItem(props) {
-  const [scrollViewEnabled, setScrollEnabled] = React.useState(true);
+  // const [scrollViewEnabled, setScrollEnabled] = React.useState(true);
   const position = React.useRef(new Animated.ValueXY()).current;
 
   const gestureDelay = 10;

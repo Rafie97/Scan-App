@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList} from 'react-native-gesture-handler';
-import Item from '../Models/Item';
+import Item from '../Models/ItemModels/Item';
 import {useNavigation} from '@react-navigation/native';
 import globalStyles from '../Styles/globalStyles';
 import ItemBubble from '../Components/ItemBubble';

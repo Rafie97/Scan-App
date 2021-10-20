@@ -1,5 +1,5 @@
-import {CartItem} from '../Models/CartItem';
-import Item from '../Models/Item';
+import {CartItem} from '../Models/ItemModels/CartItem';
+import Item from '../Models/ItemModels/Item';
 
 export type StateType = {
   user: string;

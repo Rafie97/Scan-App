@@ -1,4 +1,4 @@
-import React, {Component, useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../Models/Item';
+import Item from '../Models/ItemModels/Item';
 import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
-import {Recipe} from '../Models/Recipe';
+import {Recipe} from '../Models/ItemModels/Recipe';
 import {mainReducer} from '../Reducers/mainReducer';
 import {StateContext} from '../Navigation/AppNavigation';
 import globalStyles from '../Styles/globalStyles';

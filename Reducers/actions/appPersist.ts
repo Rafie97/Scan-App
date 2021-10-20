@@ -1,6 +1,6 @@
 import {snapshotItems} from '../../Connections/ItemsConnection';
-import Item from '../../Models/Item';
-import {StateType} from '../mainReducer';
+import Item from '../../Models/ItemModels/Item';
+
 //add storeId as param
 export const loadItems = () => {
   const loadFromDispatch = async (dispatch: any) => {

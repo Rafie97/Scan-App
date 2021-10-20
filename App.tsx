@@ -26,50 +26,35 @@ console.disableYellowBox = true;
 
 const OuterNavigator = createStackNavigator();
 
-class App extends Component {
-  constructor(props) {
-    if (Platform.OS === 'ios') {
-      firebase.initializeApp(config);
-    }
-    super(props);
-    this.state = {
-      isSignedIn: false,
-    };
-  }
+function App() {
+  const [isSignedIn, setIsSignedIn] = React.useState(false);
 
-  componentDidMount() {
-    if (!firebase.apps.length) {
-      console.log('check passed');
-      if (Platform.OS === 'ios') {
-        firebase.initializeApp(config);
-      }
-    } else {
-      console.log('check failed');
+  React.useEffect(() => {
+    if (!firebase.apps.length || Platform.OS === 'ios') {
+      firebase.initializeApp(config);
     }
     auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({isSignedIn: true});
+        setIsSignedIn(true);
       } else {
-        this.setState({isSignedIn: false});
+        setIsSignedIn(false);
       }
     });
-  }
+  }, []);
 
-  render() {
-    return (
-      <AuthProvider>
-        <NavigationContainer>
-          <OuterNavigator.Navigator headerMode="none">
-            {this.state.isSignedIn ? (
-              <OuterNavigator.Screen name="App" component={AppNavigation} />
-            ) : (
-              <OuterNavigator.Screen name="Auth" component={AuthNavigation} />
-            )}
-          </OuterNavigator.Navigator>
-        </NavigationContainer>
-      </AuthProvider>
-    );
-  }
+  return (
+    <AuthProvider>
+      <NavigationContainer>
+        <OuterNavigator.Navigator headerMode="none">
+          {this.state.isSignedIn ? (
+            <OuterNavigator.Screen name="App" component={AppNavigation} />
+          ) : (
+            <OuterNavigator.Screen name="Auth" component={AuthNavigation} />
+          )}
+        </OuterNavigator.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
+  );
 }
 
 export default App;

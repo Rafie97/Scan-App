@@ -1,8 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View, Image, Text, StyleSheet} from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {CartItem} from '../Models/CartItem';
-import Item from '../Models/Item';
+import Item from '../Models/ItemModels/Item';
 import globalStyles from '../Styles/globalStyles';
 
 type PropTypes = {

@@ -1,14 +1,28 @@
+import {Review} from './Review';
+
 interface ItemInterface {
+  barcode: string;
   docID: string;
   name: string;
-  price: number;
   imageLink: string;
-  barcode: string;
+  location: Location;
+  price: number;
+  priceHistory: [string, number];
   promo: boolean;
-  priceHistory;
+  reviews: Review[];
 }
 
-class Item {
+class Item implements ItemInterface {
+  barcode: string;
+  docID: string;
+  name: string;
+  imageLink: string;
+  location: Location;
+  price: number;
+  priceHistory: [string, number];
+  promo: boolean;
+  reviews: Review[];
+
   constructor(doc) {
     if (typeof doc.data == 'function') {
       this.docID = doc.id;

@@ -5,7 +5,7 @@ import Ion from 'react-native-vector-icons/Ionicons';
 
 type PropTypes = {
   searchItems: (val) => {};
-  setSearchFocused: (val) => {};
+  setSearchFocused: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function SearchBar(props: PropTypes) {
