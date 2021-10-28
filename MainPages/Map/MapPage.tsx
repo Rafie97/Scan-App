@@ -6,7 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 
 import Item from '../../Models/ItemModels/Item';
-import globalStyles from '../../Styles/globalStyles';
+import gs from '../../Styles/globalStyles';
 import SearchBar from '../../Components/SearchBar';
 import Wall from './MapComponents/Wall';
 
@@ -113,15 +113,16 @@ function MapPage() {
   const ProdBubble = ({prods, coord}) => {
     return (
       <View
-        style={{
-          flexDirection: 'column',
-          //position: 'relative',
-          left: coord.x,
-          top: coord.y,
-          backgroundColor: '#0073FE',
-          maxWidth: 100,
-          borderRadius: 10,
-        }}>
+        style={[
+          gs.flexColumn,
+          gs.bgBlue,
+          gs.radius10,
+          {
+            left: coord.x,
+            top: coord.y,
+            maxWidth: 100,
+          },
+        ]}>
         {prods.map(prod => {
           const match = items.findIndex(item => {
             return item.docID === prod;
@@ -142,7 +143,6 @@ function MapPage() {
                 style={{
                   paddingVertical: 7,
                   paddingLeft: 6,
-                  // fontSize: 15,
                 }}>
                 <Text style={{color: 'white'}}>{items[match].name}</Text>
               </TouchableOpacity>
@@ -186,17 +186,20 @@ function MapPage() {
   };
 
   return (
-    <View style={globalStyles.fullBackground}>
-      <View style={styles.mapPageContainer}>
+    <View style={gs.fullBackground}>
+      <View style={[gs.width100, gs.height100]}>
         {!searchFocused && (
           <View>
-            <Text style={globalStyles.header}>Map</Text>
+            <Text style={gs.header}>Map</Text>
           </View>
         )}
         <View
-          // onPress={() => setCurrentBubble(-1)}
           style={[
             styles.mapBox,
+            gs.bgWhite,
+            gs.margin20,
+            gs.radius10,
+            gs.shadow,
             {
               height: wallData.mapSize.height * scaleFactor,
               width: wallData.mapSize.width * scaleFactor,
@@ -240,18 +243,7 @@ function MapPage() {
 }
 
 const styles = StyleSheet.create({
-  mapPageContainer: {
-    width: '100%',
-    height: '100%',
-  },
-
   mapBox: {
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 10,
-    backgroundColor: 'white',
-    borderRadius: 10,
     marginHorizontal: 20,
   },
 });

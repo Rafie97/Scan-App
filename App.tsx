@@ -46,7 +46,7 @@ function App() {
     <AuthProvider>
       <NavigationContainer>
         <OuterNavigator.Navigator headerMode="none">
-          {this.state.isSignedIn ? (
+          {isSignedIn ? (
             <OuterNavigator.Screen name="App" component={AppNavigation} />
           ) : (
             <OuterNavigator.Screen name="Auth" component={AuthNavigation} />

@@ -18,7 +18,7 @@ import {useEffect} from 'react';
 import {Recipe} from '../Models/ItemModels/Recipe';
 import {mainReducer} from '../Reducers/mainReducer';
 import {StateContext} from '../Navigation/AppNavigation';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
@@ -70,10 +70,11 @@ function PromotionsPage() {
   }, []);
 
   return (
-    <View style={globalStyles.fullBackground}>
-      <ScrollView style={styles.promoPageContainer}>
-        <Text style={globalStyles.header}>Today's Best Deals</Text>
-        <Text style={styles.exploreRecipesText}>
+    <View style={gs.fullBackground}>
+      <ScrollView
+        style={[styles.promoPageContainer, gs.height100, gs.width100]}>
+        <Text style={gs.header}>Today's Best Deals</Text>
+        <Text style={[styles.exploreRecipesText, gs.margin20]}>
           Explore our take-and-make recipes
         </Text>
 
@@ -149,23 +150,13 @@ const styles = StyleSheet.create({
   exploreRecipesText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 20,
-    marginBottom: 10,
     color: '#0073FE',
   },
 
   promoPageContainer: {
-    width: '100%',
-    height: '100%',
     marginBottom: 60,
   },
 
-  promoFooter: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#c8e8e4',
-    justifyContent: 'space-around',
-  },
   seeAllView: {
     borderWidth: 1,
     borderRadius: 20,
