@@ -30,6 +30,7 @@ function PromotionsPage() {
   const navigation = useNavigation();
 
   // useEffect(() => {
+  //   console.log(overallState);
   //   setPromoItems(overallState.products);
   // }, [overallState.products]);
 
@@ -82,6 +83,7 @@ function PromotionsPage() {
           <FlatList
             contentContainerStyle={{
               paddingVertical: 10,
+              paddingHorizontal: 20,
             }}
             showsHorizontalScrollIndicator={false}
             data={recipes}
@@ -112,6 +114,7 @@ function PromotionsPage() {
           <FlatList
             contentContainerStyle={{
               paddingVertical: 10,
+              paddingHorizontal: 20,
             }}
             showsHorizontalScrollIndicator={false}
             data={promoItems.slice(0, 10)}
@@ -144,13 +147,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20,
     marginBottom: 10,
-    color: '#0073FE',
+    ...gs.blue,
   },
 
   exploreRecipesText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#0073FE',
+    ...gs.blue,
   },
 
   promoPageContainer: {
@@ -162,12 +165,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#0073FE',
     width: 80,
-    justifyContent: 'center',
     marginRight: 10,
+    ...gs.jCenter,
   },
   seeAllText: {
-    color: '#0073FE',
     alignSelf: 'stretch',
-    textAlign: 'center',
+    ...gs.blue,
+    ...gs.jCenter,
+    ...gs.taCenter,
   },
 });

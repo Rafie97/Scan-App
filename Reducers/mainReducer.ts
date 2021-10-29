@@ -1,11 +1,12 @@
+import {NavigationProp} from '@react-navigation/native';
 import {CartItem} from '../Models/ItemModels/CartItem';
 import Item from '../Models/ItemModels/Item';
 
 export type StateType = {
-  user: string;
+  cart: CartItem[];
   products: Item[];
-  cart: Item[];
   total: number;
+  user: string;
 };
 
 export const mainReducer = (state, action) => {

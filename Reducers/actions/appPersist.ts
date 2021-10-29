@@ -10,6 +10,7 @@ export const loadItems = () => {
         return;
       }
       dispatch({type: 'SET_PRODUCTS', payload: loadedItems});
+      console.log('loadedItems', loadedItems);
     });
   };
 

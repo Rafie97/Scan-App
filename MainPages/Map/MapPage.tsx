@@ -8,7 +8,11 @@ import {useNavigation} from '@react-navigation/native';
 import Item from '../../Models/ItemModels/Item';
 import gs from '../../Styles/globalStyles';
 import SearchBar from '../../Components/SearchBar';
+
+import Aisle from './MapComponents/Aisle';
 import Wall from './MapComponents/Wall';
+
+import WallType from '../../Models/MapModels/Wall';
 
 export default MapPage;
 
@@ -19,7 +23,7 @@ function MapPage() {
   const [currentBubble, setCurrentBubble] = useState(-1);
   const [items, setItems] = useState([]);
   const [scaleFactor, setScale] = useState(1);
-  const [wallData, setWallData] = useState({
+  const [wallData, setWallData] = useState<WallType>({
     aisles: [],
     mapSize: {
       height: 300,
@@ -110,81 +114,6 @@ function MapPage() {
     }
   }
 
-  const ProdBubble = ({prods, coord}) => {
-    return (
-      <View
-        style={[
-          gs.flexColumn,
-          gs.bgBlue,
-          gs.radius10,
-          {
-            left: coord.x,
-            top: coord.y,
-            maxWidth: 100,
-          },
-        ]}>
-        {prods.map(prod => {
-          const match = items.findIndex(item => {
-            return item.docID === prod;
-          });
-
-          return (
-            match > -1 && (
-              <TouchableOpacity
-                // activeOpacity={0.6}
-                // underlayColor="black"
-                onPress={() => {
-                  navigation.navigate('Promo', {
-                    screen: 'PromoItemPage',
-                    initial: false,
-                    params: {itemIDCallback: items[match], isRecipe: true},
-                  });
-                }}
-                style={{
-                  paddingVertical: 7,
-                  paddingLeft: 6,
-                }}>
-                <Text style={{color: 'white'}}>{items[match].name}</Text>
-              </TouchableOpacity>
-            )
-          );
-        })}
-      </View>
-    );
-  };
-
-  const Aisle = ({index, aisl, wallData, scaleFactor}) => {
-    const shiftedX = aisl.coordinate.x - wallData.mapSize.width / 2;
-    const shiftedY = -aisl.coordinate.y + wallData.mapSize.height / 2;
-
-    const newX =
-      shiftedX * scaleFactor + (wallData.mapSize.width * scaleFactor) / 2;
-    const newY =
-      shiftedY * scaleFactor + (wallData.mapSize.height * scaleFactor) / 2;
-    return (
-      <View>
-        <Circle
-          onPress={() => {
-            setCurrentBubble(index);
-          }}
-          cx={newX}
-          cy={newY}
-          r={10}
-          stroke="black"
-          strokeWidth={1}
-          fill={markedAisles.includes(index) ? '#0073FE' : 'rgba(0,0,0,0)'}
-        />
-
-        {currentBubble === index && (
-          <ProdBubble
-            prods={wallData.aisles[currentBubble].products}
-            coord={{x: newX, y: newY}}
-          />
-        )}
-      </View>
-    );
-  };
-
   return (
     <View style={gs.fullBackground}>
       <View style={[gs.width100, gs.height100]}>
@@ -196,10 +125,6 @@ function MapPage() {
         <View
           style={[
             styles.mapBox,
-            gs.bgWhite,
-            gs.margin20,
-            gs.radius10,
-            gs.shadow,
             {
               height: wallData.mapSize.height * scaleFactor,
               width: wallData.mapSize.width * scaleFactor,
@@ -222,6 +147,9 @@ function MapPage() {
                 return (
                   <Aisle
                     index={index}
+                    currentBubble={currentBubble}
+                    setCurrentBubble={setCurrentBubble}
+                    markedAisles={markedAisles}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
                     wallData={wallData}
@@ -245,5 +173,9 @@ function MapPage() {
 const styles = StyleSheet.create({
   mapBox: {
     marginHorizontal: 20,
+    ...gs.bgWhite,
+    ...gs.margin20,
+    ...gs.radius10,
+    ...gs.shadow,
   },
 });

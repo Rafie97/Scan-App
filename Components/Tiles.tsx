@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {Receipt} from '../Models/Receipt';
+import {Receipt} from '../Models/CartModels/Receipt';
 
 export type PromoTileProps = {
   imageLink: string;
@@ -22,7 +22,7 @@ const PromoItemTile = (item: PromoTileProps) => {
   return (
     <View
       style={{
-        marginHorizontal: 10,
+        marginRight: 20,
         width: item.isRecipe ? 200 : 180,
       }}>
       <TouchableOpacity

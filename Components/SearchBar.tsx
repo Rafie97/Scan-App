@@ -16,18 +16,7 @@ export default function SearchBar(props: PropTypes) {
     <TouchableWithoutFeedback
       style={{height: '100%'}}
       onPress={Keyboard.dismiss}>
-      <View
-        style={[
-          styles.searchBarView,
-          gs.aCenter,
-          gs.aSelfCenter,
-          gs.bgBlue,
-          gs.flexRow,
-          gs.jCenter,
-          gs.margin20,
-          gs.radius10,
-          gs.shadow,
-        ]}>
+      <View style={[styles.searchBarView]}>
         <Ion name="search-circle" size={40} color="white" />
         <TextInput
           ref={inputRef}
@@ -51,12 +40,20 @@ export default function SearchBar(props: PropTypes) {
 const styles = StyleSheet.create({
   searchBarView: {
     width: '65%',
+    alignSelf: 'center',
+    ...gs.aCenter,
+    ...gs.aSelfCenter,
+    ...gs.bgBlue,
+    ...gs.flexRow,
+    ...gs.jCenter,
+    ...gs.margin20,
+    ...gs.radius10,
+    ...gs.shadow,
   },
 
   searchInput: {
     paddingLeft: 5,
     paddingRight: 5,
     fontSize: 20,
-    color: 'white',
   },
 });
