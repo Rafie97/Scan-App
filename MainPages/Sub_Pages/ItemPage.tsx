@@ -104,11 +104,11 @@ function ItemPage({route}: ItemPageParams) {
     let vals = [];
     let labels = [];
     if (!route.params.isRecipe && thing) {
-      const entries: [string, number][] = Object.entries(thing.priceHistory);
-      entries.forEach((entry: [string, number]) => {
-        vals.push(Math.round(entry[1] * 100));
-        const labelNum = Math.floor(parseFloat(entry[0]) / 100000) / 10;
-        labels.push(`${labelNum}`);
+      thing.priceHistory.forEach((value, key) => {
+        const val = Math.round(value * 100);
+        const label = Math.floor(parseFloat(key) / 100000) / 10;
+        vals.push(val);
+        labels.push(`${label}`);
       });
 
       const dataObj: LineChartDataType = {
@@ -142,7 +142,6 @@ function ItemPage({route}: ItemPageParams) {
         <ScrollView>
           <View style={styles.bigApple}>
             <Text style={styles.itemNameText}>{thing.name}</Text>
-
             <View style={styles.imageContainer}>
               <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             </View>
@@ -175,7 +174,6 @@ function ItemPage({route}: ItemPageParams) {
                     },
                   }}
                 />
-
                 <Text>Here are the stonks for this item</Text>
               </Card>
             )}

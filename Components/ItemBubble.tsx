@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, Image, Text, StyleSheet} from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Item from '../Models/ItemModels/Item';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 
 type PropTypes = {
   item: Item;
@@ -63,21 +63,14 @@ const styles = StyleSheet.create({
   },
 
   itemBubble: {
-    backgroundColor: 'white',
-    borderColor: 'grey',
-    borderRadius: 10,
-    flexDirection: 'row',
-    width: 350,
-    height: 90,
+    width: 362,
+    height: 80,
     marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
-    elevation: 5,
+    marginRight: 10,
+    ...gs.bgWhite,
+    ...gs.flexRow,
+    ...gs.radius10,
+    ...gs.shadow,
   },
 
   itemImage: {

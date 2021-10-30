@@ -7,7 +7,7 @@ interface ItemInterface {
   imageLink: string;
   location: Location;
   price: number;
-  priceHistory: [string, number];
+  priceHistory: Map<string, number>;
   promo: boolean;
   reviews: Review[];
 }
@@ -19,7 +19,7 @@ class Item implements ItemInterface {
   imageLink: string;
   location: Location;
   price: number;
-  priceHistory: [string, number];
+  priceHistory: Map<string, number>;
   promo: boolean;
   reviews: Review[];
 
@@ -32,7 +32,7 @@ class Item implements ItemInterface {
       this.barcode = doc.data().barcode;
       this.promo = doc.data().promo;
       this.reviews = doc.data().reviews;
-      this.priceHistory = doc.data().priceHistory;
+      this.priceHistory = convertPriceHistory(doc.data().priceHistory);
       this.location = doc.data().location;
     } else {
       this.docID = doc.docID;
@@ -42,7 +42,7 @@ class Item implements ItemInterface {
       this.barcode = doc.barcode;
       this.promo = doc.promo;
       this.reviews = doc.reviews;
-      this.priceHistory = doc.priceHistory;
+      this.priceHistory = convertPriceHistory(doc.priceHistory);
       this.location = doc.location;
     }
   }
@@ -69,3 +69,16 @@ class Item implements ItemInterface {
 }
 
 export default Item;
+
+function convertPriceHistory(firebasePriceHistory: {
+  timestamp: number;
+}): Map<string, number> {
+  let priceHist = new Map<string, number>();
+
+  Object.entries(firebasePriceHistory).forEach(entry => {
+    const [key, value] = entry;
+    priceHist.set(key, value);
+  });
+
+  return priceHist;
+}

@@ -91,10 +91,10 @@ function SwipeableItem(props) {
       }}>
       <View
         style={{
-          alignSelf: 'center',
-          paddingBottom: 20,
+          ...globalStyles.aSelfCenter,
           position: 'absolute',
-          right: -5,
+          right: 5,
+          bottom: 20,
         }}>
         <TouchableOpacity onPress={() => props.deleteItem(props.item.docID)}>
           <Animated.View
@@ -107,7 +107,7 @@ function SwipeableItem(props) {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 10,
-              elevation: 20,
+              elevation: 10,
             }}>
             <EvilIcons name="trash" size={30} color="black" />
           </Animated.View>

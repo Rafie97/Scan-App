@@ -10,7 +10,7 @@ import Ticker, {Tick} from 'react-native-ticker';
 
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<Item[]>([]);
@@ -84,17 +84,8 @@ function CartPage() {
   //   return totalNum;
   // }
 
-  const renderItem = ({item}) => (
-    <SwipeableItem
-      item={item}
-      deleteItem={deleteItem}
-      sourcePage="Cart"
-      navigation={navigation}
-    />
-  );
-
   return (
-    <View style={globalStyles.fullBackground}>
+    <View style={gs.fullBackground}>
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
           <View
@@ -149,13 +140,21 @@ function CartPage() {
 
       <FlatList
         contentContainerStyle={{
-          alignItems: 'center',
-          marginBottom: 20,
           paddingTop: 5,
+          marginBottom: 10,
+          ...gs.aCenter,
+          ...gs.height100,
         }}
         style={styles.flatContainer}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
+        renderItem={({item}) => (
+          <SwipeableItem
+            item={item}
+            deleteItem={deleteItem}
+            sourcePage="Cart"
+            navigation={navigation}
+          />
+        )}
         data={cartItems}
       />
       <View
