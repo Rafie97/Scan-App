@@ -147,7 +147,7 @@ function ItemPage({route}: ItemPageParams) {
             </View>
             <Text style={styles.itemPriceText}>${thing.price}</Text>
             {!route.params.isRecipe && lineChartData.labels.length && (
-              <Card style={styles.chartCard} title="Price History">
+              <Card containerStyle={styles.chartCard} title="Price History">
                 <LineChart
                   style={styles.priceChart}
                   width={350}
@@ -212,7 +212,7 @@ function ItemPage({route}: ItemPageParams) {
                 <TouchableOpacity
                   style={styles.wishlistSelect}
                   onPress={() => addToWishlist(item)}>
-                  <Text style={styles.title}>{item}</Text>
+                  <Text>{item}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -225,7 +225,7 @@ function ItemPage({route}: ItemPageParams) {
                 justifyContent: 'center',
               }}
               onPress={() => setWishlistModal(false)}>
-              <Text style={styles.title}>Cancel</Text>
+              <Text>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
