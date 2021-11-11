@@ -5,10 +5,10 @@ import {StyleSheet} from 'react-native';
 const styles = {
   fullBackground: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: '100%' as '100%',
+    height: '100%' as '100%',
     alignItems: 'center' as 'center',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fafafa' as '#fafafa',
   },
 
   header: {

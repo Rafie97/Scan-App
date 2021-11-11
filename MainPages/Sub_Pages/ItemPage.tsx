@@ -16,7 +16,7 @@ import firestore from '@react-native-firebase/firestore';
 import {LineChart} from 'react-native-chart-kit';
 import auth from '@react-native-firebase/auth';
 import Item from '../../Models/ItemModels/Item';
-import globalStyles from '../../Styles/globalStyles';
+import gs from '../../Styles/globalStyles';
 
 type LineChartDataType = {
   labels: string[];
@@ -105,7 +105,7 @@ function ItemPage({route}: ItemPageParams) {
     let labels = [];
     if (!route.params.isRecipe && thing) {
       thing.priceHistory.forEach((value, key) => {
-        const val = Math.round(value * 100);
+        const val = Math.round(value * 100)/100;
         const label = Math.floor(parseFloat(key) / 100000) / 10;
         vals.push(val);
         labels.push(`${label}`);
@@ -115,7 +115,6 @@ function ItemPage({route}: ItemPageParams) {
         labels: labels,
         datasets: [{data: vals}],
       };
-
       setLineChartData(dataObj);
 
       console.log('LABELS', dataObj.labels);
@@ -123,60 +122,58 @@ function ItemPage({route}: ItemPageParams) {
   }, [route.params.isRecipe, thing]);
 
   return (
-    <View style={globalStyles.fullBackground}>
-      <View style={styles.backButtonView}>
+    <View style={gs.fullBackground}>
+
+      <View style={styles.backButtonView} >
         <TouchableOpacity
-          style={{flexDirection: 'row'}}
+          style={[{flexDirection: 'row', padding:5}]}
           onPress={() => navigate.goBack()}>
           <Ionicon
             name="arrow-back-circle-outline"
-            size={50}
-            style={{marginLeft: 10, marginTop: 5}}
+            size={45}
           />
         </TouchableOpacity>
       </View>
 
-      {!thing ? (
-        <Text>Loading...</Text>
-      ) : (
-        <ScrollView>
+      {!!thing && (
+        <ScrollView showsVerticalScrollIndicator={false} >
           <View style={styles.bigApple}>
-            <Text style={styles.itemNameText}>{thing.name}</Text>
+            <Text style={[gs.header, styles.itemNameText]}>{thing.name}</Text>
             <View style={styles.imageContainer}>
               <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             </View>
             <Text style={styles.itemPriceText}>${thing.price}</Text>
-            {!route.params.isRecipe && lineChartData.labels.length && (
+            {!route.params.isRecipe && lineChartData.labels.length ? (
               <Card containerStyle={styles.chartCard} title="Price History">
                 <LineChart
                   style={styles.priceChart}
-                  width={350}
+                  width={260}
                   height={250}
                   data={lineChartData}
-                  xAxisLabel="Time"
-                  yAxisLabel="Price"
-                  yAxisInterval={1}
+                  // xAxisLabel="Time"
+                  // yAxisLabel="Price"
+                  yAxisInterval={1.00}
+                  withVerticalLabels={false}
                   chartConfig={{
-                    backgroundColor: '#e26a00',
-                    backgroundGradientFrom: '#fb8c00',
-                    backgroundGradientTo: '#ffa726',
-                    decimalPlaces: 2, // optional, defaults to 2dp
+                    backgroundColor: '#0073FE',
+                    backgroundGradientFrom: '#0073FE',
+                    backgroundGradientTo: '#fe6100',
+                    decimalPlaces: 2,
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) =>
-                      `rgba(255, 255, 255, ${opacity})`,
+                    // labelColor: (opacity = 1) =>
+                    //   `rgba(255, 255, 255, ${opacity})`,
                     style: {
                       borderRadius: 16,
                     },
                     propsForDots: {
-                      r: '6',
-                      strokeWidth: '2',
-                      stroke: '#ffa726',
+                      r: '2',
+                      strokeWidth: '1',
+                      stroke: '#4400fe',
                     },
                   }}
                 />
-                <Text>Here are the stonks for this item</Text>
               </Card>
-            )}
+            ) : null}
 
             <Text style={styles.reviewText}>Reviews</Text>
             <View style={styles.reviewBox} />
@@ -265,11 +262,12 @@ const styles = StyleSheet.create({
   backButtonView: {
     justifyContent: 'center',
     alignContent: 'center',
-    width: 100,
-    alignSelf: 'flex-start',
+    position:'absolute',
+    top:0,
+    left:0
   },
   chartCard: {
-    width: 400,
+    width: '72%'
   },
   centeredView: {
     flex: 1,
@@ -279,28 +277,30 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    backgroundColor: 'yellow',
-    marginBottom: 50,
-    width: '100%',
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 2,
+    ...gs.radius10,
+    ...gs.margin20,
+    ...gs.shadow,
   },
 
   itemImage: {
-    width: 150,
-    height: 150,
+    width: 300,
+    height: 300,
+    borderRadius: 10,
   },
+
   itemNameText: {
-    fontSize: 30,
-    paddingBottom: 50,
+    alignSelf: 'stretch',
+    textAlign: 'center',
+    marginTop:18,
   },
+
   itemPriceText: {
     fontSize: 35,
     paddingBottom: 50,
+    fontWeight: 'bold',
+    alignSelf: 'stretch',
+    textAlign: 'center',
   },
 
   modalView: {
