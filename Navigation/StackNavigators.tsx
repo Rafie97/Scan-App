@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AccountPage from '../MainPages/AccountPage';
 import CartPage from '../MainPages/CartPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
-import ItemPage from '../MainPages/Sub_Pages/ItemPage';
+import ItemPage from '../MainPages/Sub_Pages/ItemPage/ItemPage';
 import PromotionsPage from '../MainPages/PromotionsPage';
 import ReceiptPage from '../MainPages/Sub_Pages/ReceiptPage';
 import ScanPage from '../MainPages/ScanPage';

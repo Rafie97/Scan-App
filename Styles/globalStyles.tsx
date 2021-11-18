@@ -1,7 +1,5 @@
 import {StyleSheet} from 'react-native';
 
-////// YO TURN THIS SHIT INTO A REGULAR OBJECT
-
 const styles = {
   fullBackground: {
     flex: 1,

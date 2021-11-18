@@ -10,13 +10,15 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {LineChart} from 'react-native-chart-kit';
 import auth from '@react-native-firebase/auth';
-import Item from '../../Models/ItemModels/Item';
-import gs from '../../Styles/globalStyles';
+import Item from '../../../Models/ItemModels/Item';
+import gs from '../../../Styles/globalStyles';
+import PriceChart from './ItemComponents/PriceChart';
 
 type LineChartDataType = {
   labels: string[];
@@ -105,7 +107,7 @@ function ItemPage({route}: ItemPageParams) {
     let labels = [];
     if (!route.params.isRecipe && thing) {
       thing.priceHistory.forEach((value, key) => {
-        const val = Math.round(value * 100)/100;
+        const val = Math.round(value * 100) / 100;
         const label = Math.floor(parseFloat(key) / 100000) / 10;
         vals.push(val);
         labels.push(`${label}`);
@@ -123,20 +125,16 @@ function ItemPage({route}: ItemPageParams) {
 
   return (
     <View style={gs.fullBackground}>
-
-      <View style={styles.backButtonView} >
+      <View style={styles.backButtonView}>
         <TouchableOpacity
-          style={[{flexDirection: 'row', padding:5}]}
-          onPress={() => navigate.goBack()}>
-          <Ionicon
-            name="arrow-back-circle-outline"
-            size={45}
-          />
+          style={[{flexDirection: 'row'}]}
+          onPress={() => navigate.navigate('Promo', {screen: 'MainPromoPage'})}>
+          <Ionicon name="arrow-back-circle-outline" size={45} />
         </TouchableOpacity>
       </View>
 
       {!!thing && (
-        <ScrollView showsVerticalScrollIndicator={false} >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.bigApple}>
             <Text style={[gs.header, styles.itemNameText]}>{thing.name}</Text>
             <View style={styles.imageContainer}>
@@ -144,39 +142,25 @@ function ItemPage({route}: ItemPageParams) {
             </View>
             <Text style={styles.itemPriceText}>${thing.price}</Text>
             {!route.params.isRecipe && lineChartData.labels.length ? (
-              <Card containerStyle={styles.chartCard} title="Price History">
-                <LineChart
-                  style={styles.priceChart}
-                  width={260}
-                  height={250}
-                  data={lineChartData}
-                  // xAxisLabel="Time"
-                  // yAxisLabel="Price"
-                  yAxisInterval={1.00}
-                  withVerticalLabels={false}
-                  chartConfig={{
-                    backgroundColor: '#0073FE',
-                    backgroundGradientFrom: '#0073FE',
-                    backgroundGradientTo: '#fe6100',
-                    decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    // labelColor: (opacity = 1) =>
-                    //   `rgba(255, 255, 255, ${opacity})`,
-                    style: {
-                      borderRadius: 16,
-                    },
-                    propsForDots: {
-                      r: '2',
-                      strokeWidth: '1',
-                      stroke: '#4400fe',
-                    },
-                  }}
-                />
-              </Card>
+              <PriceChart lineChartData={lineChartData} />
             ) : null}
 
-            <Text style={styles.reviewText}>Reviews</Text>
-            <View style={styles.reviewBox} />
+            <View
+              style={[
+                styles.reviewBox,
+                {
+                  width: 300,
+                  height: 300,
+                },
+              ]}>
+              <View
+                style={[gs.flexRow, gs.width100, {backgroundColor: 'yellow'}]}>
+                <Text style={styles.reviewText}>Reviews </Text>
+                <Text style={[{textAlign: 'right', alignSelf: 'stretch'}]}>
+                  4.0/5
+                </Text>
+              </View>
+            </View>
 
             <TouchableOpacity style={styles.bottomButtons} onPress={getLists}>
               <Text style={styles.addButtonText}> Add to Wishlist</Text>
@@ -262,13 +246,11 @@ const styles = StyleSheet.create({
   backButtonView: {
     justifyContent: 'center',
     alignContent: 'center',
-    position:'absolute',
-    top:0,
-    left:0
+    position: 'absolute',
+    top: 10,
+    left: 5,
   },
-  chartCard: {
-    width: '72%'
-  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -277,7 +259,6 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    borderWidth: 2,
     ...gs.radius10,
     ...gs.margin20,
     ...gs.shadow,
@@ -286,13 +267,13 @@ const styles = StyleSheet.create({
   itemImage: {
     width: 300,
     height: 300,
-    borderRadius: 10,
+    ...gs.radius10,
   },
 
   itemNameText: {
     alignSelf: 'stretch',
     textAlign: 'center',
-    marginTop:18,
+    marginTop: 18,
   },
 
   itemPriceText: {
@@ -325,24 +306,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  priceChart: {
-    height: 250,
-    width: 350,
-  },
-
   reviewText: {
     fontSize: 24,
-    color: 'green',
-    marginTop: 50,
+    width: '60%',
+    ...gs.blue,
+    ...gs.header,
   },
 
   reviewBox: {
-    borderWidth: 1,
-    borderColor: 'green',
-    width: 300,
-    height: 200,
-    marginTop: 20,
-    marginBottom: 30,
+    marginHorizontal: 20,
+    ...gs.bgWhite,
+    ...gs.margin20,
+    ...gs.radius10,
+    ...gs.shadow,
   },
 
   wishlistSelect: {
