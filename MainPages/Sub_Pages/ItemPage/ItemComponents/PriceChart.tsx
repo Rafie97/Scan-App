@@ -1,18 +1,21 @@
 import React from 'react';
+import {View, Text} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 import {Card} from 'react-native-elements';
 import gs from '../../../../Styles/globalStyles';
+import {LineChartDataType} from '../ItemPage';
 
 type ChartProps = {
-  lineChartData: any;
+  lineChartData: LineChartDataType;
 };
 
 export default function PriceChart(props: ChartProps) {
   return (
-    <Card containerStyle={styles.chartCard} title="Price History">
+    <View style={styles.chartCard}>
+      <Text style={gs.subHeader}>Price Chart</Text>
       <LineChart
         style={styles.priceChart}
-        width={260}
+        width={315}
         height={250}
         data={props.lineChartData}
         // xAxisLabel="Time"
@@ -37,17 +40,22 @@ export default function PriceChart(props: ChartProps) {
           },
         }}
       />
-    </Card>
+    </View>
   );
 }
 
 const styles = {
   chartCard: {
-    width: '72%',
+    width: 300,
+    height: 300,
+    overflow: 'hidden' as 'hidden',
+    ...gs.bgWhite,
     ...gs.radius10,
+    ...gs.shadow,
   },
   priceChart: {
-    height: 250,
-    width: 350,
+    height: '100%',
+    width: '100%',
+    marginLeft: -10,
   },
 };

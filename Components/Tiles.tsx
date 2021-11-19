@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Receipt} from '../Models/CartModels/Receipt';
+import gs from '../Styles/globalStyles';
 
 export type PromoTileProps = {
   imageLink: string;
@@ -111,13 +112,15 @@ const FamilyTile = (props: TileProps) => {
           height: 100,
           borderRadius: 10,
           borderColor: '#0073FE',
-          borderWidth: 2,
+          borderWidth: 1,
           marginLeft: 10,
         }}
       />
 
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
-        <Text style={{}}>{props.name}</Text>
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
+        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+          {props.name}
+        </Text>
       </View>
     </View>
   );
@@ -126,7 +129,7 @@ const FamilyTile = (props: TileProps) => {
 type WishlistTileProps = {
   name: string;
 };
-const WishlistTile = (props: WishlistTileProps) => {
+const WishlistTile = (wishlist: WishlistTileProps) => {
   const nav = useNavigation();
   return (
     <TouchableOpacity
@@ -148,21 +151,19 @@ const WishlistTile = (props: WishlistTileProps) => {
           width: 100,
           height: 100,
           borderRadius: 10,
-          borderColor: '#dddddd',
-          borderWidth: 2,
+          borderColor: '#0073FE',
+          borderWidth: 1,
           marginLeft: 10,
         }}
       />
 
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'center'}}>
+      <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
         <Text
           style={{
-            shadowColor: '#000',
-            shadowOpacity: 0.5,
-            shadowRadius: 4,
-            elevation: 10,
+            fontWeight: 'bold',
+            textAlign: 'center',
           }}>
-          {props.name}
+          {wishlist.name}
         </Text>
       </View>
     </TouchableOpacity>
@@ -195,8 +196,8 @@ const ReceiptTile = (props: ReceiptTileProps) => {
           width: 100,
           height: 100,
           borderRadius: 10,
-          borderColor: '#dddddd',
-          borderWidth: 2,
+          borderColor: '#0073fe',
+          borderWidth: 1,
           marginLeft: 10,
         }}
       />
@@ -210,7 +211,7 @@ const ReceiptTile = (props: ReceiptTileProps) => {
           shadowOpacity: 0.5,
           shadowRadius: 4,
         }}>
-        <Text style={{textAlign: 'center', marginTop: 3}}>
+        <Text style={{textAlign: 'center', marginTop: 3, fontWeight: 'bold'}}>
           {props.receipt.storeId}
         </Text>
         <Text style={{textAlign: 'center'}}>{props.receipt.date}</Text>

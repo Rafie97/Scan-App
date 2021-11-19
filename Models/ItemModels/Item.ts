@@ -75,10 +75,12 @@ function convertPriceHistory(firebasePriceHistory: {
 }): Map<string, number> {
   let priceHist = new Map<string, number>();
 
-  Object.entries(firebasePriceHistory).forEach(entry => {
-    const [key, value] = entry;
-    priceHist.set(key, value);
-  });
+  Object.entries(firebasePriceHistory)
+    .reverse()
+    .forEach(entry => {
+      const [key, value] = entry;
+      priceHist.set(key, value);
+    });
 
   return priceHist;
 }

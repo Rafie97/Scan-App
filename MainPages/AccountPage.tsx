@@ -28,7 +28,7 @@ import {Receipt} from '../Models/Receipt';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -421,7 +421,7 @@ export default function AccountPage() {
   }
 
   return (
-    <View style={globalStyles.fullBackground}>
+    <View style={gs.fullBackground}>
       <View style={styles.textView}>
         <Text style={styles.yourWishlistsText}>Your Account</Text>
         <TouchableOpacity
@@ -454,7 +454,7 @@ export default function AccountPage() {
               height: 130,
               borderRadius: 10,
               borderColor: '#0073FE',
-              borderWidth: 2,
+              borderWidth: 1,
               marginHorizontal: 10,
             }}
           />
@@ -507,15 +507,15 @@ export default function AccountPage() {
               style={{
                 alignSelf: 'center',
                 borderRadius: 10,
-                borderWidth: 1,
-                borderColor: '#0073FE',
                 fontSize: 20,
                 textAlign: 'center',
                 height: 60,
                 width: '90%',
                 paddingVertical: 15,
-                color: '#0073FE',
+                color: 'white',
                 fontWeight: 'bold',
+                backgroundColor: '#0073FE',
+                ...gs.shadow,
               }}>
               {editProfile ? 'Save Profile' : 'Edit Profile'}
             </Text>
@@ -525,13 +525,15 @@ export default function AccountPage() {
               style={{
                 alignSelf: 'center',
                 borderRadius: 10,
-                borderWidth: 1,
                 fontSize: 20,
                 textAlign: 'center',
                 height: 60,
                 width: '90%',
                 paddingVertical: 15,
                 fontWeight: 'bold',
+                backgroundColor: '#52cc95',
+                color: 'white',
+                ...gs.shadow,
               }}>
               Payment Info
             </Text>

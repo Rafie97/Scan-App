@@ -19,8 +19,9 @@ import auth from '@react-native-firebase/auth';
 import Item from '../../../Models/ItemModels/Item';
 import gs from '../../../Styles/globalStyles';
 import PriceChart from './ItemComponents/PriceChart';
+import ReviewCard from './ItemComponents/ReviewCard';
 
-type LineChartDataType = {
+export type LineChartDataType = {
   labels: string[];
   datasets: [
     {
@@ -106,16 +107,22 @@ function ItemPage({route}: ItemPageParams) {
     let vals = [];
     let labels = [];
     if (!route.params.isRecipe && thing) {
+      let i = 0;
       thing.priceHistory.forEach((value, key) => {
-        const val = Math.round(value * 100) / 100;
-        const label = Math.floor(parseFloat(key) / 100000) / 10;
-        vals.push(val);
-        labels.push(`${label}`);
+        if (i < 40) {
+          i++;
+          const val = Math.round(value * 100) / 100;
+          const label = Math.floor(parseFloat(key) / 100000) / 10;
+          vals.push(val);
+          labels.push(`${label}`);
+        } else {
+          return;
+        }
       });
 
       const dataObj: LineChartDataType = {
-        labels: labels,
-        datasets: [{data: vals}],
+        labels: labels.reverse(),
+        datasets: [{data: vals.reverse()}],
       };
       setLineChartData(dataObj);
 
@@ -145,22 +152,18 @@ function ItemPage({route}: ItemPageParams) {
               <PriceChart lineChartData={lineChartData} />
             ) : null}
 
-            <View
-              style={[
-                styles.reviewBox,
+            <ReviewCard
+              reviews={[
                 {
-                  width: 300,
-                  height: 300,
+                  reviewer: 'Rafa',
+                  reviewText: 'I love this product! I use it daily',
                 },
-              ]}>
-              <View
-                style={[gs.flexRow, gs.width100, {backgroundColor: 'yellow'}]}>
-                <Text style={styles.reviewText}>Reviews </Text>
-                <Text style={[{textAlign: 'right', alignSelf: 'stretch'}]}>
-                  4.0/5
-                </Text>
-              </View>
-            </View>
+                {
+                  reviewer: 'Neto',
+                  reviewText: 'Please stop screaming',
+                },
+              ]}
+            />
 
             <TouchableOpacity style={styles.bottomButtons} onPress={getLists}>
               <Text style={styles.addButtonText}> Add to Wishlist</Text>
@@ -188,7 +191,7 @@ function ItemPage({route}: ItemPageParams) {
 
             <FlatList
               data={wishlists}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => `${index}`}
               renderItem={({item}) => (
                 <TouchableOpacity
                   style={styles.wishlistSelect}
@@ -267,6 +270,7 @@ const styles = StyleSheet.create({
   itemImage: {
     width: 300,
     height: 300,
+    padding: 10,
     ...gs.radius10,
   },
 
@@ -304,21 +308,6 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-  },
-
-  reviewText: {
-    fontSize: 24,
-    width: '60%',
-    ...gs.blue,
-    ...gs.header,
-  },
-
-  reviewBox: {
-    marginHorizontal: 20,
-    ...gs.bgWhite,
-    ...gs.margin20,
-    ...gs.radius10,
-    ...gs.shadow,
   },
 
   wishlistSelect: {

@@ -16,6 +16,13 @@ const styles = {
     fontSize: 24,
   },
 
+  subHeader: {
+    margin: 20,
+    fontWeight: 'bold' as 'bold',
+    textAlign: 'left' as 'left',
+    fontSize: 20,
+  },
+
   width100: {
     width: '100%',
   },
@@ -44,6 +51,10 @@ const styles = {
     color: '#0073FE',
   },
 
+  flex1: {
+    flex: 1,
+  },
+
   flexColumn: {
     flexDirection: 'column' as 'column',
   },
@@ -65,7 +76,7 @@ const styles = {
   },
 
   shadow: {
-    shadowColor: '#000',
+    shadowColor: '#000' as '#000',
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 10,

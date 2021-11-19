@@ -96,7 +96,7 @@ function EditWishlistPage(props: any) {
       <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
         <View style={styles.wishlistGroupView}>
           <FlatList
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => `${index}`}
             data={listItems}
             renderItem={renderItem}
           />
