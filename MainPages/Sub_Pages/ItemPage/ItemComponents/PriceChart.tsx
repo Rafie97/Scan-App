@@ -50,6 +50,7 @@ const styles = {
     height: 300,
     overflow: 'hidden' as 'hidden',
     ...gs.bgWhite,
+    ...gs.margin20,
     ...gs.radius10,
     ...gs.shadow,
   },

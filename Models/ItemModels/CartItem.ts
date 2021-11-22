@@ -1,7 +1,6 @@
 import Item from './Item';
 
-export type CartItem = {
-  baseItem: Item;
-  quantity: number;
+export interface CartItem extends Item {
+  quantity?: number;
   stock?: number;
-};
+}

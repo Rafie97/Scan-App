@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   exploreRecipesText: {
     fontSize: 18,
     fontWeight: 'bold',
-    ...gs.blue,
+    color: '#4400fe',
   },
 
   promoPageContainer: {

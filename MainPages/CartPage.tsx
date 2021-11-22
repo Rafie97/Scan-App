@@ -11,9 +11,10 @@ import Ticker, {Tick} from 'react-native-ticker';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import gs from '../Styles/globalStyles';
+import {CartItem} from '../Models/ItemModels/CartItem';
 
 function CartPage() {
-  const [cartItems, setCartItems] = React.useState<Item[]>([]);
+  const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const [isScrollEnabled, setScrollEnabled] = React.useState(true);
   const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
   const navigation = useNavigation();
@@ -31,9 +32,9 @@ function CartPage() {
 
     const sub = cartRef.onSnapshot(snap => {
       setCartItems([]);
-      const tempItems: Item[] = [];
+      const tempItems: CartItem[] = [];
       snap.forEach(async doc => {
-        const item = new Item(doc);
+        const item: CartItem = new Item(doc);
         item.quantity = doc.data().quantity;
         tempItems.push(item);
       });
@@ -46,7 +47,7 @@ function CartPage() {
   React.useEffect(() => {
     let tempSum = 0;
     cartItems.forEach(item => {
-      const numPrice = +item.price;
+      const numPrice = +item.price * item.quantity;
       tempSum += numPrice;
     });
     if (tempSum > 0) {

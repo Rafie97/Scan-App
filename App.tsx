@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import AppNavigation from './Navigation/AppNavigation';
 import AuthNavigation from './Navigation/AuthNavigation';
-
-import BigMoney from './app.json';
 import {AuthProvider} from './Auth_Components/AuthContext';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';

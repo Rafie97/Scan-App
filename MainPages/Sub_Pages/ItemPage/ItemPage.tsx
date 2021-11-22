@@ -143,10 +143,11 @@ function ItemPage({route}: ItemPageParams) {
       {!!thing && (
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.bigApple}>
-            <Text style={[gs.header, styles.itemNameText]}>{thing.name}</Text>
             <View style={styles.imageContainer}>
               <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             </View>
+            <Text style={[styles.itemNameText]}>{thing.name}</Text>
+
             <Text style={styles.itemPriceText}>${thing.price}</Text>
             {!route.params.isRecipe && lineChartData.labels.length ? (
               <PriceChart lineChartData={lineChartData} />
@@ -157,10 +158,14 @@ function ItemPage({route}: ItemPageParams) {
                 {
                   reviewer: 'Rafa',
                   reviewText: 'I love this product! I use it daily',
+                  date: '11/25/2021',
+                  rating: 5,
                 },
                 {
                   reviewer: 'Neto',
                   reviewText: 'Please stop screaming',
+                  date: '10/18/2021',
+                  rating: 3,
                 },
               ]}
             />
@@ -277,15 +282,16 @@ const styles = StyleSheet.create({
   itemNameText: {
     alignSelf: 'stretch',
     textAlign: 'center',
-    marginTop: 18,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 
   itemPriceText: {
     fontSize: 35,
-    paddingBottom: 50,
     fontWeight: 'bold',
     alignSelf: 'stretch',
     textAlign: 'center',
+    ...gs.margin20,
   },
 
   modalView: {

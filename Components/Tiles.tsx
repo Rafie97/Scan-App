@@ -41,7 +41,7 @@ const PromoItemTile = (item: PromoTileProps) => {
             height: 35,
             width: 90,
             borderRadius: 20,
-            backgroundColor: '#0073FE',
+            backgroundColor: item.isRecipe ? '#4400fe':'#0073FE',
             justifyContent: 'center',
             marginLeft: 10,
           }}>

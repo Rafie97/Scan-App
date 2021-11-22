@@ -502,7 +502,8 @@ export default function AccountPage() {
               }
               setEditProfile(!editProfile);
             }}
-            style={{marginBottom: 30, marginTop: 20}}>
+            // style={{marginBottom: 30, marginTop: 20}}
+          >
             <Text
               style={{
                 alignSelf: 'center',
@@ -515,7 +516,7 @@ export default function AccountPage() {
                 color: 'white',
                 fontWeight: 'bold',
                 backgroundColor: '#0073FE',
-                ...gs.shadow,
+                ...gs.margin20,
               }}>
               {editProfile ? 'Save Profile' : 'Edit Profile'}
             </Text>
@@ -533,7 +534,6 @@ export default function AccountPage() {
                 fontWeight: 'bold',
                 backgroundColor: '#52cc95',
                 color: 'white',
-                ...gs.shadow,
               }}>
               Payment Info
             </Text>

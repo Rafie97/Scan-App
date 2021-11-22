@@ -31,12 +31,20 @@ const styles = {
     height: '100%',
   },
 
+  width50: {
+    width: '50%',
+  },
+
   aSelfCenter: {
     alignSelf: 'center' as 'center',
   },
 
   aCenter: {
     alignItems: 'center' as 'center',
+  },
+
+  aStretch: {
+    alignSelf: 'stretch' as 'stretch',
   },
 
   bgBlue: {
@@ -69,6 +77,10 @@ const styles = {
 
   margin20: {
     margin: 20,
+  },
+
+  padding20: {
+    padding: 20,
   },
 
   radius10: {
