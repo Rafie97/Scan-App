@@ -14,6 +14,7 @@ import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import gs from '../../Styles/globalStyles';
 
 function EditWishlistPage(props: any) {
   const [listItems, setListItems] = React.useState<Item[]>([]);
@@ -76,9 +77,7 @@ function EditWishlistPage(props: any) {
   );
 
   return (
-    <ImageBackground
-      style={styles.fullBackground}
-      source={require('../../res/grad_3.png')}>
+    <View style={gs.fullBackground}>
       <View style={styles.backButtonView}>
         <TouchableOpacity
           style={{flexDirection: 'row'}}
@@ -90,9 +89,7 @@ function EditWishlistPage(props: any) {
           />
         </TouchableOpacity>
       </View>
-
       <Text style={styles.ListNameText}>{routeListName}</Text>
-
       <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
         <View style={styles.wishlistGroupView}>
           <FlatList
@@ -102,18 +99,13 @@ function EditWishlistPage(props: any) {
           />
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
 export default EditWishlistPage;
 
 const styles = StyleSheet.create({
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
   wishlistGroupView: {
     padding: 30,
     paddingTop: 20,

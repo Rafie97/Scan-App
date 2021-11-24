@@ -14,7 +14,6 @@ export const AuthProvider = ({children}) => {
 
       setPending(false);
     });
-    console.log('=====THIS IS THE USER =====');
     if (currentUser) {
       setPending(false);
     }

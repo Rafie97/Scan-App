@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import Item from '../Models/ItemModels/Item';
 
 export function snapshotItems(callback: (items: Item[]) => void): () => void {
-  const ItemsSnap = firestore()
+  return firestore()
     .collection('stores')
     .doc('HEB')
     .collection('items')
@@ -18,6 +18,4 @@ export function snapshotItems(callback: (items: Item[]) => void): () => void {
       );
       callback(items);
     });
-
-  return ItemsSnap;
 }

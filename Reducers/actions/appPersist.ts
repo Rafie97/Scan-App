@@ -2,17 +2,18 @@ import {snapshotItems} from '../../Connections/ItemsConnection';
 import Item from '../../Models/ItemModels/Item';
 
 //add storeId as param
-export const loadItems = () => {
-  const loadFromDispatch = async (dispatch: any) => {
+export function loadItems() {
+  console.log('LOAD ITEMS HAPPENED');
+  return async (dispatch: any) => {
     snapshotItems((loadedItems: Item[]) => {
-      if (!loadedItems.length) {
+      console.log('loadedItems', loadedItems);
+      if (loadedItems.length) {
+        dispatch({type: 'SET_PRODUCTS', payload: loadedItems});
+        console.log('loadedItems', loadedItems);
+      } else {
         dispatch({type: 'SET_PRODUCTS', payload: []});
         return;
       }
-      dispatch({type: 'SET_PRODUCTS', payload: loadedItems});
-      console.log('loadedItems', loadedItems);
     });
   };
-
-  return loadFromDispatch;
-};
+}

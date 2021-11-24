@@ -11,28 +11,35 @@ import {
 } from 'react-native';
 import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../Models/ItemModels/Item';
-import FamilyTile, {PromoItemTile, PromoTileProps} from '../Components/Tiles';
+import Item from '../../Models/ItemModels/Item';
+import FamilyTile, {
+  PromoItemTile,
+  PromoTileProps,
+} from '../../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
-import {Recipe} from '../Models/ItemModels/Recipe';
-import {mainReducer} from '../Reducers/mainReducer';
-import {StateContext} from '../Navigation/AppNavigation';
-import gs from '../Styles/globalStyles';
+import {Recipe} from '../../Models/ItemModels/Recipe';
+import {mainReducer} from '../../Reducers/mainReducer';
+import {StateContext} from '../../Navigation/AppNavigation';
+import gs from '../../Styles/globalStyles';
+import {SelectorContext} from '../../App';
+import {itemsSelector} from '../../Reducers/selectors';
 
 function PromotionsPage() {
   const [loading, setLoading] = useState(true);
   const [promoItems, setPromoItems] = useState<PromoTileProps[]>([]);
   const [recipes, setRecipes] = useState([]);
+  const useSelector = useContext(SelectorContext);
+  const items = useSelector(itemsSelector);
 
-  const overallState = useContext(StateContext);
+  // const overallState = useContext(StateContext);
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   console.log(overallState);
-  //   setPromoItems(overallState.products);
-  // }, [overallState.products]);
+  useEffect(() => {
+    console.log('ITEMSSSSSSSSSSSS', items);
+    // setPromoItems(overallState.products);
+  }, [items]);
 
   useEffect(() => {
     const hebRef = firestore()
@@ -106,9 +113,13 @@ function PromotionsPage() {
 
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
-          <View style={styles.seeAllView}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Promo', {screen: 'AllItemsPage'})
+            }
+            style={styles.seeAllView}>
             <Text style={styles.seeAllText}>See All</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View>
           <FlatList

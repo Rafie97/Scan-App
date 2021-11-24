@@ -3,10 +3,11 @@ import AccountPage from '../MainPages/AccountPage';
 import CartPage from '../MainPages/CartPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
 import ItemPage from '../MainPages/Sub_Pages/ItemPage/ItemPage';
-import PromotionsPage from '../MainPages/PromotionsPage';
+import PromotionsPage from '../MainPages/Promo/PromotionsPage';
 import ReceiptPage from '../MainPages/Sub_Pages/ReceiptPage';
 import ScanPage from '../MainPages/ScanPage';
 import React from 'react';
+import AllItemsPage from '../MainPages/Promo/AllItemsPage';
 
 const AccountStackNav = createStackNavigator();
 export function AccountStack() {
@@ -28,8 +29,8 @@ const CartStackNav = createStackNavigator();
 export function CartStack() {
   return (
     <CartStackNav.Navigator headerMode="none">
-      <ScanStackNav.Screen name="MainCartPage" component={CartPage} />
-      <ScanStackNav.Screen name="CartItemPage" component={ItemPage} />
+      <CartStackNav.Screen name="MainCartPage" component={CartPage} />
+      <CartStackNav.Screen name="CartItemPage" component={ItemPage} />
     </CartStackNav.Navigator>
   );
 }
@@ -38,8 +39,9 @@ const PromoStackNav = createStackNavigator();
 export function PromoStack() {
   return (
     <PromoStackNav.Navigator headerMode="none">
-      <ScanStackNav.Screen name="MainPromoPage" component={PromotionsPage} />
-      <ScanStackNav.Screen name="PromoItemPage" component={ItemPage} />
+      <PromoStackNav.Screen name="MainPromoPage" component={PromotionsPage} />
+      <PromoStackNav.Screen name="PromoItemPage" component={ItemPage} />
+      <PromoStackNav.Screen name="AllItemsPage" component={AllItemsPage} />
     </PromoStackNav.Navigator>
   );
 }
