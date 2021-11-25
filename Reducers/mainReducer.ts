@@ -34,13 +34,13 @@ export const mainReducer = (state, action) => {
 
 const addToCart = (currCart: CartItem[], currTotal: number, item: CartItem) => {
   let updated = false;
-  currCart = currCart.map(cItem => {
+  currCart = currCart.map(cartItem => {
     //If there is a duplicate item in the cart just update its quantity
-    if (cItem.baseItem.docID === item.baseItem.docID) {
+    if (cartItem.docID === item.docID) {
       updated = true;
-      return {...cItem, quantity: cItem.quantity + 1};
+      return {...cartItem, quantity: cartItem.quantity + 1};
     }
-    return cItem;
+    return cartItem;
   });
   if (!updated) currCart.push(item);
 
@@ -48,5 +48,5 @@ const addToCart = (currCart: CartItem[], currTotal: number, item: CartItem) => {
 };
 
 const addToTotal = (currTotal: number, item: CartItem) => {
-  return currTotal + item.baseItem.price;
+  return currTotal + item.price;
 };

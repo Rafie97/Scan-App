@@ -1,62 +1,24 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  Image,
-  ImageBackground,
   TouchableOpacity,
   FlatList,
   ScrollView,
 } from 'react-native';
-import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
-import Item from '../../Models/ItemModels/Item';
-import FamilyTile, {
-  PromoItemTile,
-  PromoTileProps,
-} from '../../Components/Tiles';
+import {PromoItemTile} from '../../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {Recipe} from '../../Models/ItemModels/Recipe';
-import {mainReducer} from '../../Reducers/mainReducer';
-import {StateContext} from '../../Navigation/AppNavigation';
 import gs from '../../Styles/globalStyles';
-import {SelectorContext} from '../../App';
-import {itemsSelector} from '../../Reducers/selectors';
+import {useStore} from '../../Reducers/store';
 
 function PromotionsPage() {
-  const [loading, setLoading] = useState(true);
-  const [promoItems, setPromoItems] = useState<PromoTileProps[]>([]);
   const [recipes, setRecipes] = useState([]);
-  const useSelector = useContext(SelectorContext);
-  const items = useSelector(itemsSelector);
-
-  // const overallState = useContext(StateContext);
-
+  const store = useStore();
   const navigation = useNavigation();
-
-  useEffect(() => {
-    console.log('ITEMSSSSSSSSSSSS', items);
-    // setPromoItems(overallState.products);
-  }, [items]);
-
-  useEffect(() => {
-    const hebRef = firestore()
-      .collection('stores')
-      .doc('HEB')
-      .collection('items');
-
-    hebRef.onSnapshot(snap => {
-      setPromoItems([]);
-      const newPromoItems: PromoTileProps[] = [];
-      snap.forEach(async doc => {
-        const item = new Item(doc);
-        newPromoItems.push(item);
-      });
-      setPromoItems(newPromoItems);
-    });
-  }, []);
 
   useEffect(() => {
     const hebRef = firestore()
@@ -97,14 +59,7 @@ function PromotionsPage() {
             horizontal={true}
             renderItem={({item}) => {
               return (
-                <PromoItemTile
-                  imageLink={item.imageLink}
-                  name={item.name}
-                  price={item.price}
-                  priceHistory={item.priceHistory}
-                  feeds={item.feeds}
-                  isRecipe={true}
-                />
+                <PromoItemTile feeds={item.feeds} isRecipe={true} {...item} />
               );
             }}
           />
@@ -128,18 +83,10 @@ function PromotionsPage() {
               paddingHorizontal: 20,
             }}
             showsHorizontalScrollIndicator={false}
-            data={promoItems.slice(0, 10)}
+            data={store.products.slice(0, 10)}
             horizontal={true}
             renderItem={({item}) => {
-              return (
-                <PromoItemTile
-                  imageLink={item.imageLink}
-                  name={item.name}
-                  price={item.price}
-                  priceHistory={item.priceHistory}
-                  isRecipe={false}
-                />
-              );
+              return <PromoItemTile isRecipe={false} {...item} />;
             }}
           />
         </View>

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import AppNavigation from './Navigation/AppNavigation';
+import AppNavigation, {NavContext} from './Navigation/AppNavigation';
 import AuthNavigation from './Navigation/AuthNavigation';
 import {AuthProvider} from './Auth_Components/AuthContext';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import config from './hiddenConfig/config';
 import firestore, {firebase} from '@react-native-firebase/firestore';
@@ -13,6 +13,7 @@ import Font5Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Platform} from 'react-native';
+import StoreProvider from './Reducers/store';
 
 MatIcon.loadFont();
 AntIcon.loadFont();
@@ -41,17 +42,19 @@ function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        <OuterNavigator.Navigator headerMode="none">
-          {isSignedIn ? (
-            <OuterNavigator.Screen name="App" component={AppNavigation} />
-          ) : (
-            <OuterNavigator.Screen name="Auth" component={AuthNavigation} />
-          )}
-        </OuterNavigator.Navigator>
-      </NavigationContainer>
-    </AuthProvider>
+    <NavigationContainer>
+      <AuthProvider>
+        <StoreProvider>
+          <OuterNavigator.Navigator headerMode="none">
+            {isSignedIn ? (
+              <OuterNavigator.Screen name="App" component={AppNavigation} />
+            ) : (
+              <OuterNavigator.Screen name="Auth" component={AuthNavigation} />
+            )}
+          </OuterNavigator.Navigator>
+        </StoreProvider>
+      </AuthProvider>
+    </NavigationContainer>
   );
 }
 

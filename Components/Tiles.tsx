@@ -4,34 +4,31 @@ import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Receipt} from '../Models/CartModels/Receipt';
+import Item from '../Models/ItemModels/Item';
 import gs from '../Styles/globalStyles';
 
-export type PromoTileProps = {
-  imageLink: string;
-  name: string;
-  price: string;
-  priceHistory: number[];
+export interface PromoTileProps extends Item {
   feeds?: number;
   isRecipe?: boolean;
-};
+}
 
 //PROMO TILE
 
-const PromoItemTile = (item: PromoTileProps) => {
+const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
   const navigation = useNavigation();
 
   return (
     <View
       style={{
         marginRight: 20,
-        width: item.isRecipe ? 200 : 180,
+        width: isRecipe ? 200 : 180,
       }}>
       <TouchableOpacity
         style={styles.itemBox}
         onPress={() =>
           navigation.navigate('Promo', {
             screen: 'PromoItemPage',
-            params: {itemIDCallback: item, isRecipe: item.isRecipe},
+            params: {itemIDCallback: item, isRecipe: isRecipe},
           })
         }>
         <Image style={styles.itemImage} source={{uri: item.imageLink}} />
@@ -41,7 +38,7 @@ const PromoItemTile = (item: PromoTileProps) => {
             height: 35,
             width: 90,
             borderRadius: 20,
-            backgroundColor: item.isRecipe ? '#4400fe':'#0073FE',
+            backgroundColor: isRecipe ? '#4400fe' : '#0073FE',
             justifyContent: 'center',
             marginLeft: 10,
           }}>
