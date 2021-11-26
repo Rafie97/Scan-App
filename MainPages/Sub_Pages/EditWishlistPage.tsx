@@ -14,9 +14,11 @@ import auth from '@react-native-firebase/auth';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
 import {useNavigation} from '@react-navigation/core';
+import {useStore} from '../../Reducers/store';
 
 function EditWishlistPage(props: any) {
   const [listItems, setListItems] = React.useState<Item[]>([]);
+  const store = useStore();
   const navigation = useNavigation();
   const routeListName = props.route.params.listNameCallback;
 
@@ -26,22 +28,23 @@ function EditWishlistPage(props: any) {
 
   async function getItems(): Promise<void> {
     const userID = auth().currentUser.uid;
-    const wishRef = firestore()
+    firestore()
       .collection('users')
       .doc(userID)
       .collection('Wishlists')
       .doc(routeListName)
-      .collection('items');
-
-    await wishRef.onSnapshot(snap => {
-      const tempItems: Item[] = [];
-      setListItems([]);
-      snap.forEach(doc => {
-        const item = new Item(doc);
-        tempItems.push(item);
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          let tempItems: Item[] = [];
+          doc.data().items.forEach((id: string) => {
+            tempItems.push(store.items.find(itm => itm.docID === id));
+          });
+          setListItems(tempItems);
+        } else {
+          console.log('No such document!');
+        }
       });
-      setListItems(tempItems);
-    });
   }
 
   function deleteItem(itemID) {

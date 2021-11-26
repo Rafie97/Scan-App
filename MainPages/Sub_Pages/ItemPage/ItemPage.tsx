@@ -85,14 +85,14 @@ function ItemPage({route}: ItemPageParams) {
 
   function addToWishlist(listname) {
     const userID = auth().currentUser.uid;
-    const wishRef = firestore()
+    firestore()
       .collection('users')
       .doc(userID)
       .collection('Wishlists')
       .doc(listname)
-      .collection('items');
-    const item = new Item(thing);
-    wishRef.add(thing);
+      .update({
+        items: firestore.FieldValue.arrayUnion(`${thing.docID}`),
+      });
 
     navigate.navigate('Account', {
       screen: 'EditWishlistPage',
@@ -122,8 +122,6 @@ function ItemPage({route}: ItemPageParams) {
         datasets: [{data: vals.reverse()}],
       };
       setLineChartData(dataObj);
-
-      console.log('LABELS', dataObj.labels);
     }
   }, [route.params.isRecipe, thing]);
 
