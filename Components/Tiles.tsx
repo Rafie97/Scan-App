@@ -5,10 +5,10 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Receipt} from '../Models/CartModels/Receipt';
 import Item from '../Models/ItemModels/Item';
+import {Recipe} from '../Models/ItemModels/Recipe';
 import gs from '../Styles/globalStyles';
 
-export interface PromoTileProps extends Item {
-  feeds?: number;
+export interface PromoTileProps extends Recipe {
   isRecipe?: boolean;
 }
 
@@ -16,12 +16,12 @@ export interface PromoTileProps extends Item {
 
 const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
   const navigation = useNavigation();
-
   return (
     <View
       style={{
-        marginRight: 20,
-        width: isRecipe ? 200 : 180,
+        marginRight: 10,
+        marginBottom: 10,
+        width: isRecipe ? 200 : 160,
       }}>
       <TouchableOpacity
         style={styles.itemBox}
@@ -35,7 +35,7 @@ const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
 
         <View
           style={{
-            height: 35,
+            height: 30,
             width: 90,
             borderRadius: 20,
             backgroundColor: isRecipe ? '#4400fe' : '#0073FE',
@@ -48,7 +48,7 @@ const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
               {
                 fontWeight: 'bold',
                 marginVertical: 0,
-                fontSize: 16,
+                fontSize: 20,
                 textAlign: 'center',
                 color: 'white',
               },
@@ -78,12 +78,12 @@ const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
   );
 };
 
-type TileProps = {
+type FamilyTileProps = {
   imageLink?: string;
   name: string;
 };
 
-const FamilyTile = (props: TileProps) => {
+const FamilyTile = (props: FamilyTileProps) => {
   const [sauce, setSauce] = React.useState();
 
   React.useEffect(() => {
@@ -133,7 +133,7 @@ const WishlistTile = (wishlist: WishlistTileProps) => {
       onPress={() => {
         nav.navigate('Account', {
           screen: 'EditWishlistPage',
-          params: {listNameCallback: props.name},
+          params: {listNameCallback: wishlist.name},
         });
       }}
       style={{
@@ -225,20 +225,14 @@ export default FamilyTile;
 const styles = StyleSheet.create({
   itemBox: {
     borderColor: 'black',
-    backgroundColor: 'white',
-    elevation: 5,
-    borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
+    ...gs.bgWhite,
+    ...gs.radius10,
+    ...gs.shadow,
   },
 
   itemTitleText: {
     marginVertical: 5,
-    fontSize: 20,
+    fontSize: 18,
   },
 
   itemImage: {
@@ -247,8 +241,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 2,
     top: 0,
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     resizeMode: 'contain',
     alignSelf: 'center',
   },

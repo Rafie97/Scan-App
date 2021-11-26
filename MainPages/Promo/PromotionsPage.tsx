@@ -16,35 +16,14 @@ import gs from '../../Styles/globalStyles';
 import {useStore} from '../../Reducers/store';
 
 function PromotionsPage() {
-  const [recipes, setRecipes] = useState([]);
   const store = useStore();
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const hebRef = firestore()
-      .collection('stores')
-      .doc('HEB')
-      .collection('recipes');
-
-    hebRef.onSnapshot(snap => {
-      setRecipes([]);
-      const newRecipes = [];
-      snap.forEach(async doc => {
-        const item = {
-          ...doc.data(),
-        } as Recipe;
-        newRecipes.push(item);
-      });
-      setRecipes(newRecipes);
-    });
-  }, []);
-
   return (
     <View style={gs.fullBackground}>
       <ScrollView
         style={[styles.promoPageContainer, gs.height100, gs.width100]}>
         <Text style={gs.header}>Today's Best Deals</Text>
-        <Text style={[styles.exploreRecipesText, gs.margin20]}>
+        <Text style={[styles.exploreRecipesText]}>
           Explore our take-and-make recipes
         </Text>
 
@@ -55,7 +34,7 @@ function PromotionsPage() {
               paddingHorizontal: 20,
             }}
             showsHorizontalScrollIndicator={false}
-            data={recipes}
+            data={store.recipes}
             horizontal={true}
             renderItem={({item}) => {
               return (
@@ -83,7 +62,7 @@ function PromotionsPage() {
               paddingHorizontal: 20,
             }}
             showsHorizontalScrollIndicator={false}
-            data={store.products.slice(0, 10)}
+            data={store.items.slice(0, 10)}
             horizontal={true}
             renderItem={({item}) => {
               return <PromoItemTile isRecipe={false} {...item} />;
@@ -103,15 +82,15 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 20,
-    marginBottom: 10,
     ...gs.blue,
+    ...gs.margin20,
   },
 
   exploreRecipesText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#4400fe',
+    ...gs.margin20,
   },
 
   promoPageContainer: {
@@ -123,11 +102,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#0073FE',
     width: 80,
-    marginRight: 10,
+    height: 35,
+    margin: 10,
+    ...gs.aSelfCenter,
     ...gs.jCenter,
   },
   seeAllText: {
-    alignSelf: 'stretch',
+    ...gs.aStretch,
     ...gs.blue,
     ...gs.jCenter,
     ...gs.taCenter,

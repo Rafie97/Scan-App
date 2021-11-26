@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Card} from 'react-native-elements';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {
   Image,
@@ -10,11 +9,9 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import {LineChart} from 'react-native-chart-kit';
 import auth from '@react-native-firebase/auth';
 import Item from '../../../Models/ItemModels/Item';
 import gs from '../../../Styles/globalStyles';
@@ -239,13 +236,13 @@ const styles = StyleSheet.create({
   },
   bottomButtons: {
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 10,
     width: 200,
     height: 60,
     backgroundColor: '#0073FE',
     justifyContent: 'center',
     borderRadius: 10,
-    elevation: 5,
+    ...gs.shadow,
   },
 
   backButton: {

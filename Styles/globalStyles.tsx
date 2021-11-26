@@ -47,6 +47,10 @@ const styles = {
     alignSelf: 'stretch' as 'stretch',
   },
 
+  bold: {
+    fontWeight: 'bold' as 'bold',
+  },
+
   bgBlue: {
     backgroundColor: '#0073FE',
   },

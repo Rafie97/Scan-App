@@ -13,13 +13,12 @@ import {
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 import ItemBubble from './ItemBubble';
 
 const {width} = Dimensions.get('window');
 
 function SwipeableItem(props) {
-  // const [scrollViewEnabled, setScrollEnabled] = React.useState(true);
   const position = React.useRef(new Animated.ValueXY()).current;
 
   const gestureDelay = 10;
@@ -88,26 +87,26 @@ function SwipeableItem(props) {
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        position: 'relative',
       }}>
       <View
         style={{
-          ...globalStyles.aSelfCenter,
+          // ...gs.aSelfCenter,
           position: 'absolute',
           right: 5,
-          bottom: 20,
+          bottom: 10,
         }}>
         <TouchableOpacity onPress={() => props.deleteItem(props.item.docID)}>
           <Animated.View
             style={{
               backgroundColor:
                 //@ts-ignore
-                position.x < -15 ? 'rgba(217, 63, 18, 0.5)' : '#D93F12', //'#D93F12'
+                position.x < -15 ? 'rgba(217, 63, 18, 0.5)' : '#D93F12', //red
               width: 50,
-              height: 60,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 10,
-              elevation: 10,
+              height: 80,
+              ...gs.aCenter,
+              ...gs.jCenter,
+              ...gs.radius10,
             }}>
             <EvilIcons name="trash" size={30} color="black" />
           </Animated.View>

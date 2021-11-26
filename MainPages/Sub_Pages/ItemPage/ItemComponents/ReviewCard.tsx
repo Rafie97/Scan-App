@@ -82,8 +82,8 @@ const styles = {
   reviewsBody: {},
 
   review: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#e6e6e6',
+    borderTopWidth: 1,
+    borderTopColor: '#e6e6e6',
     ...gs.flexColumn,
     ...gs.padding20,
     ...gs.radius10,

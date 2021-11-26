@@ -20,10 +20,6 @@ function CartPage() {
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    console.log('cart side', isScrollEnabled);
-  }, [isScrollEnabled]);
-
-  React.useEffect(() => {
     const userID = auth().currentUser.uid;
     const cartRef = firestore()
       .collection('users')
@@ -116,7 +112,12 @@ function CartPage() {
             <Text style={{color: 'white'}}>Total Balance</Text>
           </View>
           <TouchableOpacity
-            style={{width: '200%', height: '100%', justifyContent: 'center'}}>
+            style={{
+              width: '200%',
+              height: '100%',
+              justifyContent: 'center',
+              marginRight: -10,
+            }}>
             <View
               style={{
                 width: 115,
@@ -132,7 +133,7 @@ function CartPage() {
                   fontWeight: 'bold',
                   textAlign: 'center',
                 }}>
-                Check Out
+                Checkout
               </Text>
             </View>
           </TouchableOpacity>
@@ -169,7 +170,7 @@ function CartPage() {
         }}>
         <View
           style={{
-            height: '60%',
+            height: '65%',
             width: '100%',
             flexDirection: 'column',
           }}>
@@ -197,7 +198,9 @@ function CartPage() {
               width: '100%',
             }}>
             <Text style={styles.totalTitles}>{'  '}Total</Text>
-            <Text style={styles.totalNumbersText}>${cartSum[2]}</Text>
+            <Text style={[styles.totalNumbersText, gs.bold]}>
+              ${cartSum[2]}
+            </Text>
           </View>
         </View>
 
@@ -205,7 +208,6 @@ function CartPage() {
           style={{
             width: '100%',
             height: '30%',
-            // backgroundColor: 'purple',
           }}>
           <TouchableOpacity
             style={styles.checkOutButton}
@@ -219,7 +221,7 @@ function CartPage() {
                 fontWeight: 'bold',
                 color: 'white',
               }}>
-              Check out
+              Checkout
             </Text>
           </TouchableOpacity>
         </View>

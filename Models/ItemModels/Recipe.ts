@@ -1,8 +1,5 @@
-export type Recipe = {
-  name: string;
-  price: number;
-  priceHistory: number[];
-  category: string;
-  imageLink: string;
+import Item from './Item';
+export interface Recipe extends Item {
+  category?: string;
   feeds?: number;
-};
+}

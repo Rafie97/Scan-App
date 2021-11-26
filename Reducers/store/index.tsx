@@ -3,7 +3,8 @@ import {mainReducer, StateType} from '../mainReducer';
 
 const initialState: StateType = {
   cart: [],
-  products: [],
+  items: [],
+  recipes: [],
   total: 0,
   user: '',
 };

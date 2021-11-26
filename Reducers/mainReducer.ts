@@ -1,20 +1,27 @@
 import {NavigationProp} from '@react-navigation/native';
 import {CartItem} from '../Models/ItemModels/CartItem';
 import Item from '../Models/ItemModels/Item';
+import {Recipe} from '../Models/ItemModels/Recipe';
 
 export type StateType = {
   cart: CartItem[];
-  products: Item[];
+  items: Item[];
+  recipes: Recipe[];
   total: number;
   user: string;
 };
 
 export const mainReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_PRODUCTS':
+    case 'SET_ITEMS':
       return {
         ...state,
-        products: action.payload,
+        items: action.payload,
+      };
+    case 'SET_RECIPES':
+      return {
+        ...state,
+        recipes: action.payload,
       };
     case 'SET_USER':
       return {

@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-  ImageBackground,
   StyleSheet,
   View,
   Text,
@@ -8,20 +7,18 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Grid from 'react-native-grid-component';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
+import {useNavigation} from '@react-navigation/core';
 
 function EditWishlistPage(props: any) {
   const [listItems, setListItems] = React.useState<Item[]>([]);
-
+  const navigation = useNavigation();
   const routeListName = props.route.params.listNameCallback;
-
-  const {navigate} = props.navigation;
 
   React.useEffect(() => {
     getItems();
@@ -72,7 +69,7 @@ function EditWishlistPage(props: any) {
       item={item}
       deleteItem={deleteItem}
       sourcePage="Account"
-      navigation={props.navigation}
+      navigation={navigation}
     />
   );
 
@@ -81,7 +78,7 @@ function EditWishlistPage(props: any) {
       <View style={styles.backButtonView}>
         <TouchableOpacity
           style={{flexDirection: 'row'}}
-          onPress={() => navigate('AccountPage')}>
+          onPress={() => navigation.navigate('AccountPage')}>
           <Ionicon
             name="arrow-back-circle-outline"
             size={50}
