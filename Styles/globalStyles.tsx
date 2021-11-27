@@ -54,7 +54,9 @@ const styles = {
   bgBlue: {
     backgroundColor: '#0073FE',
   },
-
+  bgPurple: {
+    backgroundColor: '#4400fe',
+  },
   bgWhite: {
     backgroundColor: '#fff',
   },
@@ -87,6 +89,10 @@ const styles = {
     padding: 20,
   },
 
+  pAbsolute: {
+    position: 'absolute' as 'absolute',
+  },
+
   radius10: {
     borderRadius: 10,
   },
@@ -100,6 +106,10 @@ const styles = {
 
   taCenter: {
     textAlign: 'center' as 'center',
+  },
+
+  white: {
+    color: '#fff',
   },
 };
 

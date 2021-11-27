@@ -17,6 +17,7 @@ import Item from '../../../Models/ItemModels/Item';
 import gs from '../../../Styles/globalStyles';
 import PriceChart from './ItemComponents/PriceChart';
 import ReviewCard from './ItemComponents/ReviewCard';
+import WishlistModal from './ItemComponents/WishlistModal';
 
 export type LineChartDataType = {
   labels: string[];
@@ -37,19 +38,15 @@ type ItemPageParams = {
 };
 
 function ItemPage({route}: ItemPageParams) {
-  const [thing, setThing] = useState<Item>();
+  const thing = route.params.itemIDCallback;
   const [wishlistModal, setWishlistModal] = useState(false);
-  const [wishlists, setWishlists] = useState([]);
+  const [wishlists, setWishlists] = useState<string[]>([]);
   const [lineChartData, setLineChartData] = useState<LineChartDataType>({
     labels: [],
     datasets: [{data: []}],
   });
 
   const navigate = useNavigation();
-
-  React.useEffect(() => {
-    setThing(route.params.itemIDCallback);
-  }, [route.params.itemIDCallback]);
 
   async function getLists() {
     //Retrieve names of wishlists
@@ -81,23 +78,6 @@ function ItemPage({route}: ItemPageParams) {
     item.quantity = 1;
     cartRef.add(item);
     navigate.navigate('Cart');
-  }
-
-  function addToWishlist(listname) {
-    const userID = auth().currentUser.uid;
-    firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Wishlists')
-      .doc(listname)
-      .update({
-        items: firestore.FieldValue.arrayUnion(`${thing.docID}`),
-      });
-
-    navigate.navigate('Account', {
-      screen: 'EditWishlistPage',
-      params: {listNameCallback: listname},
-    });
   }
 
   useEffect(() => {
@@ -177,43 +157,12 @@ function ItemPage({route}: ItemPageParams) {
           </View>
         </ScrollView>
       )}
-
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <WishlistModal
+        itemID={thing.docID}
         visible={wishlistModal}
-        onRequestClose={() => setWishlistModal(false)}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              Which wishlist would you like to add it to?
-            </Text>
-
-            <FlatList
-              data={wishlists}
-              keyExtractor={(item, index) => `${index}`}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  style={styles.wishlistSelect}
-                  onPress={() => addToWishlist(item)}>
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-
-            <TouchableOpacity
-              style={{
-                width: 80,
-                height: 40,
-                borderWidth: 1,
-                justifyContent: 'center',
-              }}
-              onPress={() => setWishlistModal(false)}>
-              <Text>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+        setVisible={setWishlistModal}
+        wishlists={wishlists}
+      />
     </View>
   );
 }
@@ -254,13 +203,6 @@ const styles = StyleSheet.create({
     left: 5,
   },
 
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-
   imageContainer: {
     ...gs.radius10,
     ...gs.margin20,
@@ -287,37 +229,5 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     textAlign: 'center',
     ...gs.margin20,
-  },
-
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    height: 350,
-  },
-
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-
-  wishlistSelect: {
-    backgroundColor: '#5cbcc9',
-    padding: 0,
-    marginTop: 20,
-    height: 40,
-    width: 200,
-    textAlign: 'center',
-    justifyContent: 'center',
   },
 });

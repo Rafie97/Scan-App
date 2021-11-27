@@ -24,7 +24,7 @@ function EditWishlistPage(props: any) {
 
   React.useEffect(() => {
     getItems();
-  }, []);
+  });
 
   async function getItems(): Promise<void> {
     const userID = auth().currentUser.uid;
@@ -49,21 +49,16 @@ function EditWishlistPage(props: any) {
 
   function deleteItem(itemID) {
     const userID = auth().currentUser.uid;
-    const cartRef = firestore()
+    firestore()
       .collection('users')
       .doc(userID)
       .collection('Wishlists')
       .doc(routeListName)
-      .collection('items');
-
-    cartRef
-      .doc(itemID)
-      .delete()
-      .then(() => {
-        console.log('Successfully deleted from wishlist');
+      .update({
+        items: firestore.FieldValue.arrayRemove(itemID),
       })
-      .catch(err => {
-        console.log('Error removing from list: ', err);
+      .then(() => {
+        getItems();
       });
   }
 
@@ -80,87 +75,46 @@ function EditWishlistPage(props: any) {
     <View style={gs.fullBackground}>
       <View style={styles.backButtonView}>
         <TouchableOpacity
-          style={{flexDirection: 'row'}}
-          onPress={() => navigation.navigate('AccountPage')}>
-          <Ionicon
-            name="arrow-back-circle-outline"
-            size={50}
-            style={{marginLeft: 10, marginTop: 5}}
-          />
+          style={gs.flexRow}
+          onPress={() =>
+            navigation.navigate('Account', {screen: 'AccountPage'})
+          }>
+          <Ionicon name="arrow-back-circle-outline" size={45} />
         </TouchableOpacity>
       </View>
-      <Text style={styles.ListNameText}>{routeListName}</Text>
-      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-        <View style={styles.wishlistGroupView}>
-          <FlatList
-            keyExtractor={(item, index) => `${index}`}
-            data={listItems}
-            renderItem={renderItem}
-          />
-        </View>
-      </View>
+      <Text style={styles.listNameText}>{routeListName}</Text>
+      <FlatList
+        keyExtractor={(item, index) => `${index}`}
+        data={listItems}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContainer}
+        style={gs.width100}
+      />
     </View>
   );
 }
 
 export default EditWishlistPage;
 
-const styles = StyleSheet.create({
-  wishlistGroupView: {
-    padding: 30,
-    paddingTop: 20,
-  },
-  wishlistButton: {
-    opacity: 100,
-    marginStart: 20,
-    marginEnd: 20,
-    marginBottom: 20,
-  },
-  backButton: {
-    width: 20,
-    flex: 1,
-  },
+const styles = {
   backButtonView: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    width: 150,
-    alignSelf: 'flex-start',
+    top: 10,
+    left: 5,
+    ...gs.aCenter,
+    ...gs.jCenter,
+    ...gs.pAbsolute,
   },
-  gridContainer: {
-    flex: 1,
+  listNameText: {
+    fontSize: 24,
+    ...gs.aStretch,
+    ...gs.bold,
+    ...gs.margin20,
+    ...gs.taCenter,
   },
-  ListNameText: {
-    fontSize: 40,
-    textAlign: 'center',
-    paddingTop: 60,
+  listContainer: {
+    paddingTop: 5,
+    marginBottom: 10,
+    ...gs.aCenter,
+    ...gs.height100,
   },
-  itemBubble: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderRadius: 20,
-    flexDirection: 'row',
-    width: 300,
-    height: 60,
-    marginTop: 20,
-  },
-  itemImage: {
-    alignSelf: 'center',
-    width: 45,
-    height: 45,
-    marginLeft: 10,
-    marginRight: 0,
-    borderRadius: 10,
-    borderWidth: 10,
-  },
-  itemLabel: {
-    alignSelf: 'center',
-    marginLeft: 15,
-    fontSize: 16,
-  },
-  itemPrice: {
-    alignSelf: 'center',
-    textAlign: 'right',
-    marginLeft: 'auto',
-    marginRight: 10,
-  },
-});
+};

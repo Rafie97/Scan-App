@@ -141,13 +141,8 @@ function CartPage() {
       </View>
 
       <FlatList
-        contentContainerStyle={{
-          paddingTop: 5,
-          marginBottom: 10,
-          ...gs.aCenter,
-          ...gs.height100,
-        }}
-        style={styles.flatContainer}
+        contentContainerStyle={styles.listContainer}
+        style={gs.width100}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <SwipeableItem
@@ -250,26 +245,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 
-  flatContainer: {
-    width: '100%',
+  checkOutButton: {
+    width: '50%',
+    borderRadius: 40,
+    ...gs.aSelfCenter,
+    ...gs.bgBlue,
+    ...gs.shadow,
   },
 
-  checkOutButton: {
-    alignSelf: 'center',
-    width: '50%',
-    backgroundColor: '#0073FE',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
-    padding: 15,
-    elevation: 20,
-    // borderWidth: 2,
-    borderRadius: 40,
-    // borderColor: 'white',
+  listContainer: {
+    paddingTop: 5,
+    marginBottom: 10,
+    ...gs.aCenter,
+    ...gs.height100,
   },
 
   totalTitles: {
