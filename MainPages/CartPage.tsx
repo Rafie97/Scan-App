@@ -246,8 +246,10 @@ const styles = StyleSheet.create({
   },
 
   checkOutButton: {
-    width: '50%',
+    width: '40%',
+    height: 50,
     borderRadius: 40,
+    ...gs.jCenter,
     ...gs.aSelfCenter,
     ...gs.bgBlue,
     ...gs.shadow,

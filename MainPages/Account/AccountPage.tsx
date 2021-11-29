@@ -12,23 +12,21 @@ import {
   AsyncStorage,
 } from 'react-native';
 
-import DropDownPicker from 'react-native-dropdown-picker';
-
 require('react-native-linear-gradient').default;
-import FamilyTile, {ReceiptTile, WishlistTile} from '../Components/Tiles';
 import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import {TextInput} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import SelectableItem from '../Components/SelectableItem';
+import SelectableItem from '../../Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
-import {Receipt} from '../Models/Receipt';
+import {Receipt} from '../../Models/CartModels/Receipt';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons';
-import gs from '../Styles/globalStyles';
+import gs from '../../Styles/globalStyles';
+import BottomTabsCard from './AccountComponents/BottomTabsCard';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -286,140 +284,6 @@ export default function AccountPage() {
     return selectedNames.includes(name);
   }
 
-  function BottomBarContent() {
-    const [selected, setSelected] = React.useState('');
-    const [dropdownOpen, setDropdownOpen] = React.useState(false);
-    if (currentBottomTabIndex === 0) {
-      return (
-        <View>
-          {contactsLoading ? (
-            <View
-              style={{
-                backgroundColor: '#0073FE',
-                borderWidth: 1,
-                height: 30,
-                width: 100,
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: 10,
-              }}>
-              <Text style={{color: 'white'}}>Loading...</Text>
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={{
-                height: 30,
-                width: '40%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 20,
-              }}
-              onPress={() => setContactModal(true)}>
-              <Text style={{color: '#0073FE', fontSize: 18}}>
-                <FontAwe name="plus-square" size={18} color="#0073FE" /> Add
-                Family
-              </Text>
-            </TouchableOpacity>
-          )}
-          {selectedNames.length > 0 ? (
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              data={selectedNames}
-              horizontal={true}
-              renderItem={({item}) => <FamilyTile name={item} />}
-            />
-          ) : (
-            <View
-              style={{
-                width: 415,
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: 20,
-
-                  paddingTop: 40,
-                  height: 130,
-                }}>
-                There is no Family to show
-              </Text>
-            </View>
-          )}
-        </View>
-      );
-    }
-
-    if (currentBottomTabIndex === 1) {
-      return (
-        <View>
-          <TouchableOpacity
-            style={{
-              height: 30,
-              width: '40%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 20,
-            }}>
-            <Text style={{color: '#0073FE', fontSize: 18}}>
-              <FontAwe name="plus-square" size={18} color="#0073FE" /> Add
-              Wishlist
-            </Text>
-          </TouchableOpacity>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={wishlists}
-            horizontal={true}
-            renderItem={({item}) => <WishlistTile name={item} />}
-          />
-        </View>
-      );
-    }
-
-    if (currentBottomTabIndex === 2 && receipts.length > 0) {
-      return (
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 30,
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 20,
-              marginLeft: 10,
-            }}>
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Text style={{fontSize: 16}}>Sort: </Text>
-              <DropDownPicker
-                items={[
-                  {label: 'Date', value: 'date'},
-                  {label: 'Store Name', value: 'store'},
-                ]}
-                open={dropdownOpen}
-                setOpen={op => setDropdownOpen(op)}
-                value={selected}
-                setValue={setSelected}
-                style={{height: 35}}
-                containerStyle={{width: 160}}
-              />
-            </View>
-          </View>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={receipts}
-            horizontal={true}
-            renderItem={({item}) => <ReceiptTile receipt={item} />}
-          />
-        </View>
-      );
-    }
-  }
-
   return (
     <View style={gs.fullBackground}>
       <View style={styles.textView}>
@@ -427,8 +291,10 @@ export default function AccountPage() {
         <TouchableOpacity
           style={{
             marginRight: 20,
+            height: 40,
           }}
           onPress={() => signOut()}>
+          <Ion name="md-exit-outline" size={24} color="#0073FE" />
           <Text
             style={{
               color: '#0073FE',
@@ -438,8 +304,6 @@ export default function AccountPage() {
               paddingVertical: 5,
               alignSelf: 'stretch',
             }}>
-            <Ion name="md-exit-outline" size={24} color="#0073FE" />
-            {'  '}
             Sign out
           </Text>
         </TouchableOpacity>
@@ -448,7 +312,7 @@ export default function AccountPage() {
       <View style={{flexDirection: 'column', width: '100%'}}>
         <View style={styles.personalInfoCard}>
           <Image
-            source={require('../res/default_profile.jpg')}
+            source={require('../../res/default_profile.jpg')}
             style={{
               width: 130,
               height: 130,
@@ -599,7 +463,14 @@ export default function AccountPage() {
             width: '100%',
             padding: 20,
           }}>
-          {BottomBarContent()}
+          <BottomTabsCard
+            currentBottomTabIndex={currentBottomTabIndex}
+            contactsLoading={contactsLoading}
+            setContactModal={setContactModal}
+            selectedNames={selectedNames}
+            wishlists={wishlists}
+            receipts={receipts}
+          />
         </View>
       </View>
 

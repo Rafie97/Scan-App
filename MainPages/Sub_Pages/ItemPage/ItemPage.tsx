@@ -117,7 +117,7 @@ function ItemPage({route}: ItemPageParams) {
 
       {!!thing && (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.bigApple}>
+          <View style={styles.innerScroll}>
             <View style={styles.imageContainer}>
               <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
             </View>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 
-  bigApple: {
+  innerScroll: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

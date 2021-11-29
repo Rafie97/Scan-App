@@ -1,5 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import AccountPage from '../MainPages/AccountPage';
+import AccountPage from '../MainPages/Account/AccountPage';
 import CartPage from '../MainPages/CartPage';
 import EditWishlistPage from '../MainPages/Sub_Pages/EditWishlistPage';
 import ItemPage from '../MainPages/Sub_Pages/ItemPage/ItemPage';

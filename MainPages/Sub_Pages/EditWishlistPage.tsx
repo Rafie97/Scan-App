@@ -24,7 +24,7 @@ function EditWishlistPage(props: any) {
 
   React.useEffect(() => {
     getItems();
-  });
+  }, []);
 
   async function getItems(): Promise<void> {
     const userID = auth().currentUser.uid;
@@ -40,7 +40,11 @@ function EditWishlistPage(props: any) {
           doc.data().items.forEach((id: string) => {
             tempItems.push(store.items.find(itm => itm.docID === id));
           });
-          setListItems(tempItems);
+          setListItems(
+            tempItems.map(itm => {
+              return {...itm, quantity: 1};
+            }),
+          );
         } else {
           console.log('No such document!');
         }

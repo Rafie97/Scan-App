@@ -15,11 +15,13 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import gs from '../Styles/globalStyles';
 import ItemBubble from './ItemBubble';
+import {useNavigation} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
 function SwipeableItem(props) {
   const position = React.useRef(new Animated.ValueXY()).current;
+  const navigation = useNavigation();
 
   const gestureDelay = 10;
   const panResponder = React.useRef(
@@ -58,7 +60,7 @@ function SwipeableItem(props) {
   ).current;
 
   function navToItem() {
-    props.navigation.navigate(props.sourcePage, {
+    navigation.navigate(props.sourcePage, {
       screen: props.sourcePage + 'ItemPage',
       params: {itemIDCallback: props.item},
     });
