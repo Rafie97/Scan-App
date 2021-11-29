@@ -1,5 +1,5 @@
 import React from 'react';
-import {Circle, Line, G} from 'react-native-svg';
+import {Line, G} from 'react-native-svg';
 
 export default function Wall({start, end, scale = 1, wallData}) {
   const shiftedStartX = start.x - wallData.mapSize.width / 2;
@@ -23,26 +23,8 @@ export default function Wall({start, end, scale = 1, wallData}) {
         y1={newStartY}
         x2={newEndX}
         y2={newEndY}
-        stroke="black"
+        stroke="#999"
         strokeWidth={2}
-      />
-
-      <Circle
-        cx={newStartX}
-        cy={newStartY}
-        r={2}
-        stroke="white"
-        strokeWidth={1}
-        fill="#283d6d"
-      />
-
-      <Circle
-        cx={newEndX}
-        cy={newEndY}
-        r={2}
-        stroke="white"
-        strokeWidth={1}
-        fill="#283d6d"
       />
     </G>
   );

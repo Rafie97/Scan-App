@@ -1,10 +1,13 @@
 import React, {useContext} from 'react';
 import {TouchableOpacity, View, Text} from 'react-native';
 import {NavContext} from '../../../Navigation/AppNavigation';
+import {useStore} from '../../../Reducers/store';
 import gs from '../../../Styles/globalStyles';
 
-export default function ProdBubble({prods, coord, items}) {
+export default function ProdBubble({prods, coord}) {
   const navigation = useContext(NavContext);
+  const store = useStore();
+  const items = store.items;
 
   return (
     <View

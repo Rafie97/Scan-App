@@ -2,17 +2,24 @@ import {NavigationProp} from '@react-navigation/native';
 import {CartItem} from '../Models/ItemModels/CartItem';
 import Item from '../Models/ItemModels/Item';
 import {Recipe} from '../Models/ItemModels/Recipe';
+import Map from '../Models/MapModels/Map';
 
 export type StateType = {
-  cart: CartItem[];
+  user: string;
+  map: Map;
   items: Item[];
   recipes: Recipe[];
+  cart: CartItem[];
   total: number;
-  user: string;
 };
 
 export const mainReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_USER':
+      return {
+        ...state,
+        user: action.payload,
+      };
     case 'SET_ITEMS':
       return {
         ...state,
@@ -23,10 +30,10 @@ export const mainReducer = (state, action) => {
         ...state,
         recipes: action.payload,
       };
-    case 'SET_USER':
+    case 'SET_MAP':
       return {
         ...state,
-        user: action.payload,
+        map: action.payload,
       };
     case 'ADD_TO_CART':
       return {

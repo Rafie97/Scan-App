@@ -7,7 +7,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ion from 'react-native-vector-icons/Ionicons';
 import Ant from 'react-native-vector-icons/AntDesign';
 import {View} from 'react-native';
-import {loadItems} from '../Reducers/actions/appPersist';
+import {loadItems, loadMap} from '../Reducers/actions/appPersist';
 import {
   AccountStack,
   CartStack,
@@ -27,6 +27,7 @@ export default function AppNavigation() {
 
   useEffect(() => {
     loadItems(dispatch);
+    loadMap(dispatch);
   }, []);
 
   return (

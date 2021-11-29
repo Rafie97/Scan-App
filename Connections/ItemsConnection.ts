@@ -9,6 +9,7 @@ export function snapshotItems(callback: (items: Item[]) => void): () => void {
     .collection('items')
     .onSnapshot(async snapshot => {
       if (snapshot.empty) {
+        console.log('Error in snapshotItems');
         callback([]);
       }
       const items = await Promise.all(
@@ -30,6 +31,7 @@ export function snapshotRecipes(
     .collection('recipes')
     .onSnapshot(async snapshot => {
       if (snapshot.empty) {
+        console.log('Error in snapshotRecipes');
         callback([]);
       }
       const recipes = await Promise.all(

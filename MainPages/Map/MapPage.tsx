@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import Svg, {Circle} from 'react-native-svg';
+import Svg from 'react-native-svg';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
-
-import Item from '../../Models/ItemModels/Item';
+import Map from '../../Models/MapModels/Map';
 import gs from '../../Styles/globalStyles';
-import SearchBar from '../../Components/SearchBar';
 
+import SearchBar from '../../Components/SearchBar';
 import Aisle from './MapComponents/Aisle';
 import Wall from './MapComponents/Wall';
 
-import WallType from '../../Models/MapModels/Wall';
+import {useStore} from '../../Reducers/store';
+import {defaultMap} from '../../Connections/MapConnection';
 
 export default MapPage;
 
@@ -21,60 +20,11 @@ function MapPage() {
   const [backSearches, setBackSearches] = useState([]);
   const [markedAisles, setMarkedAisles] = useState([]);
   const [currentBubble, setCurrentBubble] = useState(-1);
-  const [items, setItems] = useState([]);
   const [scaleFactor, setScale] = useState(1);
-  const [wallData, setWallData] = useState<WallType>({
-    aisles: [],
-    mapSize: {
-      height: 300,
-      width: 300,
-    },
-    wallCoordinates: [],
-  });
 
+  const store = useStore();
+  const wallData = store.map;
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const mapRef = firestore()
-      .collection('stores')
-      .doc('HEB')
-      .collection('map-data')
-      .doc('walls');
-
-    mapRef.get().then(snap => {
-      try {
-        if (snap.exists) {
-          setWallData({
-            aisles: snap.data().aisles,
-            mapSize: {
-              height: snap.data().mapSize.height,
-              width: snap.data().mapSize.width,
-            },
-            wallCoordinates: snap.data().wallCoordinates,
-          });
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    setItems([]);
-    const hebRef = firestore()
-      .collection('stores')
-      .doc('HEB')
-      .collection('items');
-
-    hebRef.onSnapshot(snap => {
-      const itemsTemp = [];
-      snap.forEach(async doc => {
-        const item = new Item(doc);
-        itemsTemp.push(item);
-      });
-      setItems(itemsTemp);
-    });
-  }, []);
 
   useEffect(() => {
     const f = (Dimensions.get('window').width - 40) / wallData.mapSize.width;
@@ -97,10 +47,10 @@ function MapPage() {
       await wallData.aisles.forEach((a, index) => {
         if (a.products) {
           a.products.map(p => {
-            const match = items.findIndex(i => {
+            const match = store.items.findIndex(i => {
               return i.docID === p;
             });
-            if (match >= 0 && items[match].name.includes(val)) {
+            if (match >= 0 && store.items[match].name.includes(val)) {
               matches.push(index);
             }
           });

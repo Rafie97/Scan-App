@@ -30,9 +30,11 @@ export default function Aisle({
         cy={newY}
         r={10}
         stroke="black"
-        strokeWidth={1}
+        strokeWidth={0}
         fill={markedAisles.includes(index) ? '#0073FE' : 'rgba(0,0,0,0)'}
       />
+
+      <Circle cx={newX} cy={newY} r={2} fill="#777" />
 
       {currentBubble === index && (
         <ProdBubble
