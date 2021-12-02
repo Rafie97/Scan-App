@@ -6,31 +6,17 @@ import gs from '../../../Styles/globalStyles';
 
 export default function ProdBubble({prods, coord}) {
   const navigation = useContext(NavContext);
-  const store = useStore();
-  const items = store.items;
+  const items = useStore().items;
 
   return (
-    <View
-      style={[
-        gs.flexColumn,
-        gs.bgBlue,
-        gs.radius10,
-        {
-          left: coord.x,
-          top: coord.y,
-          maxWidth: 100,
-        },
-      ]}>
+    <View style={[styles.prodBubbleContainer, {left: coord.x, top: coord.y}]}>
       {prods.map(prod => {
         const match = items.findIndex(item => {
           return item.docID === prod;
         });
-
         return (
           match > -1 && (
             <TouchableOpacity
-              // activeOpacity={0.6}
-              // underlayColor="black"
               onPress={() => {
                 navigation.navigate('Promo', {
                   screen: 'PromoItemPage',
@@ -41,6 +27,7 @@ export default function ProdBubble({prods, coord}) {
               style={{
                 paddingVertical: 7,
                 paddingLeft: 6,
+                borderBottomWidth: 1,
               }}>
               <Text style={{color: 'white'}}>{items[match].name}</Text>
             </TouchableOpacity>
@@ -50,3 +37,13 @@ export default function ProdBubble({prods, coord}) {
     </View>
   );
 }
+
+const styles = {
+  prodBubbleContainer: {
+    maxWidth: 100,
+    ...gs.flexColumn,
+    ...gs.bgBlue,
+    ...gs.radius10,
+    ...gs.shadow,
+  },
+};

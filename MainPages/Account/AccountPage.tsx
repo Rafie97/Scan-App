@@ -26,7 +26,10 @@ import FontAwe from 'react-native-vector-icons/FontAwesome';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
-import BottomTabsCard from './AccountComponents/BottomTabsCard';
+import BottomTabsCard from './AccountComponents/BottomTabs/BottomTabsCard';
+import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
+import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
+import ContactsModal from './AccountComponents/ContactsModal';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -52,15 +55,7 @@ export default function AccountPage() {
   const [typedName, setTypedName] = React.useState<string>();
   const userID = auth().currentUser.uid;
 
-  const navigate = useNavigation();
-
-  //Get User Info
-  React.useEffect(() => {
-    const userRef = firestore()
-      .collection('users')
-      .doc(userID);
-    userRef.get().then(data => setUserName(data.data().name || 'default'));
-  }, []);
+  ////////////////////////////////// GET THE DAMN USER FROM USERCONNECTION
 
   //Get Family
   React.useEffect(() => {
@@ -133,14 +128,6 @@ export default function AccountPage() {
     auth().signOut();
   }
 
-  const renderItem = ({item}) => (
-    <SelectableItem
-      name={item}
-      logItem={logItem}
-      initialState={initialContactState(item)}
-    />
-  );
-
   // ============================== CONTACT METHODS ====================================
 
   function getCount() {
@@ -151,10 +138,6 @@ export default function AccountPage() {
       buttonNegative: 'Cancel',
     }).then(() => {
       console.log('GOT PERMSSIONS');
-      // Contacts.getCount(async function count => {
-      //   await setCountContacts(count + 1)
-      // set DidCount(true)
-      // });
     });
   }
 
@@ -286,7 +269,7 @@ export default function AccountPage() {
 
   return (
     <View style={gs.fullBackground}>
-      <View style={styles.textView}>
+      <View style={styles.headerView}>
         <Text style={styles.yourWishlistsText}>Your Account</Text>
         <TouchableOpacity
           style={{
@@ -310,52 +293,17 @@ export default function AccountPage() {
       </View>
 
       <View style={{flexDirection: 'column', width: '100%'}}>
-        <View style={styles.personalInfoCard}>
-          <Image
-            source={require('../../res/default_profile.jpg')}
-            style={{
-              width: 130,
-              height: 130,
-              borderRadius: 10,
-              borderColor: '#0073FE',
-              borderWidth: 1,
-              marginHorizontal: 10,
-            }}
-          />
-          <View style={{flexDirection: 'column'}}>
-            {editProfile ? (
-              <TextInput
-                placeholder="Name"
-                style={{fontSize: 18, borderWidth: 1, marginBottom: 8}}
-                onChangeText={val => setTypedName(val)}
-              />
-            ) : (
-              <Text
-                style={[
-                  styles.personalInfoText,
-                  {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
-                ]}>
-                {userName}
-              </Text>
-            )}
-
-            <Text style={styles.personalInfoText}>
-              <FontAwe name="phone" size={18} color="#0073FE" />
-              {'   '}
-              512.363.8986
-            </Text>
-
-            <Text style={styles.personalInfoText}>
-              <Ion name="location-sharp" size={18} color="#0073FE" />
-              {'  '}
-              H-E-B
-            </Text>
-          </View>
-        </View>
+        <PersonalInfoCard
+          editProfile={editProfile}
+          setTypedName={setTypedName}
+        />
         <View>
           <TouchableOpacity
             onPress={() => {
-              if (editProfile && typedName && typedName !== userName) {
+              if (
+                editProfile &&
+                typedName //&& typedName !== userName
+              ) {
                 setUserName(typedName);
                 const userRef = firestore()
                   .collection('users')
@@ -365,199 +313,45 @@ export default function AccountPage() {
                 });
               }
               setEditProfile(!editProfile);
-            }}
-            // style={{marginBottom: 30, marginTop: 20}}
-          >
-            <Text
-              style={{
-                alignSelf: 'center',
-                borderRadius: 10,
-                fontSize: 20,
-                textAlign: 'center',
-                height: 60,
-                width: '90%',
-                paddingVertical: 15,
-                color: 'white',
-                fontWeight: 'bold',
-                backgroundColor: '#0073FE',
-                ...gs.margin20,
-              }}>
+            }}>
+            <Text style={styles.middleButtonText}>
               {editProfile ? 'Save Profile' : 'Edit Profile'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text
-              style={{
-                alignSelf: 'center',
-                borderRadius: 10,
-                fontSize: 20,
-                textAlign: 'center',
-                height: 60,
-                width: '90%',
-                paddingVertical: 15,
-                fontWeight: 'bold',
-                backgroundColor: '#52cc95',
-                color: 'white',
-              }}>
-              Payment Info
-            </Text>
+            <Text style={styles.middleButtonText}>Payment Info</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.fullBottomCard}>
-        <View
-          style={{
-            width: '100%',
-          }}>
-          <View style={{flexDirection: 'row', width: '100%'}}>
-            <TouchableOpacity
-              onPress={() => {
-                setCurrentBottomTabIndex(0);
-              }}
-              style={{flex: 1, borderRightWidth: 2}}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  alignSelf: 'stretch',
-                  textAlign: 'center',
-                  fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
-                }}>
-                <Ion name="people" color="#0073FE" size={20} /> Family
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setCurrentBottomTabIndex(1);
-              }}
-              style={{flex: 1, borderRightWidth: 2}}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  alignSelf: 'stretch',
-                  textAlign: 'center',
-                  fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
-                }}>
-                <FontAwe name="heart" color="#0073FE" size={18} /> Wishlists
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setCurrentBottomTabIndex(2);
-              }}
-              style={{flex: 1}}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  alignSelf: 'stretch',
-                  textAlign: 'center',
-                  fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
-                }}>
-                <FontAwe5 name="receipt" color="#0073FE" size={18} /> Receipts
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'column',
-            width: '100%',
-            padding: 20,
-          }}>
-          <BottomTabsCard
-            currentBottomTabIndex={currentBottomTabIndex}
-            contactsLoading={contactsLoading}
-            setContactModal={setContactModal}
-            selectedNames={selectedNames}
-            wishlists={wishlists}
-            receipts={receipts}
-          />
-        </View>
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={contactModal}
-        onRequestClose={() => setContactModal(false)}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              Which contacts would you like to add?
-            </Text>
-            <TextInput
-              placeholder="Search contacts by name"
-              onChangeText={val => searchContacts(val)}
-            />
-
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              data={filteredContactNames}
-              initialNumToRender={100}
-              renderItem={renderItem}
-            />
-
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                style={{
-                  width: 80,
-                  height: 40,
-                  borderWidth: 1,
-                  justifyContent: 'center',
-                  marginTop: 20,
-                }}
-                onPress={() => {
-                  setContactModal(false);
-                  setContactsLoading(false);
-                }}>
-                <Text style={styles.title}>Cancel</Text>
-              </TouchableOpacity>
-              {selectedNames.length === 0 && tempSelectedNames.length === 0 ? (
-                <></>
-              ) : (
-                <TouchableOpacity
-                  style={{
-                    width: 80,
-                    height: 40,
-                    borderWidth: 1,
-                    justifyContent: 'center',
-                    marginTop: 20,
-                    marginLeft: 20,
-                  }}
-                  onPress={pushContactsFirebase}>
-                  <Text style={styles.title}>Ok</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <BottomTabsCard
+        currentBottomTabIndex={currentBottomTabIndex}
+        setCurrentBottomTabIndex={setCurrentBottomTabIndex}>
+        <BottomTabsContent
+          currentBottomTabIndex={currentBottomTabIndex}
+          contactsLoading={contactsLoading}
+          setContactModal={setContactModal}
+          selectedNames={selectedNames}
+          wishlists={wishlists}
+          receipts={receipts}
+        />
+      </BottomTabsCard>
+      <ContactsModal
+        initialContactState={initialContactState}
+        contactModal={contactModal}
+        setContactModal={setContactModal}
+        setContactsLoading={setContactsLoading}
+        searchContacts={searchContacts}
+        selectedNames={selectedNames}
+        tempSelectedNames={tempSelectedNames}
+        pushContactsFirebase={pushContactsFirebase}
+        filteredContactNames={filteredContactNames}
+        logItem={logItem}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  fullBottomCard: {
-    width: '90%',
-    paddingTop: 10,
-    marginTop: 30,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    marginHorizontal: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
-    elevation: 5,
-  },
-
-  title: {
-    fontSize: 18,
-    alignSelf: 'center',
-  },
-
   yourWishlistsText: {
     flex: 1,
     fontSize: 24,
@@ -566,59 +360,23 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 20,
   },
-  textView: {
-    width: '100%',
-    marginTop: 30,
-    marginBottom: 40,
-    flexDirection: 'row',
-    alignSelf: 'stretch',
+  headerView: {
+    ...gs.aStretch,
+    ...gs.flexRow,
+    ...gs.margin20,
+    ...gs.width100,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    height: 500,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-
-  personalInfoCard: {
-    flexDirection: 'row',
-    width: '90%',
-    backgroundColor: 'white',
-    alignSelf: 'center',
-    // borderWidth: 1,
-    borderColor: 'grey',
-    borderRadius: 10,
-    marginBottom: 10,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
-    elevation: 5,
-  },
-  personalInfoText: {
-    marginVertical: 5,
-    fontSize: 18,
+  middleButtonText: {
+    fontSize: 20,
+    height: 60,
+    width: '90%' as '90%',
+    paddingVertical: 15,
+    ...gs.aSelfCenter,
+    ...gs.bgBlue,
+    ...gs.bold,
+    ...gs.margin20,
+    ...gs.radius10,
+    ...gs.taCenter,
+    ...gs.white,
   },
 });

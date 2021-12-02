@@ -1,9 +1,11 @@
 import React, {Dispatch} from 'react';
 import {mainReducer, StateType} from '../mainReducer';
+import Map from '../../Models/MapModels/Map';
 
 const initialState: StateType = {
   cart: [],
   items: [],
+  map: {} as Map,
   recipes: [],
   total: 0,
   user: '',

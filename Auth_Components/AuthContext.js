@@ -2,8 +2,9 @@ import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import {Text} from 'react-native';
 
-export const AuthContext = React.createContext();
-export const useAuth = () => React.useContext(AuthContext);
+const AuthContext = React.createContext();
+const useAuth = () => React.useContext(AuthContext);
+export default useAuth;
 
 export const AuthProvider = ({children}) => {
   const [currentUser, setCurrentUser] = useState(auth().currentUser);
@@ -12,7 +13,6 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     auth().onAuthStateChanged(user => {
       setCurrentUser(user);
-
       setPending(false);
     });
     if (currentUser) {

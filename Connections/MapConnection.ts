@@ -20,7 +20,6 @@ export function snapshotMap(callback: (map: Map) => void): () => void {
     .onSnapshot(async snap => {
       if (snap.exists) {
         const wallData = snap.data() as Map;
-        console.log('wallData', wallData);
         callback(wallData);
       } else {
         console.log('Error in snapshotMap');

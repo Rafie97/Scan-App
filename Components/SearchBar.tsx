@@ -20,7 +20,7 @@ export default function SearchBar(props: PropTypes) {
         <Ion name="search-circle" size={40} color="white" />
         <TextInput
           ref={inputRef}
-          style={[styles.searchInput, gs.taCenter]}
+          style={styles.searchInput}
           onChangeText={val => {
             props.searchItems(val);
           }}
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     ...gs.aCenter,
     ...gs.aSelfCenter,
-    ...gs.bgBlue,
+    ...gs.bgPurple,
     ...gs.flexRow,
     ...gs.jCenter,
     ...gs.margin20,
@@ -55,5 +55,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     fontSize: 20,
+    ...gs.white,
+    ...gs.taCenter,
   },
 });

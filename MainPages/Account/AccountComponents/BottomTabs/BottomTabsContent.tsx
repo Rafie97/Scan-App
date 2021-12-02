@@ -1,12 +1,15 @@
 import React, {Dispatch, SetStateAction} from 'react';
 import {TouchableOpacity, View, Text, FlatList} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import FamilyTile, {ReceiptTile, WishlistTile} from '../../../Components/Tiles';
+import FamilyTile, {
+  ReceiptTile,
+  WishlistTile,
+} from '../../../../Components/Tiles';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
-import {Receipt} from '../../../Models/CartModels/Receipt';
-import gs from '../../../Styles/globalStyles';
+import {Receipt} from '../../../../Models/CartModels/Receipt';
+import gs from '../../../../Styles/globalStyles';
 
-type BottomTabsCardProps = {
+type BottomTabsContentProps = {
   currentBottomTabIndex: number;
   contactsLoading: boolean;
   setContactModal: Dispatch<SetStateAction<boolean>>;
@@ -15,14 +18,14 @@ type BottomTabsCardProps = {
   receipts: Receipt[];
 };
 
-export default function BottomTabsCard({
+export default function BottomTabsContent({
   currentBottomTabIndex,
   contactsLoading,
   setContactModal,
   selectedNames,
   wishlists,
   receipts,
-}: BottomTabsCardProps) {
+}: BottomTabsContentProps) {
   const [selected, setSelected] = React.useState('');
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
   if (currentBottomTabIndex === 0) {

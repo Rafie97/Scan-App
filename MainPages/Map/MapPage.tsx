@@ -16,11 +16,11 @@ import {defaultMap} from '../../Connections/MapConnection';
 export default MapPage;
 
 function MapPage() {
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [backSearches, setBackSearches] = useState([]);
-  const [markedAisles, setMarkedAisles] = useState([]);
-  const [currentBubble, setCurrentBubble] = useState(-1);
-  const [scaleFactor, setScale] = useState(1);
+  const [searchFocused, setSearchFocused] = useState<boolean>(false);
+  const [backSearches, setBackSearches] = useState<number[]>([]);
+  const [markedAisles, setMarkedAisles] = useState<number[]>([]);
+  const [currentBubble, setCurrentBubble] = useState<number>(-1);
+  const [scaleFactor, setScale] = useState<number>(1);
 
   const store = useStore();
   const wallData = store.map;
@@ -80,7 +80,10 @@ function MapPage() {
               width: wallData.mapSize.width * scaleFactor,
             },
           ]}>
-          <Svg>
+          <Svg
+            onPress={() => {
+              setCurrentBubble(-1);
+            }}>
             {wallData.wallCoordinates.map((coordinates, index) => {
               return (
                 <Wall

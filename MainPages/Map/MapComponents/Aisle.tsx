@@ -3,8 +3,20 @@ import {View} from 'react-native';
 import {Circle} from 'react-native-svg';
 import gs from '../../../Styles/globalStyles';
 import ProdBubble from './ProdBubble';
+import Aisle from '../../../Models/MapModels/Aisle';
+import Map from '../../../Models/MapModels/Map';
 
-export default function Aisle({
+type AisleProps = {
+  aisl: Aisle;
+  currentBubble: number;
+  setCurrentBubble: React.Dispatch<React.SetStateAction<number>>;
+  index: number;
+  markedAisles: number[];
+  scaleFactor: number;
+  wallData: Map;
+};
+
+export default function AisleComponent({
   aisl,
   currentBubble,
   setCurrentBubble,

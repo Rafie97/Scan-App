@@ -48,7 +48,7 @@ export default function ReviewCard({reviews}) {
 const styles = {
   reviewsContainer: {
     width: 300,
-    height: 400,
+    height: 350,
     ...gs.bgWhite,
     ...gs.margin20,
     ...gs.radius10,
