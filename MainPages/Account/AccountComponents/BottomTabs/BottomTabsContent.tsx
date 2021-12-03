@@ -47,6 +47,7 @@ export default function BottomTabsContent({
         )}
         {selectedNames.length > 0 ? (
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             data={selectedNames}
             horizontal={true}
@@ -71,6 +72,7 @@ export default function BottomTabsContent({
           </Text>
         </TouchableOpacity>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           data={wishlists}
           horizontal={true}
@@ -101,6 +103,7 @@ export default function BottomTabsContent({
           </View>
         </View>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           data={receipts}
           horizontal={true}

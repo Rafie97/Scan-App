@@ -3,9 +3,10 @@ import {CartItem} from '../Models/ItemModels/CartItem';
 import Item from '../Models/ItemModels/Item';
 import {Recipe} from '../Models/ItemModels/Recipe';
 import Map from '../Models/MapModels/Map';
+import User from '../Models/UserModels/User';
 
 export type StateType = {
-  user: string;
+  user: User;
   map: Map;
   items: Item[];
   recipes: Recipe[];

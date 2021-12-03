@@ -7,7 +7,9 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ion from 'react-native-vector-icons/Ionicons';
 import Ant from 'react-native-vector-icons/AntDesign';
 import {View} from 'react-native';
-import {loadItems, loadMap} from '../Reducers/actions/appPersist';
+import loadItems from '../Reducers/actions/loadItems';
+import loadMap from '../Reducers/actions/loadMap';
+
 import {
   AccountStack,
   CartStack,
@@ -16,6 +18,8 @@ import {
 } from './StackNavigators';
 import {NavigationProp, useNavigation} from '@react-navigation/core';
 import {useDispatch} from '../Reducers/store';
+import {loadUser} from '../Reducers/actions/loadUser';
+import useAuth from '../Auth_Components/AuthContext';
 
 const TabNav = createBottomTabNavigator();
 
@@ -24,10 +28,12 @@ export const NavContext = React.createContext<NavigationProp<any>>(null);
 export default function AppNavigation() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const uid = useAuth().uid;
 
   useEffect(() => {
     loadItems(dispatch);
     loadMap(dispatch);
+    loadUser(dispatch, uid);
   }, []);
 
   return (

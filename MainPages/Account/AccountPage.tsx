@@ -272,23 +272,10 @@ export default function AccountPage() {
       <View style={styles.headerView}>
         <Text style={styles.yourWishlistsText}>Your Account</Text>
         <TouchableOpacity
-          style={{
-            marginRight: 20,
-            height: 40,
-          }}
+          style={styles.signOutTouchable}
           onPress={() => signOut()}>
           <Ion name="md-exit-outline" size={24} color="#0073FE" />
-          <Text
-            style={{
-              color: '#0073FE',
-              fontSize: 18,
-              textAlign: 'right',
-              flex: 1,
-              paddingVertical: 5,
-              alignSelf: 'stretch',
-            }}>
-            Sign out
-          </Text>
+          <Text style={styles.signOutText}>Sign out</Text>
         </TouchableOpacity>
       </View>
 
@@ -351,14 +338,14 @@ export default function AccountPage() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   yourWishlistsText: {
-    flex: 1,
     fontSize: 24,
-    fontWeight: 'bold',
-    alignSelf: 'stretch',
-    textAlign: 'left',
-    marginLeft: 20,
+    textAlign: 'left' as 'left',
+    ...gs.aStretch,
+    ...gs.bold,
+    ...gs.flex1,
+    ...gs.margin20,
   },
   headerView: {
     ...gs.aStretch,
@@ -379,4 +366,18 @@ const styles = StyleSheet.create({
     ...gs.taCenter,
     ...gs.white,
   },
-});
+  signOutText: {
+    fontSize: 18,
+    textAlign: 'right' as 'right',
+    paddingVertical: 5,
+    ...gs.aStretch,
+    // ...gs.blue,
+    ...gs.flex1,
+  },
+  signOutTouchable: {
+    height: 40,
+    width: '30%' as '30%',
+    ...gs.aStretch,
+    ...gs.margin20,
+  },
+};

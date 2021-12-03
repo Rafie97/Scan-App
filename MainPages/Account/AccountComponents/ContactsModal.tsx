@@ -46,6 +46,7 @@ export default function ContactsModal({
           />
 
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             data={filteredContactNames}
             initialNumToRender={100}

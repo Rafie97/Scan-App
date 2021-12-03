@@ -3,7 +3,7 @@ import {View, Image, Text, TextInput} from 'react-native';
 import Ion from 'react-native-vector-icons/Ionicons';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import gs from '../../../Styles/globalStyles';
-import useAuth from '../../../Auth_Components/AuthContext';
+import {useStore} from '../../../Reducers/store';
 
 type PersonalInfoProps = {
   editProfile: boolean;
@@ -14,7 +14,7 @@ export default function PersonalInfoCard({
   editProfile,
   setTypedName,
 }: PersonalInfoProps) {
-  const userName = useAuth().currentUser.name;
+  const userName = useStore().user.name;
   return (
     <View style={styles.personalInfoCard}>
       <Image

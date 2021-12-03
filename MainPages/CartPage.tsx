@@ -141,9 +141,9 @@ function CartPage() {
       </View>
 
       <FlatList
+        keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContainer}
         style={gs.width100}
-        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <SwipeableItem
             item={item}

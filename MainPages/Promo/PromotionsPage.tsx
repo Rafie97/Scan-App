@@ -29,6 +29,7 @@ function PromotionsPage() {
 
         <View>
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{
               paddingVertical: 10,
               paddingHorizontal: 20,
@@ -57,6 +58,7 @@ function PromotionsPage() {
         </View>
         <View>
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{
               paddingVertical: 10,
               paddingHorizontal: 20,
