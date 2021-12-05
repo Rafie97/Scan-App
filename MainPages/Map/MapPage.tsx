@@ -67,11 +67,7 @@ function MapPage() {
   return (
     <View style={gs.fullBackground}>
       <View style={[gs.width100, gs.height100]}>
-        {!searchFocused && (
-          <View>
-            <Text style={gs.header}>Map</Text>
-          </View>
-        )}
+        {!searchFocused && <Text style={gs.header}>Map</Text>}
         <View
           style={[
             styles.mapBox,
@@ -125,7 +121,6 @@ function MapPage() {
 
 const styles = StyleSheet.create({
   mapBox: {
-    marginHorizontal: 20,
     ...gs.bgWhite,
     ...gs.margin20,
     ...gs.radius10,

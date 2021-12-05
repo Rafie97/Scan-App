@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
 
   exploreRecipesText: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: '#4400fe',
+    ...gs.bold,
     ...gs.margin20,
   },
 

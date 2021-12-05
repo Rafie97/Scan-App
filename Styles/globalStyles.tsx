@@ -54,6 +54,9 @@ const styles = {
   bgBlue: {
     backgroundColor: '#0073FE',
   },
+  bgGreen: {
+    backgroundColor: '#52cc95',
+  },
   bgPurple: {
     backgroundColor: '#4400fe',
   },
@@ -68,11 +71,9 @@ const styles = {
   flex1: {
     flex: 1,
   },
-
   flexColumn: {
     flexDirection: 'column' as 'column',
   },
-
   flexRow: {
     flexDirection: 'row' as 'row',
   },

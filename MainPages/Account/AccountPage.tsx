@@ -295,7 +295,9 @@ export default function AccountPage() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={styles.middleButtonText}>Payment Info</Text>
+            <Text style={[styles.middleButtonText, gs.bgGreen]}>
+              Payment Info
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -329,18 +331,16 @@ export default function AccountPage() {
 
 const styles = {
   yourWishlistsText: {
-    fontSize: 24,
-    textAlign: 'left' as 'left',
-    ...gs.aStretch,
-    ...gs.bold,
+    ...gs.header,
     ...gs.flex1,
-    ...gs.margin20,
+    margin: 0,
   },
   headerView: {
     ...gs.aStretch,
     ...gs.flexRow,
     ...gs.margin20,
     ...gs.width100,
+    ...gs.bgWhite,
   },
   middleButtonText: {
     fontSize: 20,
@@ -364,9 +364,6 @@ const styles = {
     ...gs.flex1,
   },
   signOutTouchable: {
-    height: 40,
-    width: '30%' as '30%',
     ...gs.aStretch,
-    ...gs.margin20,
   },
 };

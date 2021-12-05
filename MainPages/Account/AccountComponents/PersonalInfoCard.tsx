@@ -65,11 +65,11 @@ const styles = {
   },
   personalInfoCard: {
     width: '90%' as '90%',
-    marginBottom: 10,
     paddingVertical: 10,
     ...gs.aSelfCenter,
     ...gs.bgWhite,
     ...gs.flexRow,
+    ...gs.margin20,
     ...gs.radius10,
     ...gs.shadow,
   },
