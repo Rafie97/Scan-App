@@ -30,6 +30,8 @@ import BottomTabsCard from './AccountComponents/BottomTabs/BottomTabsCard';
 import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
 import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
 import ContactsModal from './AccountComponents/ContactsModal';
+import {loadFamily} from '../../Connections/UserConnection';
+import {useStore} from '../../Reducers/store';
 
 export default function AccountPage() {
   const [wishlists, setWishlists] = React.useState([]);
@@ -54,27 +56,14 @@ export default function AccountPage() {
   const [userName, setUserName] = React.useState<string>();
   const [typedName, setTypedName] = React.useState<string>();
   const userID = auth().currentUser.uid;
+  const store = useStore();
 
   ////////////////////////////////// GET THE DAMN USER FROM USERCONNECTION
 
   //Get Family
   React.useEffect(() => {
-    const famRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family');
-
-    const sub = famRef.onSnapshot(async snap => {
-      setSelectedNames([]);
-      setTempSelectedNames([]);
-      let newSelectedNames = [];
-      snap.forEach(async doc => {
-        newSelectedNames.push(doc.data().name);
-      });
-      setSelectedNames(newSelectedNames);
-      setTempSelectedNames(newSelectedNames);
-    });
-    return sub;
+    setSelectedNames(store.user.family);
+    setTempSelectedNames(store.user.family);
   }, []);
 
   React.useEffect(() => {

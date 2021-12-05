@@ -21,3 +21,25 @@ export default function snapshotUser(
       }
     });
 }
+
+export function loadFamily(uid): string[] {
+  const famRef = firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('Family');
+
+  let newNames: string[] = [];
+
+  famRef
+    .get()
+    .then(snap => {
+      snap.forEach(async doc => {
+        newNames.push(doc.data().name);
+      });
+    })
+    .catch(err => {
+      console.log('Error in loadFamily: ', err);
+    });
+
+  return newNames;
+}
