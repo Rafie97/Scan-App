@@ -16,21 +16,14 @@ require('react-native-linear-gradient').default;
 import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
-import {TextInput} from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-import SelectableItem from '../../Components/SelectableItem';
 import auth from '@react-native-firebase/auth';
-import {useNavigation} from '@react-navigation/native';
 import {Receipt} from '../../Models/CartModels/Receipt';
-import FontAwe from 'react-native-vector-icons/FontAwesome';
-import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 import Ion from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
 import BottomTabsCard from './AccountComponents/BottomTabs/BottomTabsCard';
 import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
 import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
 import ContactsModal from './AccountComponents/ContactsModal';
-import {loadFamily} from '../../Connections/UserConnection';
 import {useStore} from '../../Reducers/store';
 
 export default function AccountPage() {
