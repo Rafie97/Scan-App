@@ -69,7 +69,7 @@ function CartPage() {
         console.log('Successfully deleted from cart');
       })
       .catch(err => {
-        console.log('Error deleting from cart: ', err);
+        console.warn('Error deleting from cart: ', err);
       });
   }
 

@@ -16,7 +16,7 @@ export default function snapshotUser(
         const user = {id: uid, name: snap.data().name} as User;
         callback(user);
       } else {
-        console.log('Error in snapshotUser');
+        console.warn('Error in snapshotUser');
         callback(null);
       }
     });
@@ -38,7 +38,7 @@ export function loadFamily(uid): string[] {
       });
     })
     .catch(err => {
-      console.log('Error in loadFamily: ', err);
+      console.warn('Error in loadFamily: ', err);
     });
 
   return newNames;

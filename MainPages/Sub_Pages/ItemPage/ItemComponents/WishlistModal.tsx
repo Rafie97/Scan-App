@@ -3,7 +3,7 @@ import {FlatList, Modal, TouchableOpacity, View, Text} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import gs from '../../../../Styles/globalStyles';
 import {useNavigation} from '@react-navigation/native';
-import {useAuth} from '../../../../Auth_Components/AuthContext';
+import useAuth from '../../../../Auth_Components/AuthContext';
 
 type WishlistModalProps = {
   itemID: string;

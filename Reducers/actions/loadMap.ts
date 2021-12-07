@@ -7,12 +7,12 @@ export default async function loadMap(dispatch) {
       if (loadedMap) {
         dispatch({type: 'SET_MAP', payload: loadedMap});
       } else {
-        console.log('Error in loadMap');
+        console.warn('Error in loadMap');
         dispatch({type: 'SET_MAP', payload: defaultMap});
         return;
       }
     });
   } catch (err) {
-    console.log('Error loading map from firestore', err);
+    console.warn('Error loading map from firestore', err);
   }
 }

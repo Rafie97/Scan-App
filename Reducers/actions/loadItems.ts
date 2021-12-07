@@ -11,7 +11,7 @@ export default async function loadItems(dispatch) {
       if (loadedItems.length) {
         dispatch({type: 'SET_ITEMS', payload: loadedItems});
       } else {
-        console.log('Error in loadItems');
+        console.warn('Error in loadItems');
         dispatch({type: 'SET_ITEMS', payload: []});
         return;
       }
@@ -20,12 +20,12 @@ export default async function loadItems(dispatch) {
       if (loadedRecipes.length) {
         dispatch({type: 'SET_RECIPES', payload: loadedRecipes});
       } else {
-        console.log('Error in loadRecipes');
+        console.warn('Error in loadRecipes');
         dispatch({type: 'SET_RECIPES', payload: []});
         return;
       }
     });
   } catch (err) {
-    console.log('Error loading items from firestore', err);
+    console.warn('Error loading items from firestore', err);
   }
 }

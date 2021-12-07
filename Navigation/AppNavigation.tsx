@@ -17,7 +17,7 @@ import {
   ScanStack,
 } from './StackNavigators';
 import {NavigationProp, useNavigation} from '@react-navigation/core';
-import {useDispatch} from '../Reducers/store';
+import {useDispatch, useStore} from '../Reducers/store';
 import {loadUser} from '../Reducers/actions/loadUser';
 import useAuth from '../Auth_Components/AuthContext';
 
@@ -28,7 +28,8 @@ export const NavContext = React.createContext<NavigationProp<any>>(null);
 export default function AppNavigation() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const uid = useAuth().uid;
+  const user = useAuth();
+  const uid = user.uid;
 
   useEffect(() => {
     loadItems(dispatch);

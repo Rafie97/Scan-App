@@ -11,7 +11,7 @@ export async function loadUser(dispatch, uid) {
           payload: loadedUser,
         });
       } else {
-        console.log('Error in loadUser');
+        console.warn('Error in loadUser');
         dispatch({
           type: 'SET_USER',
           payload: null,
@@ -20,6 +20,6 @@ export async function loadUser(dispatch, uid) {
       }
     });
   } catch (err) {
-    console.log('Error loading user from firestore');
+    console.warn('Error loading user from firestore');
   }
 }

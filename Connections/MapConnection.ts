@@ -22,7 +22,7 @@ export function snapshotMap(callback: (map: Map) => void): () => void {
         const wallData = snap.data() as Map;
         callback(wallData);
       } else {
-        console.log('Error in snapshotMap');
+        console.warn('Error in snapshotMap');
         callback(defaultMap);
       }
     });

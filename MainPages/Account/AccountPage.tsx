@@ -25,8 +25,11 @@ import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
 import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
 import ContactsModal from './AccountComponents/ContactsModal';
 import {useStore} from '../../Reducers/store';
+import LoginModal from '../../LoginPages/LoginModal';
 
 export default function AccountPage() {
+  const [showLogin, setShowLogin] = React.useState(false);
+
   const [wishlists, setWishlists] = React.useState([]);
 
   const [didCount, setDidCount] = React.useState(false);
@@ -51,12 +54,12 @@ export default function AccountPage() {
   const userID = auth().currentUser.uid;
   const store = useStore();
 
-  ////////////////////////////////// GET THE DAMN USER FROM USERCONNECTION
-
   //Get Family
   React.useEffect(() => {
-    setSelectedNames(store.user.family);
-    setTempSelectedNames(store.user.family);
+    if (store.user !== null) {
+      setSelectedNames(store.user.family);
+      setTempSelectedNames(store.user.family);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -260,12 +263,13 @@ export default function AccountPage() {
           <Text style={styles.signOutText}>Sign out</Text>
         </TouchableOpacity>
       </View>
-
       <View style={{flexDirection: 'column', width: '100%'}}>
-        <PersonalInfoCard
-          editProfile={editProfile}
-          setTypedName={setTypedName}
-        />
+        {store.user && (
+          <PersonalInfoCard
+            editProfile={editProfile}
+            setTypedName={setTypedName}
+          />
+        )}
         <View>
           <TouchableOpacity
             onPress={() => {
@@ -318,6 +322,7 @@ export default function AccountPage() {
         filteredContactNames={filteredContactNames}
         logItem={logItem}
       />
+      {!store.user && <LoginModal visible={!store.user} />}
     </View>
   );
 }

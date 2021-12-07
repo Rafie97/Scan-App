@@ -46,7 +46,7 @@ function EditWishlistPage(props: any) {
             }),
           );
         } else {
-          console.log('No such document!');
+          console.warn('Error getting wishlist items');
         }
       });
   }
