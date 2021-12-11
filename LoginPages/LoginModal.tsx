@@ -44,7 +44,8 @@ const styles = {
     ...gs.jCenter,
   },
   modalView: {
-    height: '50%',
+    minHeight: 300,
+    maxHeight: '45%',
     ...gs.aCenter,
     ...gs.bgWhite,
     ...gs.margin20,

@@ -119,12 +119,8 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
         <View style={styles.overlayView}>
             <View style={{width: 250,  ...gs.margin20}}>
                 <Text
-                    style={{
-                    fontSize: 20,
-                    marginBottom: 0,
-                    textAlign: 'center',
-                    }}>
-                    Please signin/signup with your phone number
+                    style={styles.loginTitle}>
+                    Sign-in/Sign-up with a phone number
                 </Text>
             </View>
 
@@ -133,7 +129,8 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
             <View
             style={{
                 ...gs.flexRow,
-                ...gs.margin20,
+                // ...gs.margin20,
+                marginRight: 20,
                 ...gs.aCenter,
             }}>
                 <Text style={styles.textBetweenNumber}>+1</Text>
@@ -166,14 +163,8 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
             </View>
 
             <TouchableOpacity
-            style={{
-                width: 80,
-                height: 40,
-                borderWidth: 1,
-                ...gs.jCenter,
-                ...gs.margin20
-            }} onPress={() => signInWithPhoneNumber()}>
-                <Text style={{fontSize: 18, alignSelf: 'center'}}>
+            style={styles.enterTouchable} onPress={() => signInWithPhoneNumber()}>
+                <Text style={styles.enterText}>
                     Enter
                 </Text>
             </TouchableOpacity>
@@ -182,8 +173,8 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
                 style={gs.margin20}
                 activeOpacity={0.6}
                 onPress={() => signInAnonymously()}>
-                <Text style={{color: '#5D87CA', fontSize: 16, alignSelf: 'flex-end'}}>
-                    Or sign in anonymously with view-only access
+                <Text style={styles.anonymousText}>
+                    {store.user=== null ? "Or return to promotions":"Or sign in anonymously with view-only access"} 
                 </Text>
             </TouchableOpacity>
         </View>
@@ -195,6 +186,14 @@ const styles = StyleSheet.create({
     ...gs.flex1,
     ...gs.aCenter,
   },
+
+  loginTitle: {
+    fontSize: 20,
+    ...gs.bold, 
+    ...gs.taCenter,
+    ...gs.width100
+  },
+
 
   phoneInput: {
     height: 55,
@@ -209,4 +208,23 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
   },
+
+  enterTouchable: {
+    width: 80,
+    height: 40,
+    ...gs.bgBlue,
+    ...gs.jCenter,
+    ...gs.margin20,
+    ...gs.radius10,
+  },
+  enterText:{
+      fontSize: 18,
+      ...gs.taCenter,
+      ...gs.white
+  },
+  anonymousText: {
+
+    fontSize: 16,
+    ...gs.blue,
+  }
 });

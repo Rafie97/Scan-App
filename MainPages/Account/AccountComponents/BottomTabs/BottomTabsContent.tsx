@@ -131,13 +131,18 @@ const styles = {
     ...gs.jCenter,
   },
   noFamView: {
-    width: 415,
     ...gs.aCenter,
+    ...gs.jCenter,
+    ...gs.width100,
   },
   noFamText: {
     fontSize: 20,
     paddingTop: 40,
     height: 130,
+    ...gs.blue,
+    ...gs.bold,
+    ...gs.taCenter,
+    ...gs.width100,
   },
   receiptView: {
     height: 30,

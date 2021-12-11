@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ImageBackground,
   TouchableOpacity,
@@ -23,6 +23,11 @@ export default function CodeConfirmation({
 }: CodeConfirmationProps) {
   const [code, setCode] = useState('');
   const navigation = useNavigation();
+  const codeInputRef = useRef(null);
+
+  useEffect(() => {
+    codeInputRef.current?.focus();
+  }, []);
 
   async function confirmCode(code) {
     try {
@@ -43,43 +48,25 @@ export default function CodeConfirmation({
 
   return (
     <View style={styles.overlayView}>
-      <Text
-        style={{
-          margin: 60,
-          fontSize: 20,
-          width: 250,
-          ...gs.taCenter,
-        }}>
-        We've texted your phone number, please enter the four-digit code
+      <Text style={styles.codeTitle}>
+        We've texted your phone with a four-digit code
       </Text>
       <TextInput
+        ref={codeInputRef}
         placeholder="Code"
-        style={{fontSize: 20, textAlign: 'center'}}
+        style={styles.codeInput}
         onChangeText={val => setCode(val)}
         keyboardType="phone-pad"
       />
       <TouchableOpacity
-        style={{
-          width: 80,
-          height: 40,
-          borderWidth: 1,
-          ...gs.aSelfCenter,
-          ...gs.jCenter,
-          ...gs.margin20,
-        }}
+        style={styles.confirmTouchable}
         onPress={() => confirmCode(code)}>
-        <Text style={{...gs.aSelfCenter, fontSize: 18}}>Confirm</Text>
+        <Text style={styles.confirmText}>Confirm</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{
-          width: 80,
-          height: 40,
-          borderWidth: 1,
-          justifyContent: 'center',
-          marginTop: 20,
-        }}
+        style={[styles.confirmTouchable, gs.margin20]}
         onPress={() => setConfirm(null)}>
-        <Text style={{fontSize: 18, alignSelf: 'center'}}>Cancel</Text>
+        <Text style={styles.confirmText}>Cancel</Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,4 +77,23 @@ const styles = {
     ...gs.flex1,
     ...gs.aCenter,
   },
+  codeTitle: {
+    fontSize: 20,
+    width: 300,
+    ...gs.bold,
+    ...gs.taCenter,
+  },
+  codeInput: {fontSize: 20, ...gs.taCenter, ...gs.margin20},
+  confirmTouchable: {
+    width: 80,
+    height: 40,
+    ...gs.bgBlue,
+    ...gs.jCenter,
+    ...gs.radius10,
+  },
+  confirmText:{
+    fontSize: 18,
+    ...gs.taCenter,
+    ...gs.white
+},
 };
