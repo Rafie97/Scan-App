@@ -29,13 +29,15 @@ export default function AppNavigation() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useAuth();
-  const uid = user.uid;
 
   useEffect(() => {
     loadItems(dispatch);
     loadMap(dispatch);
-    loadUser(dispatch, uid);
   }, []);
+
+  useEffect(() => {
+    loadUser(dispatch, user.uid);
+  }, [user.uid]);
 
   return (
     <TabNav.Navigator

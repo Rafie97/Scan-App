@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   TextInput,
   TouchableOpacity,
@@ -37,8 +37,13 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
     const authh = useAuth();
     const navigation = useNavigation();
 
+    useEffect(()=>{
+        areaInput.current.focus();
+    }, [])
+
      //Handle anonymous sign in
     async function signInAnonymously() {
+        console.log(store.user)
         try {
             if(!store.user && authh.isAnonymous){
                 dispatch({type:'SHOW_LOGIN_MODAL', payload:false})
@@ -194,7 +199,6 @@ const styles = StyleSheet.create({
     ...gs.width100
   },
 
-
   phoneInput: {
     height: 55,
     fontSize: 25,
@@ -223,7 +227,6 @@ const styles = StyleSheet.create({
       ...gs.white
   },
   anonymousText: {
-
     fontSize: 16,
     ...gs.blue,
   }

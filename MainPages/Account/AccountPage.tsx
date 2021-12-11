@@ -27,6 +27,7 @@ import ContactsModal from './AccountComponents/ContactsModal';
 import {useDispatch, useStore} from '../../Reducers/store';
 import LoginModal from '../../LoginPages/LoginModal';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import useAuth from '../../Auth_Components/AuthContext';
 
 export default function AccountPage() {
   const [showLogin, setShowLogin] = React.useState(false);
@@ -52,14 +53,14 @@ export default function AccountPage() {
   const [editProfile, setEditProfile] = React.useState<boolean>(false);
   const [userName, setUserName] = React.useState<string>();
   const [typedName, setTypedName] = React.useState<string>();
-  const userID = auth().currentUser.uid;
+  const authState = useAuth();
   const store = useStore();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (store.user === null && isFocused) {
+    if (store.user === null && isFocused && authState.isAnonymous) {
       dispatch({type: 'SHOW_LOGIN_MODAL', payload: true});
     } else if (store.user !== null && isFocused) {
       setSelectedNames(store.user.family);
@@ -74,43 +75,43 @@ export default function AccountPage() {
   }, [isFocused, store.user]);
 
   //Get Lists
-  React.useEffect(() => {
-    //Retrieve names of wishlists
-    const wishRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Wishlists');
-    const sub = wishRef.onSnapshot(snap => {
-      setWishlists([]);
-      let newWishlists = [];
-      snap.forEach(doc => {
-        newWishlists.push(doc.id);
-      });
-      setWishlists(newWishlists);
-    });
-    return sub;
-  }, []);
+  // React.useEffect(() => {
+  //   //Retrieve names of wishlists
+  //   const wishRef = firestore()
+  //     .collection('users')
+  //     .doc(userID)
+  //     .collection('Wishlists');
+  //   const sub = wishRef.onSnapshot(snap => {
+  //     setWishlists([]);
+  //     let newWishlists = [];
+  //     snap.forEach(doc => {
+  //       newWishlists.push(doc.id);
+  //     });
+  //     setWishlists(newWishlists);
+  //   });
+  //   return sub;
+  // }, []);
 
   //Get Receipts
-  React.useEffect(() => {
-    const receiptRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Receipts');
-    const sub = receiptRef.onSnapshot(snap => {
-      setReceipts([]);
-      let newReceipts = [];
-      snap.forEach(doc => {
-        newReceipts.push({
-          id: doc.id,
-          date: doc.data().date,
-          storeId: doc.data().storeId,
-        });
-      });
-      setReceipts(newReceipts);
-    });
-    return sub;
-  }, []);
+  // React.useEffect(() => {
+  //   const receiptRef = firestore()
+  //     .collection('users')
+  //     .doc(userID)
+  //     .collection('Receipts');
+  //   const sub = receiptRef.onSnapshot(snap => {
+  //     setReceipts([]);
+  //     let newReceipts = [];
+  //     snap.forEach(doc => {
+  //       newReceipts.push({
+  //         id: doc.id,
+  //         date: doc.data().date,
+  //         storeId: doc.data().storeId,
+  //       });
+  //     });
+  //     setReceipts(newReceipts);
+  //   });
+  //   return sub;
+  // }, []);
 
   async function signOut() {
     auth().signOut();

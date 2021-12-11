@@ -16,7 +16,7 @@ export default function snapshotUser(
         const user = {id: uid, name: snap.data().name} as User;
         callback(user);
       } else {
-        console.warn('Error in snapshotUser');
+        console.warn('Error in snapshotUser', uid);
         callback(null);
       }
     });
