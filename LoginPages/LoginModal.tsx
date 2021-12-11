@@ -4,6 +4,7 @@ import {Modal, View} from 'react-native';
 import CodeConfirmation from './CodeConfirmation';
 import Register from './Register';
 import gs from '../Styles/globalStyles';
+import {useStore} from '../Reducers/store';
 
 type Props = {
   visible: boolean;
@@ -16,7 +17,7 @@ export default function LoginModal({visible}: Props) {
   const [verificationId, setVerificationId] = useState('');
 
   return (
-    <Modal visible={visible}>
+    <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           {confirm ? (

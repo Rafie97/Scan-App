@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import gs from '../Styles/globalStyles';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { useStore } from '../Reducers/store';
+import { useDispatch, useStore } from '../Reducers/store';
 import useAuth from '../Auth_Components/AuthContext';
 
 type RegisterProps = {
@@ -33,6 +33,7 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
     const lastFourInput = useRef(null);
 
     const store = useStore();
+    const dispatch = useDispatch();
     const authh = useAuth();
     const navigation = useNavigation();
 
@@ -40,8 +41,8 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
     async function signInAnonymously() {
         try {
             if(!store.user && authh.isAnonymous){
-                console.log('got here')
-                navigation.navigate('App');
+                dispatch({type:'SHOW_LOGIN_MODAL', payload:false})
+                navigation.navigate('App', {screen: "Promo"});
             }
             else{
                 await auth()

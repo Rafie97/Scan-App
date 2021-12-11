@@ -12,6 +12,7 @@ export type StateType = {
   recipes: Recipe[];
   cart: CartItem[];
   total: number;
+  showLogin: boolean;
 };
 
 export const mainReducer = (state, action) => {
@@ -42,6 +43,13 @@ export const mainReducer = (state, action) => {
         cart: addToCart([...state.cart], state.total, action.payload),
         total: addToTotal(state.total, action.payload),
       };
+      case 'SHOW_LOGIN_MODAL':
+        console.log('in')
+        return {
+          ...state,
+          showLogin: action.payload,
+        };
+
     default:
       return state;
   }

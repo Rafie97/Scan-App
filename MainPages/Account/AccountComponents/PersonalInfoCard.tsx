@@ -14,42 +14,44 @@ export default function PersonalInfoCard({
   editProfile,
   setTypedName,
 }: PersonalInfoProps) {
-  const userName = useStore().user.name;
+  const store = useStore();
   return (
     <View style={styles.personalInfoCard}>
       <Image
         source={require('../../../res/default_profile.jpg')}
         style={styles.defaultProfileImage}
       />
-      <View style={{flexDirection: 'column'}}>
-        {editProfile ? (
-          <TextInput
-            placeholder="Name"
-            style={{fontSize: 18, borderWidth: 1, marginBottom: 8}}
-            onChangeText={val => setTypedName(val)}
-          />
-        ) : (
-          <Text
-            style={[
-              styles.personalInfoText,
-              {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
-            ]}>
-            {userName}
+      {!!store.user && (
+        <View style={{flexDirection: 'column'}}>
+          {editProfile ? (
+            <TextInput
+              placeholder="Name"
+              style={{fontSize: 18, borderWidth: 1, marginBottom: 8}}
+              onChangeText={val => setTypedName(val)}
+            />
+          ) : (
+            <Text
+              style={[
+                styles.personalInfoText,
+                {fontWeight: 'bold', marginTop: 15, marginBottom: 20},
+              ]}>
+              {store.user.name}
+            </Text>
+          )}
+
+          <Text style={styles.personalInfoText}>
+            <FontAwe name="phone" size={18} color="#0073FE" />
+            {'   '}
+            512.363.8986
           </Text>
-        )}
 
-        <Text style={styles.personalInfoText}>
-          <FontAwe name="phone" size={18} color="#0073FE" />
-          {'   '}
-          512.363.8986
-        </Text>
-
-        <Text style={styles.personalInfoText}>
-          <Ion name="location-sharp" size={18} color="#0073FE" />
-          {'  '}
-          H-E-B
-        </Text>
-      </View>
+          <Text style={styles.personalInfoText}>
+            <Ion name="location-sharp" size={18} color="#0073FE" />
+            {'  '}
+            H-E-B
+          </Text>
+        </View>
+      )}
     </View>
   );
 }

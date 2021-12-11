@@ -24,8 +24,9 @@ import BottomTabsCard from './AccountComponents/BottomTabs/BottomTabsCard';
 import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
 import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
 import ContactsModal from './AccountComponents/ContactsModal';
-import {useStore} from '../../Reducers/store';
+import {useDispatch, useStore} from '../../Reducers/store';
 import LoginModal from '../../LoginPages/LoginModal';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 export default function AccountPage() {
   const [showLogin, setShowLogin] = React.useState(false);
@@ -53,22 +54,24 @@ export default function AccountPage() {
   const [typedName, setTypedName] = React.useState<string>();
   const userID = auth().currentUser.uid;
   const store = useStore();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
-  //Get Family
   React.useEffect(() => {
-    if (store.user !== null) {
+    if (store.user === null && isFocused) {
+      dispatch({type: 'SHOW_LOGIN_MODAL', payload: true});
+    } else if (store.user !== null && isFocused) {
       setSelectedNames(store.user.family);
       setTempSelectedNames(store.user.family);
+      console.log('family', store.user.family);
+      async () => {
+        // pullContactsFirebase();
+        getCount();
+        setTimeout(() => getLocalContacts(), 1000);
+      };
     }
-  }, []);
-
-  React.useEffect(() => {
-    async () => {
-      pullContactsFirebase();
-      getCount();
-      setTimeout(() => getLocalContacts(), 1000);
-    };
-  });
+  }, [isFocused, store.user]);
 
   //Get Lists
   React.useEffect(() => {
@@ -264,12 +267,11 @@ export default function AccountPage() {
         </TouchableOpacity>
       </View>
       <View style={{flexDirection: 'column', width: '100%'}}>
-        {store.user && (
-          <PersonalInfoCard
-            editProfile={editProfile}
-            setTypedName={setTypedName}
-          />
-        )}
+        <PersonalInfoCard
+          editProfile={editProfile}
+          setTypedName={setTypedName}
+        />
+
         <View>
           <TouchableOpacity
             onPress={() => {
@@ -322,7 +324,7 @@ export default function AccountPage() {
         filteredContactNames={filteredContactNames}
         logItem={logItem}
       />
-      {!store.user && <LoginModal visible={!store.user} />}
+      {store.showLogin && <LoginModal visible={store.showLogin} />}
     </View>
   );
 }

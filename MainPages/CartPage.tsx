@@ -8,16 +8,26 @@ import auth from '@react-native-firebase/auth';
 
 import Ticker, {Tick} from 'react-native-ticker';
 
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import gs from '../Styles/globalStyles';
 import {CartItem} from '../Models/ItemModels/CartItem';
+import {useDispatch, useStore} from '../Reducers/store';
 
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const [isScrollEnabled, setScrollEnabled] = React.useState(true);
   const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
   const navigation = useNavigation();
+  const store = useStore();
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  React.useEffect(() => {
+    if (!store.user && isFocused) {
+      dispatch({type: 'SHOW_LOGIN_MODAL', payload: true});
+    }
+  }, [isFocused, store.user]);
 
   React.useEffect(() => {
     const userID = auth().currentUser.uid;

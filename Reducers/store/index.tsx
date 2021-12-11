@@ -1,6 +1,7 @@
 import React, {Dispatch} from 'react';
 import {mainReducer, StateType} from '../mainReducer';
 import Map from '../../Models/MapModels/Map';
+import User from '../../Models/UserModels/User';
 
 const initialState: StateType = {
   cart: [],
@@ -8,7 +9,8 @@ const initialState: StateType = {
   map: {} as Map,
   recipes: [],
   total: 0,
-  user: '',
+  user: {} as User,
+  showLogin: false,
 };
 
 export const StateContext = React.createContext<StateType>(initialState);
