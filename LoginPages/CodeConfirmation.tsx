@@ -9,6 +9,7 @@ import {
 import gs from '../Styles/globalStyles';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
+import { useDispatch } from '../Reducers/store';
 
 type CodeConfirmationProps = {
   verificationId: string;
@@ -24,6 +25,7 @@ export default function CodeConfirmation({
   const [code, setCode] = useState('');
   const navigation = useNavigation();
   const codeInputRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     codeInputRef.current?.focus();
@@ -33,7 +35,7 @@ export default function CodeConfirmation({
     try {
       const cred = auth.PhoneAuthProvider.credential(verificationId, code);
       await auth().signInWithCredential(cred);
-
+      dispatch({type: 'SET_LOGIN_MODAL', payload: false});
       navigation.navigate('App');
     } catch (error) {
       if (

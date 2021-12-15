@@ -13,6 +13,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import gs from '../Styles/globalStyles';
 import {CartItem} from '../Models/ItemModels/CartItem';
 import {useDispatch, useStore} from '../Reducers/store';
+import useAuth from '../Auth_Components/AuthContext';
+import LoginModal from '../LoginPages/LoginModal';
 
 function CartPage() {
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
@@ -20,35 +22,37 @@ function CartPage() {
   const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
   const navigation = useNavigation();
   const store = useStore();
+  const authh = useAuth();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (!store.user && isFocused) {
-      dispatch({type: 'SHOW_LOGIN_MODAL', payload: true});
+    console.log(store.user, isFocused, authh.isAnonymous);
+    if (store.user === null && isFocused && authh.isAnonymous) {
+      dispatch({type: 'SET_LOGIN_MODAL', payload: true});
+    } else if (store.user !== null && isFocused) {
+      const userID = store.user.id;
+      const cartRef = firestore()
+        .collection('users')
+        .doc(userID)
+        .collection('Cart');
+
+      const sub = cartRef.onSnapshot(snap => {
+        setCartItems([]);
+        const tempItems: CartItem[] = [];
+        snap.forEach(async doc => {
+          const item: CartItem = new Item(doc);
+          item.quantity = doc.data().quantity;
+          tempItems.push(item);
+        });
+        setCartItems(tempItems);
+      });
+
+      return () => sub();
     }
   }, [isFocused, store.user]);
 
-  React.useEffect(() => {
-    const userID = auth().currentUser.uid;
-    const cartRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Cart');
-
-    const sub = cartRef.onSnapshot(snap => {
-      setCartItems([]);
-      const tempItems: CartItem[] = [];
-      snap.forEach(async doc => {
-        const item: CartItem = new Item(doc);
-        item.quantity = doc.data().quantity;
-        tempItems.push(item);
-      });
-      setCartItems(tempItems);
-    });
-
-    return () => sub();
-  }, []);
+  React.useEffect(() => {}, []);
 
   React.useEffect(() => {
     let tempSum = 0;
@@ -93,6 +97,7 @@ function CartPage() {
 
   return (
     <View style={gs.fullBackground}>
+      {/* {store.showLogin && <LoginModal visible={store.showLogin} />} */}
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
           <View

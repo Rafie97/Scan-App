@@ -14,12 +14,14 @@ import {useEffect} from 'react';
 import {Recipe} from '../../Models/ItemModels/Recipe';
 import gs from '../../Styles/globalStyles';
 import {useStore} from '../../Reducers/store';
+import LoginModal from '../../LoginPages/LoginModal';
 
 function PromotionsPage() {
   const store = useStore();
   const navigation = useNavigation();
   return (
     <View style={gs.fullBackground}>
+      {store.showLogin && <LoginModal visible={store.showLogin} />}
       <ScrollView
         style={[styles.promoPageContainer, gs.height100, gs.width100]}>
         <Text style={gs.header}>Today's Best Deals</Text>

@@ -43,10 +43,9 @@ export default function Register({setVerificationId, setConfirm}: RegisterProps)
 
      //Handle anonymous sign in
     async function signInAnonymously() {
-        console.log(store.user)
         try {
-            if(!store.user && authh.isAnonymous){
-                dispatch({type:'SHOW_LOGIN_MODAL', payload:false})
+            if(store.user === null && authh.isAnonymous){
+                dispatch({type:'SET_LOGIN_MODAL', payload:false})
                 navigation.navigate('App', {screen: "Promo"});
             }
             else{

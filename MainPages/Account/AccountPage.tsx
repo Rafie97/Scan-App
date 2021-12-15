@@ -30,8 +30,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useAuth from '../../Auth_Components/AuthContext';
 
 export default function AccountPage() {
-  const [showLogin, setShowLogin] = React.useState(false);
-
   const [wishlists, setWishlists] = React.useState([]);
 
   const [didCount, setDidCount] = React.useState(false);
@@ -61,7 +59,7 @@ export default function AccountPage() {
 
   React.useEffect(() => {
     if (store.user === null && isFocused && authState.isAnonymous) {
-      dispatch({type: 'SHOW_LOGIN_MODAL', payload: true});
+      dispatch({type: 'SET_LOGIN_MODAL', payload: true});
     } else if (store.user !== null && isFocused) {
       setSelectedNames(store.user.family);
       setTempSelectedNames(store.user.family);
@@ -325,7 +323,7 @@ export default function AccountPage() {
         filteredContactNames={filteredContactNames}
         logItem={logItem}
       />
-      {store.showLogin && <LoginModal visible={store.showLogin} />}
+      {/* {store.showLogin && <LoginModal visible={store.showLogin} />} */}
     </View>
   );
 }

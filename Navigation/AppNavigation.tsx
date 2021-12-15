@@ -36,8 +36,10 @@ export default function AppNavigation() {
   }, []);
 
   useEffect(() => {
-    loadUser(dispatch, user.uid);
-  }, [user.uid]);
+    if (user && user.uid) {
+      loadUser(dispatch, user.uid);
+    }
+  }, [user]);
 
   return (
     <TabNav.Navigator
