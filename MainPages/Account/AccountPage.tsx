@@ -283,7 +283,7 @@ export default function AccountPage() {
                 setUserName(typedName);
                 const userRef = firestore()
                   .collection('users')
-                  .doc(userID);
+                  .doc(auth().currentUser.uid);
                 userRef.set({
                   name: typedName,
                 });

@@ -122,29 +122,10 @@ function CartPage() {
             <Text style={{color: 'white'}}>Total Balance</Text>
           </View>
           <TouchableOpacity
-            style={{
-              width: '200%',
-              height: '100%',
-              justifyContent: 'center',
-              marginRight: -10,
-            }}>
-            <View
-              style={{
-                width: 115,
-                height: 40,
-                backgroundColor: 'white',
-                borderRadius: 10,
-                alignSelf: 'flex-end',
-                justifyContent: 'center',
-              }}>
-              <Text
-                style={{
-                  color: '#0073FE',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
-                Checkout
-              </Text>
+            onPress={() => {}}
+            style={[gs.width100, gs.height100, gs.jCenter]}>
+            <View style={styles.topCheckoutView}>
+              <Text style={[gs.blue, gs.bold, gs.taCenter]}>Checkout</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -219,15 +200,7 @@ function CartPage() {
             onPress={() => {
               return;
             }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: 'white',
-              }}>
-              Checkout
-            </Text>
+            <Text style={styles.bottomCheckoutText}>Checkout</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -244,6 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#0073FE',
     borderRadius: 10,
+    justifyContent: 'space-between',
   },
   blueHeaderContainer: {
     width: '100%',
@@ -253,6 +227,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 20,
+  },
+
+  topCheckoutView: {
+    width: 115,
+    height: 40,
+    ...gs.bgWhite,
+    ...gs.jCenter,
+    ...gs.margin20,
+    ...gs.radius10,
   },
 
   checkOutButton: {
@@ -287,5 +270,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 5,
     flex: 1,
+  },
+
+  bottomCheckoutText: {
+    fontSize: 20,
+    ...gs.bold,
+    ...gs.taCenter,
+    ...gs.white,
   },
 });

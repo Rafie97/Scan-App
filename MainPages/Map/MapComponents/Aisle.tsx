@@ -24,7 +24,7 @@ export default function AisleComponent({
   markedAisles,
   scaleFactor,
   wallData,
-}) {
+}: AisleProps) {
   const shiftedX = aisl.coordinate.x - wallData.mapSize.width / 2;
   const shiftedY = -aisl.coordinate.y + wallData.mapSize.height / 2;
 
