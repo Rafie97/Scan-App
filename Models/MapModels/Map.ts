@@ -3,9 +3,11 @@ import {WallCoordinate} from './Coordinate';
 
 export default interface Map {
   aisles: Aisle[];
-  mapSize: {
-    height: number;
-    width: number;
-  };
+  mapSize: MapSize;
   wallCoordinates: WallCoordinate[];
 }
+
+export interface MapSize {
+  height: number;
+  width: number;
+};

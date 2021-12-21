@@ -7,11 +7,12 @@ import Map from '../../Models/MapModels/Map';
 import gs from '../../Styles/globalStyles';
 
 import SearchBar from '../../Components/SearchBar';
-import Aisle from './MapComponents/Aisle';
+import Aisle, {calcCurrCoords} from './MapComponents/Aisle';
 import Wall from './MapComponents/Wall';
 
 import {useStore} from '../../Reducers/store';
 import {defaultMap} from '../../Connections/MapConnection';
+import ProdBubble from './MapComponents/ProdBubble';
 
 export default MapPage;
 
@@ -25,6 +26,14 @@ function MapPage() {
   const store = useStore();
   const wallData = store.map;
   const navigation = useNavigation();
+
+  const {newX, newY} =
+    currentBubble > -1 &&
+    calcCurrCoords(
+      wallData.aisles[currentBubble],
+      wallData.mapSize,
+      scaleFactor,
+    );
 
   useEffect(() => {
     const f = (Dimensions.get('window').width - 40) / wallData.mapSize.width;
@@ -101,7 +110,7 @@ function MapPage() {
                     markedAisles={markedAisles}
                     aisl={aisl}
                     scaleFactor={scaleFactor}
-                    wallData={wallData}
+                    mapSize={wallData.mapSize}
                   />
                 );
               })
@@ -109,6 +118,14 @@ function MapPage() {
               <></>
             )}
           </Svg>
+          {currentBubble >= 0 && (
+            <ProdBubble
+              prods={wallData.aisles[currentBubble].products}
+              coord={{x: newX, y: newY}}
+              mapSize={wallData.mapSize}
+              scaleFactor={scaleFactor}
+            />
+          )}
         </View>
         <SearchBar
           searchItems={searchItems}

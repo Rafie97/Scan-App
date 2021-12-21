@@ -4,7 +4,7 @@ import {Circle} from 'react-native-svg';
 import gs from '../../../Styles/globalStyles';
 import ProdBubble from './ProdBubble';
 import Aisle from '../../../Models/MapModels/Aisle';
-import Map from '../../../Models/MapModels/Map';
+import Map, {MapSize} from '../../../Models/MapModels/Map';
 
 type AisleProps = {
   aisl: Aisle;
@@ -13,25 +13,18 @@ type AisleProps = {
   index: number;
   markedAisles: number[];
   scaleFactor: number;
-  wallData: Map;
+  mapSize: MapSize;
 };
 
 export default function AisleComponent({
   aisl,
-  currentBubble,
   setCurrentBubble,
   index,
   markedAisles,
   scaleFactor,
-  wallData,
+  mapSize,
 }: AisleProps) {
-  const shiftedX = aisl.coordinate.x - wallData.mapSize.width / 2;
-  const shiftedY = -aisl.coordinate.y + wallData.mapSize.height / 2;
-
-  const newX =
-    shiftedX * scaleFactor + (wallData.mapSize.width * scaleFactor) / 2;
-  const newY =
-    shiftedY * scaleFactor + (wallData.mapSize.height * scaleFactor) / 2;
+  const {newX, newY} = calcCurrCoords(aisl, mapSize, scaleFactor);
   return (
     <View>
       <Circle
@@ -47,13 +40,16 @@ export default function AisleComponent({
       />
 
       <Circle cx={newX} cy={newY} r={2} fill="#777" />
-
-      {currentBubble === index && (
-        <ProdBubble
-          prods={wallData.aisles[currentBubble].products}
-          coord={{x: newX, y: newY}}
-        />
-      )}
     </View>
   );
+}
+
+export function calcCurrCoords(aisl, mapSize, scaleFactor) {
+  const shiftedX = aisl.coordinate.x - mapSize.width / 2;
+  const shiftedY = -aisl.coordinate.y + mapSize.height / 2;
+
+  const newX = shiftedX * scaleFactor + (mapSize.width * scaleFactor) / 2;
+  const newY = shiftedY * scaleFactor + (mapSize.height * scaleFactor) / 2;
+
+  return {newX, newY};
 }

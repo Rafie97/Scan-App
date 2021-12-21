@@ -171,7 +171,7 @@ function CartPage() {
               width: '100%',
             }}>
             <Text style={styles.totalTitles}>{'  '}Subtotal</Text>
-            <Text style={styles.totalNumbersText}>${cartSum[0]}</Text>
+            <Text style={styles.subtotalValue}>${cartSum[0]}</Text>
           </View>
           <View
             style={{
@@ -270,8 +270,18 @@ const styles = StyleSheet.create({
   },
 
   totalNumbersText: {
+    letterSpacing: 0.25,
     textAlign: 'right',
     fontSize: 16,
+    marginHorizontal: 20,
+    marginVertical: 5,
+    flex: 1,
+  },
+
+  subtotalValue: {
+    letterSpacing: 0.75,
+    fontSize: 16,
+    textAlign: 'right',
     marginHorizontal: 20,
     marginVertical: 5,
     flex: 1,
