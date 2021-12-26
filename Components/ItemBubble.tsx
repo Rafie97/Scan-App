@@ -24,7 +24,7 @@ export default function ItemBubble(props: PropTypes) {
         <Text style={styles.itemLabel} numberOfLines={2}>
           {props.item.name}
         </Text>
-        <Text style={styles.itemPrice}>${price}</Text>
+        <Text style={styles.itemPrice}>${price.toFixed(2)}</Text>
       </TouchableOpacity>
       {props.inCart && (
         <View style={styles.quantityModView}>

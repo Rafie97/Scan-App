@@ -17,38 +17,20 @@ import useAuth from '../Auth_Components/AuthContext';
 import LoginModal from '../LoginPages/LoginModal';
 
 function CartPage() {
-  const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
-  const [isScrollEnabled, setScrollEnabled] = React.useState(true);
+  // const [isScrollEnabled, setScrollEnabled] = React.useState(true);S
   const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
+
   const navigation = useNavigation();
   const store = useStore();
   const authh = useAuth();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
+  const cartItems = store.cart;
+
   React.useEffect(() => {
-    console.log(store.user, isFocused, authh.isAnonymous);
     if (store.user === null && isFocused && authh.isAnonymous) {
       dispatch({type: 'SET_LOGIN_MODAL', payload: true});
-    } else if (store.user !== null && isFocused) {
-      const userID = store.user.id;
-      const cartRef = firestore()
-        .collection('users')
-        .doc(userID)
-        .collection('Cart');
-
-      const sub = cartRef.onSnapshot(snap => {
-        setCartItems([]);
-        const tempItems: CartItem[] = [];
-        snap.forEach(async doc => {
-          const item: CartItem = new Item(doc);
-          item.quantity = doc.data().quantity;
-          tempItems.push(item);
-        });
-        setCartItems(tempItems);
-      });
-
-      return () => sub();
     }
   }, [isFocused, store.user]);
 
@@ -109,6 +91,7 @@ function CartPage() {
                 </Ticker>
                 <Ticker duration={250} textStyle={styles.tickerText}>
                   {(cartSum[2] - Math.trunc(cartSum[2]))
+                    .toFixed(2)
                     .toString()
                     .slice(1, 4) || 0}
                 </Ticker>
@@ -163,7 +146,7 @@ function CartPage() {
               width: '100%',
             }}>
             <Text style={styles.totalTitles}>{'  '}Subtotal</Text>
-            <Text style={styles.subtotalValue}>${cartSum[0]}</Text>
+            <Text style={styles.subtotalValue}>${cartSum[0].toFixed(2)}</Text>
           </View>
           <View
             style={{
@@ -173,7 +156,9 @@ function CartPage() {
               borderColor: '#E6E6E6',
             }}>
             <Text style={styles.totalTitles}>{'  '}Tax</Text>
-            <Text style={styles.totalNumbersText}>+${cartSum[1]}</Text>
+            <Text style={styles.totalNumbersText}>
+              +${cartSum[1].toFixed(2)}
+            </Text>
           </View>
           <View
             style={{
@@ -182,7 +167,7 @@ function CartPage() {
             }}>
             <Text style={styles.totalTitles}>{'  '}Total</Text>
             <Text style={[styles.totalNumbersText, gs.bold]}>
-              ${cartSum[2]}
+              ${cartSum[2].toFixed(2)}
             </Text>
           </View>
         </View>

@@ -20,6 +20,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/core';
 import {useDispatch, useStore} from '../Reducers/store';
 import {loadUser} from '../Reducers/actions/loadUser';
 import useAuth from '../Auth_Components/AuthContext';
+import loadCart from '../Reducers/actions/loadCart';
 
 const TabNav = createBottomTabNavigator();
 
@@ -38,6 +39,7 @@ export default function AppNavigation() {
   useEffect(() => {
     if (user && user.uid) {
       loadUser(dispatch, user.uid);
+      loadCart(dispatch, user.uid);
     }
   }, [user]);
 

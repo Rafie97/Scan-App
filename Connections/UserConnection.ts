@@ -1,8 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import useAuth from '../Auth_Components/AuthContext';
 import User from '../Models/UserModels/User';
-
-// const uid = useStore().user.id;
 
 export default function snapshotUser(
   uid: string,

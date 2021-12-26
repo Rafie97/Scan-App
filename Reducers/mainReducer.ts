@@ -37,6 +37,11 @@ export const mainReducer = (state, action) => {
         ...state,
         map: action.payload,
       };
+    case 'SET_CART':
+      return {
+        ...state,
+        cart: action.payload,
+      };
     case 'ADD_TO_CART':
       return {
         ...state,
