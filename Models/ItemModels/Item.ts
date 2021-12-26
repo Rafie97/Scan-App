@@ -7,7 +7,7 @@ interface ItemInterface {
   imageLink: string;
   location: Location;
   price: number;
-  priceHistory: Map<string, number>;
+  priceHistory?: Map<string, number>;
   promo: boolean;
   reviews: Review[];
 }
@@ -19,7 +19,7 @@ class Item implements ItemInterface {
   imageLink: string;
   location: Location;
   price: number;
-  priceHistory: Map<string, number>;
+  priceHistory?: Map<string, number>;
   promo: boolean;
   reviews: Review[];
 
@@ -74,13 +74,17 @@ function convertPriceHistory(firebasePriceHistory: {
   timestamp: number;
 }): Map<string, number> {
   let priceHist = new Map<string, number>();
-
-  Object.entries(firebasePriceHistory)
-    .reverse()
-    .forEach(entry => {
-      const [key, value] = entry;
-      priceHist.set(key, value);
-    });
+  if(firebasePriceHistory) {
+    Object.entries(firebasePriceHistory)
+      .reverse()
+      .forEach(entry => {
+        const [key, value] = entry;
+        priceHist.set(key, value);
+      });
 
   return priceHist;
+  }
+  else{
+    return null;
+  }
 }

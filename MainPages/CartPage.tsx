@@ -104,18 +104,10 @@ function CartPage() {
             style={{flexDirection: 'column', marginTop: 15, marginLeft: 30}}>
             {cartSum ? (
               <View style={{flexDirection: 'row'}}>
-                <Ticker
-                  textStyle={{fontSize: 30, fontWeight: 'bold', color: 'white'}}
-                  duration={500}>
+                <Ticker textStyle={styles.tickerText} duration={500}>
                   ${Math.trunc(cartSum[2]).toString() || 0}
                 </Ticker>
-                <Ticker
-                  duration={250}
-                  textStyle={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    color: 'white',
-                  }}>
+                <Ticker duration={250} textStyle={styles.tickerText}>
                   {(cartSum[2] - Math.trunc(cartSum[2]))
                     .toString()
                     .slice(1, 4) || 0}
@@ -124,7 +116,7 @@ function CartPage() {
             ) : (
               <></>
             )}
-            <Text style={{color: 'white'}}>Total Balance</Text>
+            <Text style={gs.white}>Total Balance</Text>
           </View>
           <TouchableOpacity
             onPress={() => {}}
@@ -241,6 +233,13 @@ const styles = StyleSheet.create({
     ...gs.jCenter,
     ...gs.margin20,
     ...gs.radius10,
+  },
+
+  tickerText: {
+    fontSize: 30,
+    ...gs.bold,
+    ...gs.white,
+    ...gs.taCenter,
   },
 
   checkOutButton: {

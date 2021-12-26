@@ -61,7 +61,7 @@ const styles = {
     backgroundColor: '#4400fe',
   },
   bgWhite: {
-    backgroundColor: '#fefefe',
+    backgroundColor: '#fdfdfd',
   },
 
   blue: {
@@ -110,7 +110,7 @@ const styles = {
   },
 
   white: {
-    color: '#fefefe',
+    color: '#fdfdfd',
   },
 };
 

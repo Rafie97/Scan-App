@@ -3,7 +3,7 @@ import {FlatList, Modal, TouchableOpacity, View, Text} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import gs from '../../../../Styles/globalStyles';
 import {useNavigation} from '@react-navigation/native';
-import useAuth from '../../../../Auth_Components/AuthContext';
+import auth from '@react-native-firebase/auth';
 
 type WishlistModalProps = {
   itemID: string;
@@ -19,10 +19,10 @@ export default function WishlistModal({
   wishlists,
 }: WishlistModalProps) {
   const navigation = useNavigation();
-  const auth = useAuth();
 
   function addToWishlist(listname) {
-    const userID = auth.currentUser.uid;
+    const userID = auth().currentUser.uid;
+
     firestore()
       .collection('users')
       .doc(userID)

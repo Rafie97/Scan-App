@@ -18,6 +18,7 @@ import gs from '../../../Styles/globalStyles';
 import PriceChart from './ItemComponents/PriceChart';
 import ReviewCard from './ItemComponents/ReviewCard';
 import WishlistModal from './ItemComponents/WishlistModal';
+import {Recipe} from '../../../Models/ItemModels/Recipe';
 
 export type LineChartDataType = {
   labels: string[];
@@ -31,7 +32,7 @@ export type LineChartDataType = {
 type ItemPageParams = {
   route: {
     params: {
-      itemIDCallback: Item;
+      itemIDCallback: Item | Recipe;
       isRecipe: boolean;
     };
   };
@@ -73,7 +74,7 @@ function ItemPage({route}: ItemPageParams) {
       .collection('users')
       .doc(userID)
       .collection('Cart');
-    const item = new Item(thing);
+    const item = new Item(thing) as Recipe;
     //@ts-ignore
     item.quantity = 1;
     cartRef.add(item);
