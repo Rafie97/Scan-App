@@ -22,6 +22,14 @@ export const mainReducer = (state, action) => {
         ...state,
         user: action.payload,
       };
+    case 'SET_WISHLISTS':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          wishlists: action.payload,
+        },
+      };
     case 'SET_ITEMS':
       return {
         ...state,

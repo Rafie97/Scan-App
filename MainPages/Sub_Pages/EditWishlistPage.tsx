@@ -21,35 +21,22 @@ function EditWishlistPage(props: any) {
   const store = useStore();
   const navigation = useNavigation();
   const routeListName = props.route.params.listNameCallback;
+  const wishlists = store.user.wishlists;
 
   React.useEffect(() => {
-    getItems();
-  }, []);
-
-  async function getItems(): Promise<void> {
-    const userID = auth().currentUser.uid;
-    firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Wishlists')
-      .doc(routeListName)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          let tempItems: Item[] = [];
-          doc.data().items.forEach((id: string) => {
-            tempItems.push(store.items.find(itm => itm.docID === id));
-          });
-          setListItems(
-            tempItems.map(itm => {
-              return {...itm, quantity: 1};
-            }),
-          );
-        } else {
-          console.warn('Error getting wishlist items');
-        }
+    if (wishlists.length) {
+      const wishIndex = wishlists.findIndex(list => list.id === routeListName);
+      let tempItems: Item[] = [];
+      wishlists[wishIndex].items.forEach((id: string) => {
+        tempItems.push(store.items.find(itm => itm.docID === id));
       });
-  }
+      setListItems(
+        tempItems.map(itm => {
+          return {...itm, quantity: 1};
+        }),
+      );
+    }
+  }, [wishlists]);
 
   function deleteItem(itemID) {
     const userID = auth().currentUser.uid;
@@ -60,9 +47,6 @@ function EditWishlistPage(props: any) {
       .doc(routeListName)
       .update({
         items: firestore.FieldValue.arrayRemove(itemID),
-      })
-      .then(() => {
-        getItems();
       });
   }
 
@@ -102,14 +86,19 @@ export default EditWishlistPage;
 
 const styles = {
   backButtonView: {
-    top: 10,
-    left: 5,
+    top: 5,
+    left: 0.25,
+    padding: 4.75,
     ...gs.aCenter,
     ...gs.jCenter,
     ...gs.pAbsolute,
   },
   listNameText: {
     fontSize: 24,
+    maxWidth: '80%',
+    alignSelf: 'flex-end',
+    marginLeft: 60,
+    paddingRight: 40,
     ...gs.aStretch,
     ...gs.bold,
     ...gs.margin20,

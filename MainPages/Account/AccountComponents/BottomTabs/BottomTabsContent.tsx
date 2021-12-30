@@ -8,13 +8,14 @@ import FamilyTile, {
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import {Receipt} from '../../../../Models/CartModels/Receipt';
 import gs from '../../../../Styles/globalStyles';
+import {Wishlist} from '../../../../Models/UserModels/User';
 
 type BottomTabsContentProps = {
   currentBottomTabIndex: number;
   contactsLoading: boolean;
   setContactModal: Dispatch<SetStateAction<boolean>>;
   selectedNames: string[];
-  wishlists: string[];
+  wishlists: Wishlist[];
   receipts: Receipt[];
 };
 
@@ -76,7 +77,7 @@ export default function BottomTabsContent({
           showsHorizontalScrollIndicator={false}
           data={wishlists}
           horizontal={true}
-          renderItem={({item}) => <WishlistTile name={item} />}
+          renderItem={({item}) => <WishlistTile name={item.id} />}
         />
       </View>
     );

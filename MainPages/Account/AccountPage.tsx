@@ -1,16 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Modal,
-  AsyncStorage,
-} from 'react-native';
+import React from 'react';
+import {View, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 
 require('react-native-linear-gradient').default;
 import firestore from '@react-native-firebase/firestore';
@@ -25,13 +15,10 @@ import PersonalInfoCard from './AccountComponents/PersonalInfoCard';
 import BottomTabsContent from './AccountComponents/BottomTabs/BottomTabsContent';
 import ContactsModal from './AccountComponents/ContactsModal';
 import {useDispatch, useStore} from '../../Reducers/store';
-import LoginModal from '../../LoginPages/LoginModal';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useAuth from '../../Auth_Components/AuthContext';
 
 export default function AccountPage() {
-  const [wishlists, setWishlists] = React.useState([]);
-
   const [didCount, setDidCount] = React.useState(false);
   const [countContacts, setCountContacts] = React.useState(0);
 
@@ -57,38 +44,20 @@ export default function AccountPage() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
+  const wishlists = store.user.wishlists;
+
   React.useEffect(() => {
     if (store.user === null && isFocused && authState.isAnonymous) {
       dispatch({type: 'SET_LOGIN_MODAL', payload: true});
     } else if (store.user !== null && isFocused) {
       setSelectedNames(store.user.family);
       setTempSelectedNames(store.user.family);
-      console.log('family', store.user.family);
       async () => {
-        // pullContactsFirebase();
         getCount();
         setTimeout(() => getLocalContacts(), 1000);
       };
     }
   }, [isFocused, store.user]);
-
-  //Get Lists
-  // React.useEffect(() => {
-  //   //Retrieve names of wishlists
-  //   const wishRef = firestore()
-  //     .collection('users')
-  //     .doc(userID)
-  //     .collection('Wishlists');
-  //   const sub = wishRef.onSnapshot(snap => {
-  //     setWishlists([]);
-  //     let newWishlists = [];
-  //     snap.forEach(doc => {
-  //       newWishlists.push(doc.id);
-  //     });
-  //     setWishlists(newWishlists);
-  //   });
-  //   return sub;
-  // }, []);
 
   //Get Receipts
   // React.useEffect(() => {
@@ -205,23 +174,6 @@ export default function AccountPage() {
     }
   }
 
-  async function pullContactsFirebase() {
-    const userID = auth().currentUser.uid;
-    const famRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Family');
-
-    famRef.onSnapshot(async snap => {
-      setSelectedNames([]);
-      setTempSelectedNames([]);
-      snap.forEach(async doc => {
-        setSelectedNames([...selectedNames, doc.data().name]);
-        setTempSelectedNames([...tempSelectedNames, doc.data().name]);
-      });
-    });
-  }
-
   // ============================== END CONTACT METHODS ====================================
 
   async function pushContactsFirebase() {
@@ -323,7 +275,6 @@ export default function AccountPage() {
         filteredContactNames={filteredContactNames}
         logItem={logItem}
       />
-      {/* {store.showLogin && <LoginModal visible={store.showLogin} />} */}
     </View>
   );
 }

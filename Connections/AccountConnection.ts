@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import User from '../Models/UserModels/User';
+import User, {Wishlist} from '../Models/UserModels/User';
 
 export default function snapshotUser(
   uid: string,
@@ -15,6 +15,29 @@ export default function snapshotUser(
       } else {
         console.warn('Error in snapshotUser', uid);
         callback(null);
+      }
+    });
+}
+
+export function snapshotWishlists(
+  uid: string,
+  callback: (wishlists: Wishlist[]) => void,
+) {
+  return firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('Wishlists')
+    .onSnapshot(async snap => {
+      if (snap.empty) {
+        console.warn('Error in snapshotWishlists', uid);
+        callback([]);
+      } else {
+        const wishlists = await Promise.all(
+          snap.docs.map(doc => {
+            return {id: doc.id, items: doc.data().items} as Wishlist;
+          }),
+        );
+        callback(wishlists);
       }
     });
 }

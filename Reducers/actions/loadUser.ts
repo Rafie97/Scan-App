@@ -1,5 +1,8 @@
-import snapshotUser, {loadFamily} from '../../Connections/UserConnection';
-import User from '../../Models/UserModels/User';
+import snapshotUser, {
+  loadFamily,
+  snapshotWishlists,
+} from '../../Connections/AccountConnection';
+import User, {Wishlist} from '../../Models/UserModels/User';
 
 export async function loadUser(dispatch, uid) {
   try {
@@ -17,6 +20,20 @@ export async function loadUser(dispatch, uid) {
           payload: null,
         });
         return;
+      }
+    });
+    snapshotWishlists(uid, (loadedWishlists: Wishlist[]) => {
+      if (loadedWishlists.length) {
+        dispatch({
+          type: 'SET_WISHLISTS',
+          payload: loadedWishlists,
+        });
+      } else {
+        console.warn('Error in loading wishlists');
+        dispatch({
+          type: 'SET_WISHLISTS',
+          payload: [],
+        });
       }
     });
   } catch (err) {
