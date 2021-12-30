@@ -1,20 +1,15 @@
-import React, {Component} from 'react';
-import {View, Text, ImageBackground, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import Item from '../Models/ItemModels/Item';
-import SwipeableItem from '../Components/SwipeableItem';
+import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
-
-import Ticker, {Tick} from 'react-native-ticker';
-
+import Ticker from 'react-native-ticker';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import gs from '../Styles/globalStyles';
-import {CartItem} from '../Models/ItemModels/CartItem';
-import {useDispatch, useStore} from '../Reducers/store';
-import useAuth from '../Auth_Components/AuthContext';
-import LoginModal from '../LoginPages/LoginModal';
+import gs from '../../Styles/globalStyles';
+import {useDispatch, useStore} from '../../Reducers/store';
+import useAuth from '../../Auth_Components/AuthContext';
+import BottomCartInfo from './CartComponents/BottomCartInfo';
 
 function CartPage() {
   // const [isScrollEnabled, setScrollEnabled] = React.useState(true);S
@@ -33,8 +28,6 @@ function CartPage() {
       dispatch({type: 'SET_LOGIN_MODAL', payload: true});
     }
   }, [isFocused, store.user]);
-
-  React.useEffect(() => {}, []);
 
   React.useEffect(() => {
     let tempSum = 0;
@@ -69,23 +62,13 @@ function CartPage() {
       });
   }
 
-  // function getTotalPriceString(price) {
-  //   const totalNum = Math.round(100 * 1.0825 * price) / 100;
-  //   const totalString = totalNum.toString();
-  //   console.log('in func ', totalString);
-  //   // return totalString;
-  //   return totalNum;
-  // }
-
   return (
     <View style={gs.fullBackground}>
-      {/* {store.showLogin && <LoginModal visible={store.showLogin} />} */}
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
-          <View
-            style={{flexDirection: 'column', marginTop: 15, marginLeft: 30}}>
+          <View style={styles.totalBalanceView}>
             {cartSum ? (
-              <View style={{flexDirection: 'row'}}>
+              <View style={gs.flexRow}>
                 <Ticker textStyle={styles.tickerText} duration={500}>
                   ${Math.trunc(cartSum[2]).toString() || 0}
                 </Ticker>
@@ -125,67 +108,7 @@ function CartPage() {
         )}
         data={cartItems}
       />
-      <View
-        style={{
-          height: 200,
-          width: '100%',
-          flexDirection: 'column',
-          marginBottom: 60,
-          borderTopWidth: 1,
-          borderColor: '#E6E6E6',
-        }}>
-        <View
-          style={{
-            height: '65%',
-            width: '100%',
-            flexDirection: 'column',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-            }}>
-            <Text style={styles.totalTitles}>{'  '}Subtotal</Text>
-            <Text style={styles.subtotalValue}>${cartSum[0].toFixed(2)}</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              borderBottomWidth: 1,
-              borderColor: '#E6E6E6',
-            }}>
-            <Text style={styles.totalTitles}>{'  '}Tax</Text>
-            <Text style={styles.totalNumbersText}>
-              +${cartSum[1].toFixed(2)}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-            }}>
-            <Text style={styles.totalTitles}>{'  '}Total</Text>
-            <Text style={[styles.totalNumbersText, gs.bold]}>
-              ${cartSum[2].toFixed(2)}
-            </Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            width: '100%',
-            height: '30%',
-          }}>
-          <TouchableOpacity
-            style={styles.checkOutButton}
-            onPress={() => {
-              return;
-            }}>
-            <Text style={styles.bottomCheckoutText}>Checkout</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <BottomCartInfo cartSum={cartSum} />
     </View>
   );
 }
@@ -202,13 +125,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   blueHeaderContainer: {
-    width: '100%',
     height: '12%',
     borderBottomWidth: 1,
     borderColor: '#E6E6E6',
     marginTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 20,
+    ...gs.width100,
+  },
+
+  totalBalanceView: {
+    marginTop: 15,
+    marginLeft: 30,
+    ...gs.flexColumn,
   },
 
   topCheckoutView: {
@@ -227,54 +156,10 @@ const styles = StyleSheet.create({
     ...gs.taCenter,
   },
 
-  checkOutButton: {
-    width: '40%',
-    height: 50,
-    borderRadius: 40,
-    ...gs.jCenter,
-    ...gs.aSelfCenter,
-    ...gs.bgBlue,
-    ...gs.shadow,
-  },
-
   listContainer: {
     paddingTop: 5,
     marginBottom: 10,
     ...gs.aCenter,
     ...gs.height100,
-  },
-
-  totalTitles: {
-    textAlign: 'left',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    marginVertical: 8,
-    flex: 1,
-  },
-
-  totalNumbersText: {
-    letterSpacing: 0.25,
-    textAlign: 'right',
-    fontSize: 16,
-    marginHorizontal: 20,
-    marginVertical: 5,
-    flex: 1,
-  },
-
-  subtotalValue: {
-    letterSpacing: 0.75,
-    fontSize: 16,
-    textAlign: 'right',
-    marginHorizontal: 20,
-    marginVertical: 5,
-    flex: 1,
-  },
-
-  bottomCheckoutText: {
-    fontSize: 20,
-    ...gs.bold,
-    ...gs.taCenter,
-    ...gs.white,
   },
 });

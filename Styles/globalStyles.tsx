@@ -1,5 +1,3 @@
-import {StyleSheet} from 'react-native';
-
 const styles = {
   fullBackground: {
     flex: 1,
