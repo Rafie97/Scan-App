@@ -13,7 +13,6 @@ export interface PromoTileProps extends Recipe {
 }
 
 //PROMO TILE
-
 const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
   const navigation = useNavigation();
   return (
@@ -34,39 +33,14 @@ const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
         <Image style={styles.itemImage} source={{uri: item.imageLink}} />
 
         <View
-          style={{
-            height: 30,
-            width: 90,
-            borderRadius: 20,
-            backgroundColor: isRecipe ? '#4400fe' : '#0073FE',
-            justifyContent: 'center',
-            marginLeft: 10,
-          }}>
-          <Text
-            style={[
-              styles.itemTitleText,
-              {
-                fontWeight: 'bold',
-                marginVertical: 0,
-                fontSize: 20,
-                textAlign: 'center',
-                color: 'white',
-              },
-            ]}>
-            ${item.price}
-          </Text>
+          style={[
+            styles.promoPriceView,
+            {backgroundColor: isRecipe ? '#4400fe' : '#0073FE'},
+          ]}>
+          <Text style={styles.promoPriceText}>${item.price.toFixed(2)}</Text>
         </View>
 
-        <Text
-          numberOfLines={2}
-          style={[
-            styles.itemTitleText,
-            {
-              marginLeft: 18,
-              textAlign: 'left',
-              fontWeight: 'bold',
-            },
-          ]}>
+        <Text numberOfLines={2} style={styles.promoNameText}>
           {item.name + `\n`}
         </Text>
         {item.feeds && (
@@ -83,6 +57,7 @@ type FamilyTileProps = {
   name: string;
 };
 
+//FAMILY TILE
 const FamilyTile = (props: FamilyTileProps) => {
   const [sauce, setSauce] = React.useState();
 
@@ -95,34 +70,20 @@ const FamilyTile = (props: FamilyTileProps) => {
   });
 
   return (
-    <View
-      style={{
-        height: 130,
-        width: 100,
-        marginLeft: 10,
-        alignItems: 'flex-end',
-      }}>
+    <View style={styles.accountTabTile}>
       <Image
         source={require('../res/default_profile.jpg')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#0073FE',
-          borderWidth: 1,
-          marginLeft: 10,
-        }}
+        style={styles.accountTabImage}
       />
 
       <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
-        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-          {props.name}
-        </Text>
+        <Text style={[gs.bold, gs.taCenter]}>{props.name}</Text>
       </View>
     </View>
   );
 };
 
+//WISHLIST TILE
 type WishlistTileProps = {
   name: string;
 };
@@ -136,37 +97,20 @@ const WishlistTile = (wishlist: WishlistTileProps) => {
           params: {listNameCallback: wishlist.name},
         });
       }}
-      style={{
-        height: 130,
-        width: 100,
-        marginLeft: 10,
-        alignItems: 'flex-end',
-      }}>
+      style={styles.accountTabTile}>
       <Image
         source={require('../res/wishlist-tile.png')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#0073FE',
-          borderWidth: 1,
-          marginLeft: 10,
-        }}
+        style={styles.accountTabImage}
       />
 
       <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}>
-          {wishlist.name}
-        </Text>
+        <Text style={[gs.bold, gs.taCenter]}>{wishlist.name}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
+//RECEIPT TILE
 type ReceiptTileProps = {
   receipt: Receipt;
 };
@@ -181,37 +125,16 @@ const ReceiptTile = (props: ReceiptTileProps) => {
           // params: {listNameCallback: props.name},
         });
       }}
-      style={{
-        height: 150,
-        width: 100,
-        marginLeft: 10,
-        alignItems: 'flex-end',
-      }}>
+      style={styles.receiptTile}>
       <Image
         source={require('../res/empty-receipt.png')}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-          borderColor: '#0073fe',
-          borderWidth: 1,
-          marginLeft: 10,
-        }}
+        style={styles.accountTabImage}
       />
-
-      <View
-        style={{
-          flex: 1,
-          width: '100%',
-          alignSelf: 'center',
-          shadowColor: '#000',
-          shadowOpacity: 0.5,
-          shadowRadius: 4,
-        }}>
+      <View style={styles.storeNameView}>
         <Text style={{textAlign: 'center', marginTop: 3, fontWeight: 'bold'}}>
           {props.receipt.storeId}
         </Text>
-        <Text style={{textAlign: 'center'}}>{props.receipt.date}</Text>
+        <Text style={gs.taCenter}>{props.receipt.date}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -229,10 +152,27 @@ const styles = StyleSheet.create({
     ...gs.radius10,
     ...gs.shadow,
   },
+  promoPriceView: {
+    height: 30,
+    width: 90,
+    borderRadius: 20,
+    marginLeft: 10,
+    ...gs.jCenter,
+  },
 
-  itemTitleText: {
-    marginVertical: 5,
+  promoPriceText: {
+    marginVertical: 0,
+    fontSize: 20,
+    ...gs.bold,
+    ...gs.taCenter,
+    ...gs.white,
+  },
+  promoNameText: {
     fontSize: 18,
+    marginLeft: 18,
+    marginVertical: 5,
+    textAlign: 'left',
+    fontWeight: 'bold',
   },
 
   itemImage: {
@@ -244,6 +184,32 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'contain',
-    alignSelf: 'center',
+    ...gs.aSelfCenter,
+  },
+  accountTabTile: {
+    height: 130,
+    width: 100,
+    marginLeft: 10,
+    alignItems: 'flex-end',
+  },
+  accountTabImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    borderColor: '#0073FE',
+    borderWidth: 1,
+    marginLeft: 10,
+  },
+  receiptTile: {
+    height: 150,
+    width: 100,
+    marginLeft: 10,
+    alignItems: 'flex-end',
+  },
+  storeNameView: {
+    ...gs.aSelfCenter,
+    ...gs.flex1,
+    ...gs.shadow,
+    ...gs.width100,
   },
 });
