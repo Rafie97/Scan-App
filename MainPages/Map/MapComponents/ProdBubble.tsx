@@ -43,7 +43,7 @@ export default function ProdBubble({prods, coord, mapSize, scaleFactor}) {
               navigation.navigate('Promo', {
                 screen: 'PromoItemPage',
                 initial: false,
-                params: {itemIDCallback: prod, isRecipe: true},
+                params: {itemIDCallback: prod, isRecipe: false},
               });
             }}
             style={

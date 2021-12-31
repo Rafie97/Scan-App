@@ -51,14 +51,7 @@ export default function AppNavigation() {
         keyboardHidesTabBar: true,
         showLabel: false,
         activeBackgroundColor: '#b0abab',
-        style: {
-          position: 'absolute',
-          alignItems: 'center',
-          backgroundColor: 'white',
-          borderTopWidth: 2,
-          borderTopColor: 'black',
-          height: 60,
-        },
+        style: styles.mainNavigator,
       }}
       headerMode="none">
       <TabNav.Screen
@@ -147,6 +140,14 @@ export default function AppNavigation() {
 }
 
 const styles = StyleSheet.create({
+  mainNavigator: {
+    position: 'absolute',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderTopWidth: 2,
+    borderTopColor: 'black',
+    height: 60,
+  },
   iconView: {
     width: 55,
     height: 55,

@@ -18,7 +18,7 @@ export function AccountStack() {
         name="EditWishlistPage"
         component={EditWishlistPage}
       />
-      <AccountStackNav.Screen name="AccountPageItemPage" component={ItemPage} />
+      <AccountStackNav.Screen name="AccountItemPage" component={ItemPage} />
 
       <AccountStackNav.Screen name="ReceiptPage" component={ReceiptPage} />
     </AccountStackNav.Navigator>

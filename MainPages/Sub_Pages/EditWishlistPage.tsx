@@ -25,16 +25,19 @@ function EditWishlistPage(props: any) {
 
   React.useEffect(() => {
     if (wishlists.length) {
-      const wishIndex = wishlists.findIndex(list => list.id === routeListName);
+      let wishIndex = wishlists.findIndex(list => list.id === routeListName);
+
       let tempItems: Item[] = [];
       wishlists[wishIndex].items.forEach((id: string) => {
-        tempItems.push(store.items.find(itm => itm.docID === id));
+        let tempItem = store.items.find(itm => itm.docID === id);
+        let isRecipe = false;
+        if (!tempItem) {
+          tempItem = store.recipes.find(itm => itm.docID === id);
+          isRecipe = true;
+        }
+        tempItems.push({...tempItem, quantity: 1, isRecipe: isRecipe});
       });
-      setListItems(
-        tempItems.map(itm => {
-          return {...itm, quantity: 1};
-        }),
-      );
+      setListItems(tempItems);
     }
   }, [wishlists]);
 
@@ -51,12 +54,7 @@ function EditWishlistPage(props: any) {
   }
 
   const renderItem = ({item}) => (
-    <SwipeableItem
-      item={item}
-      deleteItem={deleteItem}
-      sourcePage="Account"
-      navigation={navigation}
-    />
+    <SwipeableItem item={item} deleteItem={deleteItem} sourcePage="Account" />
   );
 
   return (

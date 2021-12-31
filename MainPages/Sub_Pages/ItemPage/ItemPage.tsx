@@ -111,7 +111,7 @@ function ItemPage({route}: ItemPageParams) {
       <View style={styles.backButtonView}>
         <TouchableOpacity
           style={[{flexDirection: 'row'}]}
-          onPress={() => navigate.navigate('Promo', {screen: 'MainPromoPage'})}>
+          onPress={() => navigate.goBack()}>
           <Ionicon name="arrow-back-circle-outline" size={45} />
         </TouchableOpacity>
       </View>

@@ -61,8 +61,9 @@ function SwipeableItem(props) {
 
   function navToItem() {
     navigation.navigate(props.sourcePage, {
+      initial: false,
       screen: props.sourcePage + 'ItemPage',
-      params: {itemIDCallback: props.item},
+      params: {itemIDCallback: props.item, isRecipe: props.item.isRecipe},
     });
   }
 
@@ -85,31 +86,10 @@ function SwipeableItem(props) {
   }
 
   return (
-    <Animated.View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        position: 'relative',
-      }}>
-      <View
-        style={{
-          // ...gs.aSelfCenter,
-          position: 'absolute',
-          right: 5,
-          bottom: 10,
-        }}>
+    <Animated.View style={styles.mainView}>
+      <View style={styles.deleteView}>
         <TouchableOpacity onPress={() => props.deleteItem(props.item.docID)}>
-          <Animated.View
-            style={{
-              backgroundColor:
-                //@ts-ignore
-                position.x < -15 ? 'rgba(217, 63, 18, 0.5)' : '#D93F12', //red
-              width: 50,
-              height: 80,
-              ...gs.aCenter,
-              ...gs.jCenter,
-              ...gs.radius10,
-            }}>
+          <Animated.View style={styles.deleteButton}>
             <EvilIcons name="trash" size={30} color="black" />
           </Animated.View>
         </TouchableOpacity>
@@ -133,3 +113,24 @@ function SwipeableItem(props) {
 }
 
 export default SwipeableItem;
+
+const styles = {
+  mainView: {
+    justifyContent: 'flex-end' as 'flex-end',
+    position: 'relative' as 'relative',
+    ...gs.flexRow,
+  },
+  deleteView: {
+    right: 5,
+    bottom: 10,
+    ...gs.pAbsolute,
+  },
+  deleteButton: {
+    backgroundColor: '#D93F12' as '#D93F12',
+    width: 50,
+    height: 80,
+    ...gs.aCenter,
+    ...gs.jCenter,
+    ...gs.radius10,
+  },
+};
