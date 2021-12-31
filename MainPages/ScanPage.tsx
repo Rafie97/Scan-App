@@ -1,18 +1,10 @@
 import {RNCamera} from 'react-native-camera';
-import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  ImageBackground,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {FlatList} from 'react-native-gesture-handler';
 import Item from '../Models/ItemModels/Item';
 import {useNavigation} from '@react-navigation/native';
-import globalStyles from '../Styles/globalStyles';
+import gs from '../Styles/globalStyles';
 import ItemBubble from '../Components/ItemBubble';
 
 function ScanPage() {
@@ -99,35 +91,36 @@ export default ScanPage;
 const styles = StyleSheet.create({
   fullBackground: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     backgroundColor: '#fafafa',
+    ...gs.flex1,
+    ...gs.width100,
+    ...gs.height100,
   },
 
   cameraWindow: {
-    flex: 1,
-    width: '100%',
-    alignSelf: 'center',
+    ...gs.aCenter,
+    ...gs.flex1,
+    ...gs.width100,
   },
 
   scannedItemsText: {
     marginTop: 40,
     marginBottom: 20,
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#0073FE',
-    textAlign: 'center',
-    alignSelf: 'stretch',
+    ...gs.aStretch,
+    ...gs.bold,
+    ...gs.blue,
+    ...gs.taCenter,
   },
 
   scanContainer: {
     backgroundColor: 'transparent',
-    flex: 1,
-    justifyContent: 'center',
+    ...gs.flex1,
+    ...gs.jCenter,
   },
 
   underCam: {
     height: 400,
-    alignItems: 'center',
+    ...gs.aCenter,
   },
 });

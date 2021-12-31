@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -7,11 +7,8 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import {PromoItemTile} from '../../Components/Tiles';
 import {useNavigation} from '@react-navigation/native';
-import {useEffect} from 'react';
-import {Recipe} from '../../Models/ItemModels/Recipe';
 import gs from '../../Styles/globalStyles';
 import {useStore} from '../../Reducers/store';
 import LoginModal from '../../LoginPages/LoginModal';
@@ -82,10 +79,10 @@ export default PromotionsPage;
 
 const styles = StyleSheet.create({
   exploreCouponsText: {
-    alignSelf: 'stretch',
-    flex: 1,
     fontSize: 18,
-    fontWeight: 'bold',
+    ...gs.aStretch,
+    ...gs.bold,
+    ...gs.flex1,
     ...gs.blue,
     ...gs.margin20,
   },
