@@ -18,23 +18,20 @@ export default function BottomTabsCard({
 }: BottomTabsCardProps) {
   return (
     <View style={styles.fullBottomCard}>
-      <View
-        style={{
-          width: '100%',
-        }}>
-        <View style={{flexDirection: 'row', width: '100%'}}>
+      <View style={gs.width100}>
+        <View style={[gs.width100, gs.flexRow]}>
           <TouchableOpacity
             onPress={() => {
               setCurrentBottomTabIndex(0);
             }}
-            style={{flex: 1, borderRightWidth: 2}}>
+            style={{...gs.flex1, borderRightWidth: 2}}>
             <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'stretch',
-                textAlign: 'center',
-                fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
-              }}>
+              style={[
+                styles.tabText,
+                {
+                  fontWeight: currentBottomTabIndex === 0 ? 'bold' : 'normal',
+                },
+              ]}>
               <Ion name="people" color="#0073FE" size={20} /> Family
             </Text>
           </TouchableOpacity>
@@ -42,14 +39,14 @@ export default function BottomTabsCard({
             onPress={() => {
               setCurrentBottomTabIndex(1);
             }}
-            style={{flex: 1, borderRightWidth: 2}}>
+            style={{...gs.flex1, borderRightWidth: 2}}>
             <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'stretch',
-                textAlign: 'center',
-                fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
-              }}>
+              style={[
+                styles.tabText,
+                {
+                  fontWeight: currentBottomTabIndex === 1 ? 'bold' : 'normal',
+                },
+              ]}>
               <FontAwe name="heart" color="#0073FE" size={18} /> Wishlists
             </Text>
           </TouchableOpacity>
@@ -57,27 +54,20 @@ export default function BottomTabsCard({
             onPress={() => {
               setCurrentBottomTabIndex(2);
             }}
-            style={{flex: 1}}>
+            style={gs.flex1}>
             <Text
-              style={{
-                fontSize: 20,
-                alignSelf: 'stretch',
-                textAlign: 'center',
-                fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
-              }}>
+              style={[
+                styles.tabText,
+                {
+                  fontWeight: currentBottomTabIndex === 2 ? 'bold' : 'normal',
+                },
+              ]}>
               <FontAwe5 name="receipt" color="#0073FE" size={18} /> Receipts
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'column',
-          width: '100%',
-          padding: 20,
-        }}>
-        {children}
-      </View>
+      <View style={styles.childContainer}>{children}</View>
     </View>
   );
 }
@@ -90,5 +80,17 @@ const styles = {
     ...gs.margin20,
     ...gs.radius10,
     ...gs.shadow,
+  },
+
+  tabText: {
+    fontSize: 20,
+    ...gs.aStretch,
+    ...gs.taCenter,
+  },
+
+  childContainer: {
+    padding: 20,
+    ...gs.flexColumn,
+    ...gs.width100,
   },
 };
