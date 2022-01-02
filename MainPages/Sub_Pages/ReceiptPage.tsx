@@ -1,140 +1,107 @@
-import React, {Component} from 'react';
-import {View, Text, ImageBackground, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
+import Ticker from 'react-native-ticker';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import gs from '../../Styles/globalStyles';
+import {useDispatch, useStore} from '../../Reducers/store';
+import useAuth from '../../Auth_Components/AuthContext';
+import BottomCartInfo from '../Cart/CartComponents/BottomCartInfo';
 
-import Ticker, {Tick} from 'react-native-ticker';
+type Props = {
+  receiptId: string;
+};
 
-import {useNavigation} from '@react-navigation/native';
+function ReceiptPage({receiptId}: Props) {
+  // const [isScrollEnabled, setScrollEnabled] = React.useState(true);S
+  const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
 
-function ReceiptPage() {
-  const [cartItems, setCartItems] = React.useState<Item[]>([]);
-  const [isScrollEnabled, setScrollEnabled] = React.useState(true);
-  const [cartSum, setCartSum] = React.useState<number[]>(undefined);
   const navigation = useNavigation();
+  const store = useStore();
+  const authh = useAuth();
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const receipt = store.user.receipts.find(receipt => receipt.id === receiptId);
+  const receiptItems = receipt.items.map(itemId => {
+    return store.items.find(item => item.docID === itemId);
+  });
 
   React.useEffect(() => {
-    const userID = auth().currentUser.uid;
-    const cartRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Cart');
-
-    const sub = cartRef.onSnapshot(snap => {
-      setCartItems([]);
-      const tempItems: Item[] = [];
-      snap.forEach(async doc => {
-        const item = new Item(doc);
-        item.quantity = doc.data().quantity;
-        tempItems.push(item);
-      });
-      setCartItems(tempItems);
-    });
-
-    return () => sub();
-  }, []);
+    if (store.user === null && isFocused && authh.isAnonymous) {
+      dispatch({type: 'SET_LOGIN_MODAL', payload: true});
+    }
+  }, [isFocused, store.user]);
 
   React.useEffect(() => {
     let tempSum = 0;
-    cartItems.forEach(item => {
-      const numPrice = +item.price;
-      tempSum += numPrice;
+    receiptItems.forEach(item => {
+      tempSum += item.price;
     });
     if (tempSum > 0) {
       setCartSum([
         Math.round(100 * tempSum) / 100,
+        Math.round(100 * 0.0825 * tempSum) / 100,
         Math.round(100 * 1.0825 * tempSum) / 100,
       ]);
     }
-  }, [cartItems]);
+  }, [receipt]);
 
   function deleteItem(itemID) {
-    const userID = auth().currentUser.uid;
-    const cartRef = firestore()
-      .collection('users')
-      .doc(userID)
-      .collection('Cart');
-
-    cartRef
-      .doc(itemID)
-      .delete()
-      .then(() => {
-        console.log('Successfully deleted from cart');
-      })
-      .catch(err => {
-        console.warn('Error deleting from cart: ', err);
-      });
+    console.warn('Error deleting from receipt');
   }
 
-  // function getTotalPriceString(price) {
-  //   const totalNum = Math.round(100 * 1.0825 * price) / 100;
-  //   const totalString = totalNum.toString();
-  //   console.log('in func ', totalString);
-  //   // return totalString;
-  //   return totalNum;
-  // }
-
-  const renderItem = ({item}) => (
-    <SwipeableItem
-      item={item}
-      setScrollEnabled={enable => setScrollEnabled(enable)}
-      deleteItem={deleteItem}
-      sourcePage="Cart"
-      navigation={navigation}
-    />
-  );
-
   return (
-    <ImageBackground
-      source={require('../../res/grad_3.png')}
-      style={styles.fullBackground}>
-      <View style={styles.TotalPricesView}>
-        <Text
-          style={[
-            styles.FirstTotal,
-            {position: 'absolute', left: 20, top: -2},
-          ]}>
-          Total:
-        </Text>
-        {cartSum ? (
-          <View
-            style={{flexDirection: 'row', marginLeft: 0, alignSelf: 'center'}}>
-            <Ticker textStyle={{fontSize: 40}} duration={500}>
-              ${Math.trunc(cartSum[1]).toString() || 0}
-            </Ticker>
-            <Ticker duration={250} textStyle={{fontSize: 40}}>
-              {(cartSum[1] - Math.trunc(cartSum[1])).toString().slice(1, 4) ||
-                0}
-            </Ticker>
+    <View style={gs.fullBackground}>
+      <View style={styles.blueHeaderContainer}>
+        <View style={styles.blueHeader}>
+          <View style={styles.totalBalanceView}>
+            {cartSum ? (
+              <View style={gs.flexRow}>
+                <Ticker textStyle={styles.tickerText} duration={500}>
+                  ${Math.trunc(cartSum[2]).toString() || 0}
+                </Ticker>
+                <Ticker duration={250} textStyle={styles.tickerText}>
+                  {(cartSum[2] - Math.trunc(cartSum[2]))
+                    .toFixed(2)
+                    .toString()
+                    .slice(1, 4) || 0}
+                </Ticker>
+              </View>
+            ) : (
+              <></>
+            )}
+            <Text style={gs.white}>Total Balance</Text>
           </View>
-        ) : (
-          <></>
-        )}
+          <TouchableOpacity
+            onPress={() => {}}
+            style={[gs.width100, gs.height100, gs.jCenter]}>
+            <View style={styles.topCheckoutView}>
+              <Text style={[gs.blue, gs.bold, gs.taCenter]}>Buy again</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text style={styles.TaxTotal}>
-        {' '}
-        <B>${cartSum ? cartSum[0] : 0}</B> without tax
-      </Text>
-
-      <TouchableOpacity
-        style={{margin: 15, position: 'relative', top: 0, right: 0}}>
-        <Text style={{color: 'blue', right: 0, position: 'relative'}}>
-          About this store
-        </Text>
-      </TouchableOpacity>
 
       <FlatList
-        scrollEnabled={isScrollEnabled}
-        contentContainerStyle={{alignItems: 'center', marginBottom: 80}}
-        style={styles.flatContainer}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        data={cartItems}
+        contentContainerStyle={styles.listContainer}
+        style={gs.width100}
+        renderItem={({item}) => (
+          <SwipeableItem
+            item={item}
+            deleteItem={deleteItem}
+            sourcePage="Cart"
+            navigation={navigation}
+          />
+        )}
+        data={receiptItems}
       />
-    </ImageBackground>
+      <BottomCartInfo isReceipt={true} cartSum={cartSum} />
+    </View>
   );
 }
 
@@ -143,87 +110,46 @@ const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 export default ReceiptPage;
 
 const styles = StyleSheet.create({
-  fullBackground: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-  },
-
-  flatContainer: {
-    marginTop: 30,
-    flex: 1,
-    width: '100%',
-    marginBottom: 60,
-  },
-
-  YourCartText: {
-    fontSize: 24,
-    alignSelf: 'center',
-    marginTop: 40,
-    marginBottom: 60,
-  },
-  checkOutButton: {
-    marginBottom: 80,
-    backgroundColor: 'black',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 9.11,
-    padding: 10,
-    elevation: 20,
-    borderWidth: 2,
-    borderRadius: 100,
-    borderColor: 'white',
-  },
-
-  itemBubble: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 2,
-    borderRadius: 20,
+  blueHeader: {
     flexDirection: 'row',
-    width: 300,
-    height: 60,
-    marginTop: 20,
-  },
-  itemImage: {
-    alignSelf: 'center',
-    width: 45,
-    height: 45,
-    marginLeft: 10,
-    marginRight: 0,
+    backgroundColor: '#0073FE',
     borderRadius: 10,
-    borderWidth: 10,
+    justifyContent: 'space-between',
   },
-  itemLabel: {
-    alignSelf: 'center',
-    marginLeft: 15,
-    fontSize: 16,
-  },
-  itemPrice: {
-    alignSelf: 'center',
-    textAlign: 'right',
-    marginLeft: 'auto',
-    marginRight: 10,
+  blueHeaderContainer: {
+    height: '12%',
+    borderBottomWidth: 1,
+    borderColor: '#E6E6E6',
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+    ...gs.width100,
   },
 
-  TotalPricesView: {
-    alignSelf: 'center',
-    width: '100%',
-    marginTop: 30,
-    flexDirection: 'column',
-    justifyContent: 'center',
+  totalBalanceView: {
+    marginTop: 15,
+    marginLeft: 30,
+    ...gs.flexColumn,
+  },
+  topCheckoutView: {
+    width: 115,
+    height: 40,
+    ...gs.bgWhite,
+    ...gs.jCenter,
+    ...gs.margin20,
+    ...gs.radius10,
+  },
+  tickerText: {
+    fontSize: 30,
+    ...gs.bold,
+    ...gs.white,
+    ...gs.taCenter,
   },
 
-  FirstTotal: {
-    fontSize: 40,
-  },
-
-  TaxTotal: {
-    alignSelf: 'center',
-    fontSize: 16,
+  listContainer: {
+    paddingTop: 5,
+    marginBottom: 10,
+    ...gs.aCenter,
+    ...gs.height100,
   },
 });

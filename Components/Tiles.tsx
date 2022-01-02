@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {Component} from 'react';
 
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {Receipt} from '../Models/CartModels/Receipt';
+import Receipt from '../Models/CartModels/Receipt';
 import Item from '../Models/ItemModels/Item';
 import {Recipe} from '../Models/ItemModels/Recipe';
 import gs from '../Styles/globalStyles';
@@ -122,7 +122,6 @@ const ReceiptTile = (props: ReceiptTileProps) => {
       onPress={() => {
         nav.navigate('Account', {
           screen: 'ReceiptPage',
-          // params: {listNameCallback: props.name},
         });
       }}
       style={styles.receiptTile}>

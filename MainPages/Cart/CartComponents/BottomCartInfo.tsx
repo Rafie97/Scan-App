@@ -4,9 +4,10 @@ import gs from '../../../Styles/globalStyles';
 
 type Props = {
   cartSum: number[];
+  isReceipt?: boolean;
 };
 
-export default function BottomCartInfo({cartSum}: Props) {
+export default function BottomCartInfo({cartSum, isReceipt = false}: Props) {
   return (
     <View style={styles.bottomInfoContainer}>
       <View style={styles.receiptView}>
@@ -32,7 +33,9 @@ export default function BottomCartInfo({cartSum}: Props) {
           onPress={() => {
             return;
           }}>
-          <Text style={styles.checkoutText}>Checkout</Text>
+          <Text style={styles.checkoutText}>
+            {isReceipt ? 'Buy again' : 'Checkout'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

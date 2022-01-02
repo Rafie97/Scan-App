@@ -21,7 +21,7 @@ function CartPage() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
-  const cartItems = store.cart;
+  const cartItems = store.user.cart;
 
   React.useEffect(() => {
     if (store.user === null && isFocused && authh.isAnonymous) {
@@ -112,8 +112,6 @@ function CartPage() {
     </View>
   );
 }
-
-const B = props => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>;
 
 export default CartPage;
 

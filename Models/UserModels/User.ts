@@ -1,4 +1,5 @@
 import Receipt from '../CartModels/Receipt';
+import {CartItem} from '../ItemModels/CartItem';
 
 export default interface User {
   id: string;
@@ -6,6 +7,7 @@ export default interface User {
   family?: string[];
   wishlists?: Wishlist[];
   receipts?: Receipt[];
+  cart?: CartItem[];
 }
 
 export interface Wishlist {

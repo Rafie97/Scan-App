@@ -57,12 +57,18 @@ export const mainReducer = (state, action) => {
     case 'SET_CART':
       return {
         ...state,
-        cart: action.payload,
+        user: {
+          ...state.user,
+          cart: action.payload,
+        },
       };
     case 'ADD_TO_CART':
       return {
         ...state,
-        cart: addToCart([...state.cart], state.total, action.payload),
+        user: {
+          ...state.user,
+          cart: addToCart([...state.cart], state.total, action.payload),
+        },
         total: addToTotal(state.total, action.payload),
       };
     case 'SET_LOGIN_MODAL':
