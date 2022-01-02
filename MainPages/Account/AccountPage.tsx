@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import auth from '@react-native-firebase/auth';
-import {Receipt} from '../../Models/CartModels/Receipt';
+import Receipt from '../../Models/CartModels/Receipt';
 import Ion from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
 import BottomTabsCard from './AccountComponents/BottomTabs/BottomTabsCard';
