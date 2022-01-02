@@ -33,8 +33,6 @@ export default function AccountPage() {
 
   const [currentBottomTabIndex, setCurrentBottomTabIndex] = React.useState(0);
 
-  const [receipts, setReceipts] = React.useState<Receipt[]>([]);
-
   const [editProfile, setEditProfile] = React.useState<boolean>(false);
   const [userName, setUserName] = React.useState<string>();
   const [typedName, setTypedName] = React.useState<string>();
@@ -45,6 +43,7 @@ export default function AccountPage() {
   const isFocused = useIsFocused();
 
   const wishlists = store.user.wishlists;
+  const receipts = store.user.receipts;
 
   React.useEffect(() => {
     if (store.user === null && isFocused && authState.isAnonymous) {
@@ -58,27 +57,6 @@ export default function AccountPage() {
       };
     }
   }, [isFocused, store.user]);
-
-  //Get Receipts
-  // React.useEffect(() => {
-  //   const receiptRef = firestore()
-  //     .collection('users')
-  //     .doc(userID)
-  //     .collection('Receipts');
-  //   const sub = receiptRef.onSnapshot(snap => {
-  //     setReceipts([]);
-  //     let newReceipts = [];
-  //     snap.forEach(doc => {
-  //       newReceipts.push({
-  //         id: doc.id,
-  //         date: doc.data().date,
-  //         storeId: doc.data().storeId,
-  //       });
-  //     });
-  //     setReceipts(newReceipts);
-  //   });
-  //   return sub;
-  // }, []);
 
   async function signOut() {
     auth().signOut();

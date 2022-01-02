@@ -1,7 +1,9 @@
 import snapshotUser, {
   loadFamily,
+  snapshotReceipts,
   snapshotWishlists,
 } from '../../Connections/AccountConnection';
+import Receipt from '../../Models/CartModels/Receipt';
 import User, {Wishlist} from '../../Models/UserModels/User';
 
 export async function loadUser(dispatch, uid) {
@@ -22,6 +24,7 @@ export async function loadUser(dispatch, uid) {
         return;
       }
     });
+
     snapshotWishlists(uid, (loadedWishlists: Wishlist[]) => {
       if (loadedWishlists.length) {
         dispatch({
@@ -32,6 +35,21 @@ export async function loadUser(dispatch, uid) {
         console.warn('Error in loading wishlists');
         dispatch({
           type: 'SET_WISHLISTS',
+          payload: [],
+        });
+      }
+    });
+
+    snapshotReceipts(uid, (loadedReceipts: Receipt[]) => {
+      if (loadedReceipts.length) {
+        dispatch({
+          type: 'SET_RECEIPTS',
+          payload: loadedReceipts,
+        });
+      } else {
+        console.warn('Error in loading receipts');
+        dispatch({
+          type: 'SET_RECEIPTS',
           payload: [],
         });
       }

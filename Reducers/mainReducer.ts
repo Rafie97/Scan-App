@@ -30,6 +30,15 @@ export const mainReducer = (state, action) => {
           wishlists: action.payload,
         },
       };
+
+    case 'SET_RECEIPTS':
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          receipts: action.payload,
+        },
+      };
     case 'SET_ITEMS':
       return {
         ...state,

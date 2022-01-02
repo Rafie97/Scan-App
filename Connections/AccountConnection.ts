@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import Receipt from '../Models/CartModels/Receipt';
 import User, {Wishlist} from '../Models/UserModels/User';
 
 export default function snapshotUser(
@@ -38,6 +39,29 @@ export function snapshotWishlists(
           }),
         );
         callback(wishlists);
+      }
+    });
+}
+
+export function snapshotReceipts(
+  uid: string,
+  callback: (receipts: any[]) => void,
+) {
+  return firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('Receipts')
+    .onSnapshot(async snap => {
+      if (snap.empty) {
+        console.warn('Error in snapshotReceipts', uid);
+        callback([]);
+      } else {
+        const receipts = await Promise.all(
+          snap.docs.map(doc => {
+            return doc.data() as Receipt;
+          }),
+        );
+        callback(receipts);
       }
     });
 }

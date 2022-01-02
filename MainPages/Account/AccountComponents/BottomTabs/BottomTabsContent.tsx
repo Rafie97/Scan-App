@@ -6,7 +6,7 @@ import FamilyTile, {
   WishlistTile,
 } from '../../../../Components/Tiles';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
-import {Receipt} from '../../../../Models/CartModels/Receipt';
+import Receipt from '../../../../Models/CartModels/Receipt';
 import gs from '../../../../Styles/globalStyles';
 import {Wishlist} from '../../../../Models/UserModels/User';
 
