@@ -95,6 +95,7 @@ function CartPage() {
       </View>
 
       <FlatList
+        data={cartItems}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContainer}
         style={gs.width100}
@@ -106,7 +107,6 @@ function CartPage() {
             navigation={navigation}
           />
         )}
-        data={cartItems}
       />
       <BottomCartInfo cartSum={cartSum} />
     </View>
@@ -117,10 +117,10 @@ export default CartPage;
 
 const styles = StyleSheet.create({
   blueHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#0073FE',
     borderRadius: 10,
     justifyContent: 'space-between',
+    ...gs.bgBlue,
+    ...gs.flexRow,
   },
   blueHeaderContainer: {
     height: '12%',

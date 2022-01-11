@@ -10,6 +10,7 @@ import gs from '../../Styles/globalStyles';
 import {useDispatch, useStore} from '../../Reducers/store';
 import useAuth from '../../Auth_Components/AuthContext';
 import BottomCartInfo from '../Cart/CartComponents/BottomCartInfo';
+import ItemBubble from '../../Components/ItemBubble';
 
 type Props = {
   receiptId: string;
@@ -59,22 +60,11 @@ function ReceiptPage({receiptId}: Props) {
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
           <View style={styles.totalBalanceView}>
-            {cartSum ? (
-              <View style={gs.flexRow}>
-                <Ticker textStyle={styles.tickerText} duration={500}>
-                  ${Math.trunc(cartSum[2]).toString() || 0}
-                </Ticker>
-                <Ticker duration={250} textStyle={styles.tickerText}>
-                  {(cartSum[2] - Math.trunc(cartSum[2]))
-                    .toFixed(2)
-                    .toString()
-                    .slice(1, 4) || 0}
-                </Ticker>
-              </View>
-            ) : (
-              <></>
-            )}
-            <Text style={gs.white}>Total Balance</Text>
+            <View style={gs.flexRow}>
+              <Text style={styles.tickerText}>${receipt.amount}</Text>
+            </View>
+
+            <Text style={gs.white}>Amount Paid</Text>
           </View>
           <TouchableOpacity
             onPress={() => {}}
@@ -91,12 +81,7 @@ function ReceiptPage({receiptId}: Props) {
         contentContainerStyle={styles.listContainer}
         style={gs.width100}
         renderItem={({item}) => (
-          <SwipeableItem
-            item={item}
-            deleteItem={deleteItem}
-            sourcePage="Cart"
-            navigation={navigation}
-          />
+          <ItemBubble item={item} navToItem={() => {}} inCart={false} />
         )}
         data={receiptItems}
       />
@@ -130,6 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 30,
     ...gs.flexColumn,
+    width: 100,
   },
   topCheckoutView: {
     width: 115,
@@ -143,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     ...gs.bold,
     ...gs.white,
-    ...gs.taCenter,
+    ...gs.width100,
   },
 
   listContainer: {

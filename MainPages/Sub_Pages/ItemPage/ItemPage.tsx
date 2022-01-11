@@ -84,7 +84,8 @@ function ItemPage({route}: ItemPageParams) {
   useEffect(() => {
     let vals = [];
     let labels = [];
-    if (!route.params.isRecipe && thing) {
+
+    if (!route.params.isRecipe && thing && thing.priceHistory) {
       let i = 0;
       thing.priceHistory.forEach((value, key) => {
         if (i < 40) {

@@ -24,6 +24,7 @@ function SwipeableItem(props) {
   const navigation = useNavigation();
 
   const gestureDelay = 10;
+  const displacement = 50;
   const panResponder = React.useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => false,
@@ -37,16 +38,16 @@ function SwipeableItem(props) {
         }
       },
       onPanResponderRelease: (evt, gestureState) => {
-        if (gestureState.dx < -50) {
+        if (gestureState.dx < -displacement) {
           //@ts-ignore
           Animated.timing(position, {
-            toValue: {x: -50, y: 0},
+            toValue: {x: -displacement, y: 0},
             duration: 150,
           }).start(() => {
             // setScrollViewEnabled(true);
           });
         }
-        if (gestureState.dx > -50) {
+        if (gestureState.dx > -displacement) {
           //@ts-ignore
           Animated.timing(position, {
             toValue: {x: 0, y: 0},
@@ -121,7 +122,7 @@ const styles = {
     ...gs.flexRow,
   },
   deleteView: {
-    right: 5,
+    right: -5,
     bottom: 10,
     ...gs.pAbsolute,
   },

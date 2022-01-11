@@ -45,7 +45,7 @@ function PromotionsPage() {
         </View>
         <View style={{height: 20}} />
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={gs.flexRow}>
           <Text style={styles.exploreCouponsText}>Explore our coupons</Text>
           <TouchableOpacity
             onPress={() =>
