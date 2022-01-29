@@ -2,8 +2,11 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import gs from '../../../../Styles/globalStyles';
 import Ant from 'react-native-vector-icons/AntDesign';
+import WriteReviewModal from './WriteReviewModal';
 
 export default function ReviewCard({reviews}) {
+  const [reviewModal, setReviewModal] = React.useState(false);
+
   return (
     <View style={styles.reviewsContainer}>
       <View style={[gs.flexRow, gs.width100]}>
@@ -38,9 +41,15 @@ export default function ReviewCard({reviews}) {
             </View>
           ))}
       </View>
-      <TouchableOpacity style={styles.writeReviewButton}>
+      <TouchableOpacity
+        onPress={() => setReviewModal(true)}
+        style={styles.writeReviewButton}>
         <Text style={styles.reviewButtonText}>Write a Review</Text>
       </TouchableOpacity>
+      <WriteReviewModal
+        reviewModal={reviewModal}
+        setReviewModal={setReviewModal}
+      />
     </View>
   );
 }
@@ -62,20 +71,20 @@ const styles = {
   },
 
   avgReviewView: {
-    ...gs.flexRow,
     ...gs.flex1,
+    ...gs.flexRow,
     ...gs.aCenter,
   },
   avgReviewText: {
     fontSize: 30,
-    fontWeight: 'bold' as 'bold',
+    ...gs.bold,
     ...gs.flex1,
   },
   avg5: {
     fontSize: 15,
-    fontWeight: 'bold' as 'bold',
     marginTop: 10,
     marginRight: 20,
+    ...gs.bold,
     ...gs.flex1,
   },
 
@@ -91,21 +100,21 @@ const styles = {
 
   reviewerName: {
     flex: 2,
-    alignSelf: 'stretch' as 'stretch',
-    fontWeight: 'bold' as 'bold',
+    ...gs.aStretch,
+    ...gs.bold,
   },
   reviewDate: {
     flex: 2,
     fontSize: 10,
     color: '#a0a0a0',
-    alignSelf: 'center' as 'center',
     textAlign: 'left' as 'left',
+    ...gs.aCenter,
   },
 
   reviewRating: {
     flex: 3,
     fontSize: 10,
-    fontWeight: 'bold' as 'bold',
+    ...gs.bold,
     textAlign: 'right' as 'right',
     ...gs.aSelfCenter,
   },
@@ -123,7 +132,7 @@ const styles = {
     ...gs.radius10,
     ...gs.shadow,
   },
-  reviewButtonText: {color: 'white'},
+  reviewButtonText: {...gs.white},
   reviewerImage: {
     width: 40,
     height: 40,

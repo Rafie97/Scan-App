@@ -88,6 +88,10 @@ const styles = {
     margin: 20,
   },
 
+  padding10: {
+    padding: 10,
+  },
+
   padding20: {
     padding: 20,
   },
