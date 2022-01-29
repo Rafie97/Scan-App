@@ -80,6 +80,10 @@ const styles = {
     justifyContent: 'center' as 'center',
   },
 
+  margin10: {
+    margin: 10,
+  },
+
   margin20: {
     margin: 20,
   },

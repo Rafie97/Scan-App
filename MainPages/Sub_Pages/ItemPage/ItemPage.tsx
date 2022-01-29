@@ -173,36 +173,35 @@ export default ItemPage;
 
 const styles = StyleSheet.create({
   addButtonText: {
-    color: 'white',
     fontSize: 18,
-    alignSelf: 'center',
+    ...gs.aSelfCenter,
+    ...gs.white,
   },
 
   innerScroll: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...gs.aCenter,
+    ...gs.flex1,
+    ...gs.jCenter,
   },
   bottomButtons: {
     marginBottom: 20,
     marginTop: 10,
     width: 200,
     height: 60,
-    backgroundColor: '#0073FE',
-    justifyContent: 'center',
     borderRadius: 10,
+    ...gs.bgBlue,
+    ...gs.jCenter,
     ...gs.shadow,
   },
-
   backButton: {
-    flex: 1,
+    ...gs.flex1,
   },
   backButtonView: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    position: 'absolute',
     top: 10,
     left: 5,
+    ...gs.aCenter,
+    ...gs.jCenter,
+    ...gs.pAbsolute,
   },
 
   imageContainer: {
@@ -212,24 +211,24 @@ const styles = StyleSheet.create({
   },
 
   itemImage: {
-    width: 300,
-    height: 300,
+    width: 280,
+    height: 280,
     padding: 10,
     ...gs.radius10,
   },
 
   itemNameText: {
-    alignSelf: 'stretch',
-    textAlign: 'center',
     fontSize: 24,
-    fontWeight: 'bold',
+    ...gs.aStretch,
+    ...gs.bold,
+    ...gs.taCenter,
   },
 
   itemPriceText: {
     fontSize: 35,
-    fontWeight: 'bold',
-    alignSelf: 'stretch',
-    textAlign: 'center',
+    ...gs.aStretch,
+    ...gs.bold,
     ...gs.margin20,
+    ...gs.taCenter,
   },
 });

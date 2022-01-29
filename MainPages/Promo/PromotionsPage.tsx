@@ -43,7 +43,7 @@ function PromotionsPage() {
             }}
           />
         </View>
-        <View style={{height: 20}} />
+        <View style={{height: 10}} />
 
         <View style={gs.flexRow}>
           <Text style={styles.exploreCouponsText}>Explore our coupons</Text>

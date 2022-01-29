@@ -263,6 +263,7 @@ const styles = {
     margin: 0,
   },
   headerView: {
+    marginBottom: 10,
     ...gs.aStretch,
     ...gs.flexRow,
     ...gs.margin20,
@@ -277,7 +278,7 @@ const styles = {
     ...gs.aSelfCenter,
     ...gs.bgBlue,
     ...gs.bold,
-    ...gs.margin20,
+    ...gs.margin10,
     ...gs.radius10,
     ...gs.taCenter,
     ...gs.white,
@@ -287,7 +288,6 @@ const styles = {
     textAlign: 'right' as 'right',
     paddingVertical: 5,
     ...gs.aStretch,
-    // ...gs.blue,
     ...gs.flex1,
   },
   signOutTouchable: {
