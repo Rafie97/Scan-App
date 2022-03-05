@@ -46,7 +46,7 @@ export default function BottomTabsContent({
             </Text>
           </TouchableOpacity>
         )}
-        {selectedNames.length > 0 ? (
+        {selectedNames ? (
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}

@@ -16,7 +16,7 @@ export default async function loadItems(dispatch) {
         return;
       }
     });
-    snapshotRecipes((loadedRecipes: Recipe[]) => {
+    snapshotRecipes((loadedRecipes: Item[]) => {
       if (loadedRecipes.length) {
         dispatch({type: 'SET_RECIPES', payload: loadedRecipes});
       } else {

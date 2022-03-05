@@ -16,13 +16,26 @@ import auth from '@react-native-firebase/auth';
 import gs from '../Styles/globalStyles';
 import ItemBubble from './ItemBubble';
 import {useNavigation} from '@react-navigation/native';
+import Item from '../Models/ItemModels/Item';
+import {CartItem} from '../Models/ItemModels/CartItem';
 
 const {width} = Dimensions.get('window');
 
-function SwipeableItem(props) {
+type Props = {
+  item: CartItem;
+  deleteItem: (itemID: string) => void;
+  sourcePage: string;
+  setScrollEnabled: (bool: boolean) => void;
+};
+
+function SwipeableItem({
+  item,
+  deleteItem,
+  sourcePage,
+  setScrollEnabled,
+}: Props) {
   const position = React.useRef(new Animated.ValueXY()).current;
   const navigation = useNavigation();
-
   const gestureDelay = 10;
   const displacement = 50;
   const panResponder = React.useRef(
@@ -32,7 +45,7 @@ function SwipeableItem(props) {
       onPanResponderTerminationRequest: (evt, gestureState) => false,
       onPanResponderMove: (evt, gestureState) => {
         if (gestureState.dx < -15) {
-          // setScrollViewEnabled(false);
+          setScrollEnabled(false);
           let newX = gestureState.dx + gestureDelay;
           position.setValue({x: newX, y: 0});
         }
@@ -44,7 +57,7 @@ function SwipeableItem(props) {
             toValue: {x: -displacement, y: 0},
             duration: 150,
           }).start(() => {
-            // setScrollViewEnabled(true);
+            setScrollEnabled(true);
           });
         }
         if (gestureState.dx > -displacement) {
@@ -53,7 +66,7 @@ function SwipeableItem(props) {
             toValue: {x: 0, y: 0},
             duration: 150,
           }).start(() => {
-            // setScrollViewEnabled(true);
+            setScrollEnabled(true);
           });
         }
       },
@@ -61,10 +74,10 @@ function SwipeableItem(props) {
   ).current;
 
   function navToItem() {
-    navigation.navigate(props.sourcePage, {
+    navigation.navigate(sourcePage, {
       initial: false,
-      screen: props.sourcePage + 'ItemPage',
-      params: {itemIDCallback: props.item, isRecipe: props.item.isRecipe},
+      screen: sourcePage + 'ItemPage',
+      params: {itemIDCallback: item, isRecipe: item.isRecipe},
     });
   }
 
@@ -74,14 +87,14 @@ function SwipeableItem(props) {
       .collection('users')
       .doc(userID)
       .collection('Cart')
-      .doc(props.item.docID);
+      .doc(item.docID);
 
-    if (increment === 1 && props.item.quantity < 99) {
-      const newQuan = props.item.quantity + 1;
+    if (increment === 1 && item.quantity < 99) {
+      const newQuan = item.quantity + 1;
       cartRef.update({quantity: newQuan});
     }
-    if (increment === -1 && props.item.quantity > 1) {
-      const newQuan = props.item.quantity - 1;
+    if (increment === -1 && item.quantity > 1) {
+      const newQuan = item.quantity - 1;
       cartRef.update({quantity: newQuan});
     }
   }
@@ -89,7 +102,7 @@ function SwipeableItem(props) {
   return (
     <Animated.View style={styles.mainView}>
       <View style={styles.deleteView}>
-        <TouchableOpacity onPress={() => props.deleteItem(props.item.docID)}>
+        <TouchableOpacity onPress={() => deleteItem(item.docID)}>
           <Animated.View style={styles.deleteButton}>
             <EvilIcons name="trash" size={30} color="black" />
           </Animated.View>
@@ -102,9 +115,9 @@ function SwipeableItem(props) {
         }}
         {...panResponder.panHandlers}>
         <ItemBubble
-          item={props.item}
+          item={item}
           navToItem={navToItem}
-          quantity={props.item.quantity}
+          quantity={item.quantity}
           incrementQuantity={incrementQuantity}
           inCart={true}
         />

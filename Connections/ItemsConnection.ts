@@ -23,7 +23,7 @@ export function snapshotItems(callback: (items: Item[]) => void): () => void {
 }
 
 export function snapshotRecipes(
-  callback: (recipes: Recipe[]) => void,
+  callback: (recipes: Item[]) => void,
 ): () => void {
   return firestore()
     .collection('stores')

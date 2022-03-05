@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import gs from '../../../../Styles/globalStyles';
 import Ant from 'react-native-vector-icons/AntDesign';
 import WriteReviewModal from './WriteReviewModal';
+import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
 
 export default function ReviewCard({reviews}) {
   const [reviewModal, setReviewModal] = React.useState(false);
@@ -44,7 +45,10 @@ export default function ReviewCard({reviews}) {
       <TouchableOpacity
         onPress={() => setReviewModal(true)}
         style={styles.writeReviewButton}>
-        <Text style={styles.reviewButtonText}>Write a Review</Text>
+        <Text style={styles.reviewButtonText}>
+          <FontAwe5 name="feather-alt" size={14} />
+          {'  '} Write a Review
+        </Text>
       </TouchableOpacity>
       <WriteReviewModal
         reviewModal={reviewModal}

@@ -53,7 +53,7 @@ export default function ContactsModal({
             renderItem={renderItem}
           />
 
-          <View style={{flexDirection: 'row'}}>
+          <View style={gs.flexRow}>
             <TouchableOpacity
               style={styles.buttonContainer}
               onPress={() => {
@@ -62,9 +62,7 @@ export default function ContactsModal({
               }}>
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
-            {selectedNames.length === 0 && tempSelectedNames.length === 0 ? (
-              <></>
-            ) : (
+            {selectedNames && tempSelectedNames && (
               <TouchableOpacity
                 style={styles.buttonContainer}
                 onPress={pushContactsFirebase}>

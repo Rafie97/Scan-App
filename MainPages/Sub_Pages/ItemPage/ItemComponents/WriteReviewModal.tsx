@@ -17,6 +17,8 @@ type Props = {
 };
 
 export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
+  function setRating(rating: number) {}
+
   return (
     <Modal
       visible={reviewModal}
@@ -25,12 +27,13 @@ export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
       animationType="slide">
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text>Write Review</Text>
+          <Text style={styles.tellUsText}>Tell us what you think</Text>
           <Rating
             // defaultRating={props.rating || 0.01}
             onFinishRating={rating => {
               // setRating(rating);
             }}
+            starStyle={styles.starStyle}
             showRating={false}
           />
           <TextInput
@@ -40,6 +43,13 @@ export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
             style={styles.reviewInput}
             placeholder="This was amazing!"
           />
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              setReviewModal(false);
+            }}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -52,8 +62,7 @@ const styles = {
     ...gs.jCenter,
   },
   modalView: {
-    minHeight: 300,
-    maxHeight: '50%',
+    height: 380,
     width: 300,
     ...gs.aCenter,
     ...gs.bgWhite,
@@ -63,11 +72,36 @@ const styles = {
     ...gs.shadow,
   },
 
+  tellUsText: {
+    marginBottom: 10,
+  },
+
+  starStyle: {
+    tintColor: '#fde233' as '#fde233',
+  },
+
   reviewInput: {
     height: 180,
     width: 250,
     backgroundColor: '#f1f1f1' as '#f1f1f1',
     padding: 10,
+    marginTop: 20,
     ...gs.margin10,
+  },
+
+  buttonContainer: {
+    width: 80,
+    height: 40,
+    ...gs.bgBlue,
+    ...gs.jCenter,
+    ...gs.margin10,
+    ...gs.radius10,
+    ...gs.shadow,
+  },
+
+  buttonText: {
+    fontSize: 18,
+    ...gs.aSelfCenter,
+    ...gs.white,
   },
 };

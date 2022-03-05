@@ -9,7 +9,7 @@ export type StateType = {
   user: User;
   map: Map;
   items: Item[];
-  recipes: Recipe[];
+  recipes: Item[];
   cart: CartItem[];
   total: number;
   showLogin: boolean;

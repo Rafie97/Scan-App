@@ -12,7 +12,7 @@ import useAuth from '../../Auth_Components/AuthContext';
 import BottomCartInfo from './CartComponents/BottomCartInfo';
 
 function CartPage() {
-  // const [isScrollEnabled, setScrollEnabled] = React.useState(true);S
+  const [isScrollEnabled, setScrollEnabled] = React.useState(true);
   const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
 
   const navigation = useNavigation();
@@ -104,7 +104,7 @@ function CartPage() {
             item={item}
             deleteItem={deleteItem}
             sourcePage="Cart"
-            navigation={navigation}
+            setScrollEnabled={setScrollEnabled}
           />
         )}
       />

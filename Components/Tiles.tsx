@@ -8,12 +8,8 @@ import Item from '../Models/ItemModels/Item';
 import {Recipe} from '../Models/ItemModels/Recipe';
 import gs from '../Styles/globalStyles';
 
-export interface PromoTileProps extends Recipe {
-  isRecipe?: boolean;
-}
-
 //PROMO TILE
-const PromoItemTile = ({isRecipe = false, ...item}: PromoTileProps) => {
+const PromoItemTile = ({isRecipe = false, ...item}: Item) => {
   const navigation = useNavigation();
   return (
     <View

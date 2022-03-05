@@ -10,6 +10,9 @@ interface ItemInterface {
   priceHistory?: Map<string, number>;
   promo: boolean;
   reviews: Review[];
+  isRecipe: boolean;
+  category?: string;
+  feeds?: number;
 }
 
 class Item implements ItemInterface {
@@ -22,6 +25,9 @@ class Item implements ItemInterface {
   priceHistory?: Map<string, number>;
   promo: boolean;
   reviews: Review[];
+  isRecipe: boolean;
+  category?: string;
+  feeds?: number;
 
   constructor(doc) {
     if (typeof doc.data == 'function') {
@@ -34,6 +40,9 @@ class Item implements ItemInterface {
       this.reviews = doc.data().reviews;
       this.priceHistory = convertPriceHistory(doc.data().priceHistory);
       this.location = doc.data().location;
+      this.isRecipe = doc.data().isRecipe;
+      this.category = doc.data().category;
+      this.feeds = doc.data().feeds;
     } else {
       this.docID = doc.docID;
       this.name = doc.name;
@@ -74,7 +83,7 @@ function convertPriceHistory(firebasePriceHistory: {
   timestamp: number;
 }): Map<string, number> {
   let priceHist = new Map<string, number>();
-  if(firebasePriceHistory) {
+  if (firebasePriceHistory) {
     Object.entries(firebasePriceHistory)
       .reverse()
       .forEach(entry => {
@@ -82,9 +91,8 @@ function convertPriceHistory(firebasePriceHistory: {
         priceHist.set(key, value);
       });
 
-  return priceHist;
-  }
-  else{
+    return priceHist;
+  } else {
     return null;
   }
 }
