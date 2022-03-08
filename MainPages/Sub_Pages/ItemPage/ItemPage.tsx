@@ -39,7 +39,7 @@ type ItemPageParams = {
 };
 
 function ItemPage({route}: ItemPageParams) {
-  const thing = route.params.itemIDCallback;
+  const item = route.params.itemIDCallback;
   const [wishlistModal, setWishlistModal] = useState(false);
   const [wishlists, setWishlists] = useState<string[]>([]);
   const [lineChartData, setLineChartData] = useState<LineChartDataType>({
@@ -74,10 +74,10 @@ function ItemPage({route}: ItemPageParams) {
       .collection('users')
       .doc(userID)
       .collection('Cart');
-    const item = new Item(thing) as Recipe;
+    const newItem = new Item(item);
     //@ts-ignore
-    item.quantity = 1;
-    cartRef.add(item);
+    newItem.quantity = 1;
+    cartRef.add(newItem);
     navigate.navigate('Cart');
   }
 
@@ -85,9 +85,9 @@ function ItemPage({route}: ItemPageParams) {
     let vals = [];
     let labels = [];
 
-    if (!route.params.isRecipe && thing && thing.priceHistory) {
+    if (!route.params.isRecipe && item && item.priceHistory) {
       let i = 0;
-      thing.priceHistory.forEach((value, key) => {
+      item.priceHistory.forEach((value, key) => {
         if (i < 40) {
           i++;
           const val = Math.round(value * 100) / 100;
@@ -105,7 +105,7 @@ function ItemPage({route}: ItemPageParams) {
       };
       setLineChartData(dataObj);
     }
-  }, [route.params.isRecipe, thing]);
+  }, [route.params.isRecipe, item]);
 
   return (
     <View style={gs.fullBackground}>
@@ -117,32 +117,39 @@ function ItemPage({route}: ItemPageParams) {
         </TouchableOpacity>
       </View>
 
-      {!!thing && (
+      {!!item && (
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerScroll}>
             <View style={styles.imageContainer}>
-              <Image style={styles.itemImage} source={{uri: thing.imageLink}} />
+              <Image style={styles.itemImage} source={{uri: item.imageLink}} />
             </View>
-            <Text style={[styles.itemNameText]}>{thing.name}</Text>
+            <Text style={[styles.itemNameText]}>{item.name}</Text>
 
-            <Text style={styles.itemPriceText}>${thing.price}</Text>
+            <Text style={styles.itemPriceText}>${item.price}</Text>
             {!route.params.isRecipe && lineChartData.labels.length ? (
               <PriceChart lineChartData={lineChartData} />
             ) : null}
 
             <ReviewCard
+              itemId={item.docID}
               reviews={[
                 {
-                  reviewer: 'Rafa',
+                  id: '1',
+                  reviewerId: '1',
+                  reviewerName: 'Rafa',
                   reviewText: 'I love this product! I use it daily',
-                  date: '11/25/2021',
+                  createdAt: new Date(Date.now()),
                   rating: 5,
+                  productId: item.docID,
                 },
                 {
-                  reviewer: 'Neto',
+                  id: '2',
+                  reviewerId: '2',
+                  reviewerName: 'Neto',
                   reviewText: 'Please stop screaming',
-                  date: '10/18/2021',
+                  createdAt: new Date(Date.now()),
                   rating: 3,
+                  productId: item.docID,
                 },
               ]}
             />
@@ -160,7 +167,7 @@ function ItemPage({route}: ItemPageParams) {
         </ScrollView>
       )}
       <WishlistModal
-        itemID={thing.docID}
+        itemID={item.docID}
         visible={wishlistModal}
         setVisible={setWishlistModal}
         wishlists={wishlists}

@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 import React from 'react';
 import {
   FlatList,
@@ -7,17 +8,63 @@ import {
   View,
   Text,
 } from 'react-native';
-import {AirbnbRating as Rating} from 'react-native-elements';
-
+import useAuth from '../../../../Auth_Components/AuthContext';
 import gs from '../../../../Styles/globalStyles';
+import {AirbnbRating as Rating} from 'react-native-ratings';
 
 type Props = {
+  itemId: string;
   reviewModal: boolean;
   setReviewModal: Function;
 };
 
-export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
-  function setRating(rating: number) {}
+export default function WriteReviewModal({
+  itemId,
+  reviewModal,
+  setReviewModal,
+}: Props) {
+  const user = useAuth();
+  const [reviewNumber, setReviewNumber] = React.useState<number>(0);
+  const [reviewText, setReviewText] = React.useState<string>('');
+
+  function setRating(rating: number, reviewText: string) {
+    const review = firestore()
+      .collection('stores')
+      .doc('HEB')
+      .collection('items')
+      .doc(itemId)
+      .collection('reviews')
+      .where('reviewerId', '==', user.uid)
+      .get();
+    review.then(snap => {
+      if (snap.docs.length) {
+        firestore()
+          .collection('stores')
+          .doc('HEB')
+          .collection('items')
+          .doc(itemId)
+          .collection('reviews')
+          .doc(snap.docs[0].id)
+          .update({
+            rating: rating,
+            reviewText: reviewText,
+          });
+      } else {
+        firestore()
+          .collection('stores')
+          .doc('HEB')
+          .collection('items')
+          .doc(itemId)
+          .collection('reviews')
+          .add({
+            rating: rating,
+            reviewerId: user.uid,
+            reviewText: reviewText,
+          });
+      }
+      setReviewNumber(rating);
+    });
+  }
 
   return (
     <Modal
@@ -29,12 +76,11 @@ export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
         <View style={styles.modalView}>
           <Text style={styles.tellUsText}>Tell us what you think</Text>
           <Rating
-            // defaultRating={props.rating || 0.01}
             onFinishRating={rating => {
-              // setRating(rating);
+              setRating(rating, reviewText);
             }}
-            starStyle={styles.starStyle}
             showRating={false}
+            reviewColor="#0073fe"
           />
           <TextInput
             textAlign="left"
@@ -42,13 +88,15 @@ export default function WriteReviewModal({reviewModal, setReviewModal}: Props) {
             multiline
             style={styles.reviewInput}
             placeholder="This was amazing!"
+            onChangeText={text => setReviewText(text)}
           />
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={() => {
+              setRating(reviewNumber, reviewText);
               setReviewModal(false);
             }}>
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={styles.buttonText}>Done</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -76,10 +124,6 @@ const styles = {
     marginBottom: 10,
   },
 
-  starStyle: {
-    tintColor: '#fde233' as '#fde233',
-  },
-
   reviewInput: {
     height: 180,
     width: 250,
@@ -92,7 +136,7 @@ const styles = {
   buttonContainer: {
     width: 80,
     height: 40,
-    ...gs.bgBlue,
+    backgroundColor: '#f18b0f' as '#f18b0f',
     ...gs.jCenter,
     ...gs.margin10,
     ...gs.radius10,

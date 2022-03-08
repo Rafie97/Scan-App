@@ -4,8 +4,14 @@ import gs from '../../../../Styles/globalStyles';
 import Ant from 'react-native-vector-icons/AntDesign';
 import WriteReviewModal from './WriteReviewModal';
 import FontAwe5 from 'react-native-vector-icons/FontAwesome5';
+import {Review} from '../../../../Models/ItemModels/Review';
 
-export default function ReviewCard({reviews}) {
+type Props = {
+  reviews: Review[];
+  itemId: string;
+};
+
+export default function ReviewCard({reviews, itemId}: Props) {
   const [reviewModal, setReviewModal] = React.useState(false);
 
   return (
@@ -28,8 +34,12 @@ export default function ReviewCard({reviews}) {
                 />
                 <View style={styles.reviewInfo}>
                   <View style={[gs.flexRow, gs.width100]}>
-                    <Text style={styles.reviewerName}>{review.reviewer}</Text>
-                    <Text style={styles.reviewDate}>{review.date}</Text>
+                    <Text style={styles.reviewerName}>
+                      {review.reviewerName}
+                    </Text>
+                    <Text style={styles.reviewDate}>
+                      {review.createdAt.toDateString}
+                    </Text>
                     <Text style={styles.reviewRating}>{review.rating}/5</Text>
                   </View>
                   <Text style={styles.verifiedText}>
@@ -51,6 +61,7 @@ export default function ReviewCard({reviews}) {
         </Text>
       </TouchableOpacity>
       <WriteReviewModal
+        itemId={itemId}
         reviewModal={reviewModal}
         setReviewModal={setReviewModal}
       />

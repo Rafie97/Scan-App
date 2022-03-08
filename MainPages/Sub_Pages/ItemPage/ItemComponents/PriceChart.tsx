@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
-import {Card} from 'react-native-elements';
 import gs from '../../../../Styles/globalStyles';
 import {LineChartDataType} from '../ItemPage';
 
