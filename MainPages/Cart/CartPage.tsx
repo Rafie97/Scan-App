@@ -1,21 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity, FlatList} from 'react-native-gesture-handler';
 import SwipeableItem from '../../Components/SwipeableItem';
 import auth from '@react-native-firebase/auth';
 import Ticker from 'react-native-ticker';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import gs from '../../Styles/globalStyles';
 import {useDispatch, useStore} from '../../Reducers/store';
 import useAuth from '../../Auth_Components/AuthContext';
 import BottomCartInfo from './CartComponents/BottomCartInfo';
 
 function CartPage() {
-  const [isScrollEnabled, setScrollEnabled] = React.useState(true);
-  const [cartSum, setCartSum] = React.useState<number[]>([0, 0, 0]);
+  const [isScrollEnabled, setScrollEnabled] = useState<boolean>(true);
+  const [cartSum, setCartSum] = useState<number[]>([0, 0, 0]);
 
-  const navigation = useNavigation();
   const store = useStore();
   const authh = useAuth();
   const dispatch = useDispatch();
@@ -23,11 +22,13 @@ function CartPage() {
 
   const cartItems = store.user.cart;
 
+  console.log(isScrollEnabled);
+
   React.useEffect(() => {
     if (store.user === null && isFocused && authh.isAnonymous) {
       dispatch({type: 'SET_LOGIN_MODAL', payload: true});
     }
-  }, [isFocused, store.user]);
+  }, [isFocused, store.user, authh.isAnonymous, dispatch]);
 
   React.useEffect(() => {
     let tempSum = 0;
@@ -98,13 +99,14 @@ function CartPage() {
         data={cartItems}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContainer}
+        scrollEnabled={isScrollEnabled}
         style={gs.width100}
         renderItem={({item}) => (
           <SwipeableItem
             item={item}
             deleteItem={deleteItem}
             sourcePage="Cart"
-            setScrollEnabled={setScrollEnabled}
+            setOuterScrollEnabled={setScrollEnabled}
           />
         )}
       />

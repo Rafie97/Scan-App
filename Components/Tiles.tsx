@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginVertical: 5,
     textAlign: 'left',
-    fontWeight: 'bold',
   },
 
   itemImage: {

@@ -29,10 +29,7 @@ function PromotionsPage() {
         <View>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-            }}
+            contentContainerStyle={styles.flatListContainer}
             showsHorizontalScrollIndicator={false}
             data={store.recipes}
             horizontal={true}
@@ -58,10 +55,7 @@ function PromotionsPage() {
         <View>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-            }}
+            contentContainerStyle={styles.flatListContainer}
             showsHorizontalScrollIndicator={false}
             data={store.items.slice(0, 10)}
             horizontal={true}
@@ -92,6 +86,11 @@ const styles = StyleSheet.create({
     color: '#4400fe',
     ...gs.bold,
     ...gs.margin20,
+  },
+
+  flatListContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
 
   promoPageContainer: {

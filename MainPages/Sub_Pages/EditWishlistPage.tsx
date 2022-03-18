@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,13 +17,13 @@ import {useNavigation} from '@react-navigation/core';
 import {useStore} from '../../Reducers/store';
 
 function EditWishlistPage(props: any) {
-  const [listItems, setListItems] = React.useState<Item[]>([]);
+  const [listItems, setListItems] = useState<Item[]>([]);
   const store = useStore();
   const navigation = useNavigation();
   const routeListName = props.route.params.listNameCallback;
   const wishlists = store.user.wishlists;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (wishlists.length) {
       let wishIndex = wishlists.findIndex(list => list.id === routeListName);
 

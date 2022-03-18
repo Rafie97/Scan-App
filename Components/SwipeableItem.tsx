@@ -1,14 +1,10 @@
 import React from 'react';
 import {
   View,
-  Text,
-  StyleSheet,
   Dimensions,
   PanResponder,
   Animated,
-  Image,
   TouchableOpacity,
-  TouchableHighlight,
 } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import firestore from '@react-native-firebase/firestore';
@@ -16,7 +12,6 @@ import auth from '@react-native-firebase/auth';
 import gs from '../Styles/globalStyles';
 import ItemBubble from './ItemBubble';
 import {useNavigation} from '@react-navigation/native';
-import Item from '../Models/ItemModels/Item';
 import {CartItem} from '../Models/ItemModels/CartItem';
 
 const {width} = Dimensions.get('window');
@@ -25,17 +20,19 @@ type Props = {
   item: CartItem;
   deleteItem: (itemID: string) => void;
   sourcePage: string;
-  setScrollEnabled: (bool: boolean) => void;
+  setOuterScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function SwipeableItem({
   item,
   deleteItem,
   sourcePage,
-  setScrollEnabled,
+  setOuterScrollEnabled,
 }: Props) {
-  const position = React.useRef(new Animated.ValueXY()).current;
+  const [scrollEnabled, setScrollEnabled] = React.useState(true);
   const navigation = useNavigation();
+
+  const position = React.useRef(new Animated.ValueXY()).current;
   const gestureDelay = 10;
   const displacement = 50;
   const panResponder = React.useRef(
@@ -44,8 +41,9 @@ function SwipeableItem({
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderTerminationRequest: (evt, gestureState) => false,
       onPanResponderMove: (evt, gestureState) => {
+        setScrollViewEnabled(true);
         if (gestureState.dx < -15) {
-          setScrollEnabled(false);
+          setScrollViewEnabled(false);
           let newX = gestureState.dx + gestureDelay;
           position.setValue({x: newX, y: 0});
         }
@@ -57,7 +55,7 @@ function SwipeableItem({
             toValue: {x: -displacement, y: 0},
             duration: 150,
           }).start(() => {
-            setScrollEnabled(true);
+            setScrollViewEnabled(true);
           });
         }
         if (gestureState.dx > -displacement) {
@@ -66,12 +64,19 @@ function SwipeableItem({
             toValue: {x: 0, y: 0},
             duration: 150,
           }).start(() => {
-            setScrollEnabled(true);
+            setScrollViewEnabled(true);
           });
         }
       },
     }),
   ).current;
+
+  function setScrollViewEnabled(enabled) {
+    if (scrollEnabled !== enabled) {
+      setOuterScrollEnabled(enabled);
+      setScrollEnabled(enabled);
+    }
+  }
 
   function navToItem() {
     navigation.navigate(sourcePage, {
