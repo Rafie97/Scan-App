@@ -65,7 +65,9 @@ function ScanPage() {
             <Text style={styles.scannedItemsText}>Scan a barcode</Text>
           ) : (
             <View style={styles.underCam}>
-              <Text style={styles.scannedItemsText}>Scanned Item</Text>
+              <Text style={styles.scannedItemsText}>
+                {scannedItem ? 'Scanned Item:' : 'Scan an Item'}
+              </Text>
 
               {scannedItem && (
                 <ItemBubble

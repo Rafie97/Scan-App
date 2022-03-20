@@ -14,15 +14,15 @@ type Props = {
   item: CartItem;
   deleteItem: (itemID: string) => void;
   sourcePage: string;
-  setOuterScrollEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  // setOuterScrollEnabled?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function SwipeableItem({
   item,
   deleteItem,
   sourcePage,
-  setOuterScrollEnabled,
-}: Props) {
+}: // setOuterScrollEnabled,
+Props) {
   const [scrollEnabled, setScrollEnabled] = React.useState(true);
   const navigation = useNavigation();
 
@@ -67,7 +67,7 @@ function SwipeableItem({
 
   function setScrollViewEnabled(enabled) {
     if (scrollEnabled !== enabled) {
-      setOuterScrollEnabled(enabled);
+      // setOuterScrollEnabled(enabled);
       setScrollEnabled(enabled);
     }
   }
