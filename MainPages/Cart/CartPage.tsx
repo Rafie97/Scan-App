@@ -22,8 +22,6 @@ function CartPage() {
 
   const cartItems = store.user.cart;
 
-  console.log(isScrollEnabled);
-
   React.useEffect(() => {
     if (store.user === null && isFocused && authh.isAnonymous) {
       dispatch({type: 'SET_LOGIN_MODAL', payload: true});
@@ -99,7 +97,7 @@ function CartPage() {
         data={cartItems}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.listContainer}
-        scrollEnabled={isScrollEnabled}
+        // scrollEnabled={isScrollEnabled}
         style={gs.width100}
         renderItem={({item}) => (
           <SwipeableItem
@@ -157,9 +155,8 @@ const styles = StyleSheet.create({
   },
 
   listContainer: {
-    paddingTop: 5,
+    paddingTop: 10,
     marginBottom: 10,
     ...gs.aCenter,
-    ...gs.height100,
   },
 });

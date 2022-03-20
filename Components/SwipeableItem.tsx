@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Dimensions,
-  PanResponder,
-  Animated,
-  TouchableOpacity,
-} from 'react-native';
+import {View, PanResponder, Animated, TouchableOpacity} from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -14,7 +8,7 @@ import ItemBubble from './ItemBubble';
 import {useNavigation} from '@react-navigation/native';
 import {CartItem} from '../Models/ItemModels/CartItem';
 
-const {width} = Dimensions.get('window');
+// const {width} = Dimensions.get('window');
 
 type Props = {
   item: CartItem;
@@ -140,7 +134,7 @@ const styles = {
     ...gs.flexRow,
   },
   deleteView: {
-    right: -5,
+    right: 0,
     bottom: 10,
     ...gs.pAbsolute,
   },

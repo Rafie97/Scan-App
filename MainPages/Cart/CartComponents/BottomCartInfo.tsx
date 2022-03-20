@@ -17,7 +17,9 @@ export default function BottomCartInfo({cartSum, isReceipt = false}: Props) {
         </View>
         <View style={styles.taxRow}>
           <Text style={styles.totalTitles}>Tax</Text>
-          <Text style={styles.totalNumbersText}>+${cartSum[1].toFixed(2)}</Text>
+          <Text style={styles.totalNumbersText}>
+            +{'  '}${cartSum[1].toFixed(2)}
+          </Text>
         </View>
         <View style={styles.receiptRow}>
           <Text style={styles.totalTitles}>Total</Text>
@@ -44,14 +46,14 @@ export default function BottomCartInfo({cartSum, isReceipt = false}: Props) {
 
 const styles = {
   bottomInfoContainer: {
-    height: '28%',
+    height: '24%',
     marginBottom: 60,
     ...gs.flexColumn,
     ...gs.width100,
   },
 
   receiptView: {
-    height: '65%',
+    height: '60%',
     ...gs.flexColumn,
     ...gs.width100,
   },
@@ -94,7 +96,7 @@ const styles = {
   },
 
   checkoutButtonView: {
-    height: '30%',
+    height: '25%',
     ...gs.width100,
   },
 

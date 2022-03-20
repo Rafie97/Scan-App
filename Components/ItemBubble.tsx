@@ -55,8 +55,10 @@ export default function ItemBubble(props: PropTypes) {
 
 const styles = StyleSheet.create({
   itemBubble: {
-    width: 360,
+    width: 335,
     marginBottom: 10,
+    marginRight: 10,
+    // marginHorizontal: 20,
     ...gs.bgWhite,
     ...gs.flexRow,
     ...gs.radius10,
