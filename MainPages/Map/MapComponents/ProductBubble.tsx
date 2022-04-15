@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import Item from '../../../Models/ItemModels/Item';
 import Coordinate from '../../../Models/MapModels/Coordinate';
 
-export default function ProdBubble({prods, coord, mapSize, scaleFactor}) {
+export default function ProductBubble({prods, coord, mapSize, scaleFactor}) {
   const navigation = useNavigation();
   const items = useStore().items;
   const [filtered, setFiltered] = useState<Item[]>([]);

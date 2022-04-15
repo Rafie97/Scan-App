@@ -1,8 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Circle} from 'react-native-svg';
-import gs from '../../../Styles/globalStyles';
-import ProdBubble from './ProdBubble';
+import {Circle, G} from 'react-native-svg';
 import Aisle from '../../../Models/MapModels/Aisle';
 import Map, {MapSize} from '../../../Models/MapModels/Map';
 
@@ -18,6 +16,7 @@ type AisleProps = {
 
 export default function AisleComponent({
   aisl,
+  currentBubble,
   setCurrentBubble,
   index,
   markedAisles,
@@ -25,8 +24,10 @@ export default function AisleComponent({
   mapSize,
 }: AisleProps) {
   const {newX, newY} = calcCurrCoords(aisl, mapSize, scaleFactor);
+  const marked = markedAisles.includes(index) || currentBubble === index;
   return (
-    <View>
+    <G>
+      <Circle cx={newX} cy={newY} r={2} fill="#777" />
       <Circle
         onPress={() => {
           setCurrentBubble(index);
@@ -34,13 +35,9 @@ export default function AisleComponent({
         cx={newX}
         cy={newY}
         r={10}
-        stroke="black"
-        strokeWidth={0}
-        fill={markedAisles.includes(index) ? '#0073FE' : 'rgba(0,0,0,0)'}
+        fill={marked ? '#0073FE' : 'rgba(0,0,0,0)'}
       />
-
-      <Circle cx={newX} cy={newY} r={2} fill="#777" />
-    </View>
+    </G>
   );
 }
 

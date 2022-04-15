@@ -16,6 +16,7 @@ import ContactsModal from './AccountComponents/ContactsModal';
 import {useDispatch, useStore} from '../../Reducers/store';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useAuth from '../../Auth_Components/AuthContext';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function AccountPage() {
   const [didCount, setDidCount] = React.useState(false);
@@ -194,64 +195,66 @@ export default function AccountPage() {
           <Text style={styles.signOutText}>Sign out</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'column', width: '100%'}}>
-        <PersonalInfoCard
-          editProfile={editProfile}
-          setTypedName={setTypedName}
-        />
+      <ScrollView style={{marginBottom: 60}}>
+        <View style={{flexDirection: 'column', width: '100%'}}>
+          <PersonalInfoCard
+            editProfile={editProfile}
+            setTypedName={setTypedName}
+          />
 
-        <View>
-          <TouchableOpacity
-            onPress={() => {
-              if (
-                editProfile &&
-                typedName //&& typedName !== userName
-              ) {
-                setUserName(typedName);
-                const userRef = firestore()
-                  .collection('users')
-                  .doc(auth().currentUser.uid);
-                userRef.set({
-                  name: typedName,
-                });
-              }
-              setEditProfile(!editProfile);
-            }}>
-            <Text style={styles.middleButtonText}>
-              {editProfile ? 'Save Profile' : 'Edit Profile'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={[styles.middleButtonText, gs.bgGreen]}>
-              Payment Info
-            </Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                if (
+                  editProfile &&
+                  typedName //&& typedName !== userName
+                ) {
+                  setUserName(typedName);
+                  const userRef = firestore()
+                    .collection('users')
+                    .doc(auth().currentUser.uid);
+                  userRef.set({
+                    name: typedName,
+                  });
+                }
+                setEditProfile(!editProfile);
+              }}>
+              <Text style={styles.middleButtonText}>
+                {editProfile ? 'Save Profile' : 'Edit Profile'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={[styles.middleButtonText, gs.bgGreen]}>
+                Payment Info
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <BottomTabsCard
-        currentBottomTabIndex={currentBottomTabIndex}
-        setCurrentBottomTabIndex={setCurrentBottomTabIndex}>
-        <BottomTabsContent
+        <BottomTabsCard
           currentBottomTabIndex={currentBottomTabIndex}
-          contactsLoading={contactsLoading}
+          setCurrentBottomTabIndex={setCurrentBottomTabIndex}>
+          <BottomTabsContent
+            currentBottomTabIndex={currentBottomTabIndex}
+            contactsLoading={contactsLoading}
+            setContactModal={setContactModal}
+            selectedNames={selectedNames}
+            wishlists={wishlists}
+            receipts={receipts}
+          />
+        </BottomTabsCard>
+        <ContactsModal
+          initialContactState={initialContactState}
+          contactModal={contactModal}
           setContactModal={setContactModal}
+          setContactsLoading={setContactsLoading}
+          searchContacts={searchContacts}
           selectedNames={selectedNames}
-          wishlists={wishlists}
-          receipts={receipts}
+          tempSelectedNames={tempSelectedNames}
+          pushContactsFirebase={pushContactsFirebase}
+          filteredContactNames={filteredContactNames}
+          logItem={logItem}
         />
-      </BottomTabsCard>
-      <ContactsModal
-        initialContactState={initialContactState}
-        contactModal={contactModal}
-        setContactModal={setContactModal}
-        setContactsLoading={setContactsLoading}
-        searchContacts={searchContacts}
-        selectedNames={selectedNames}
-        tempSelectedNames={tempSelectedNames}
-        pushContactsFirebase={pushContactsFirebase}
-        filteredContactNames={filteredContactNames}
-        logItem={logItem}
-      />
+      </ScrollView>
     </View>
   );
 }

@@ -1,18 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import Svg from 'react-native-svg';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
-import {useNavigation} from '@react-navigation/native';
-import Map from '../../Models/MapModels/Map';
 import gs from '../../Styles/globalStyles';
-
 import SearchBar from '../../Components/SearchBar';
 import Aisle, {calcCurrCoords} from './MapComponents/Aisle';
 import Wall from './MapComponents/Wall';
-
 import {useStore} from '../../Reducers/store';
-import {defaultMap} from '../../Connections/MapConnection';
-import ProdBubble from './MapComponents/ProdBubble';
+import ProductBubble from './MapComponents/ProductBubble';
 
 export default MapPage;
 
@@ -25,7 +19,6 @@ function MapPage() {
 
   const store = useStore();
   const wallData = store.map;
-  const navigation = useNavigation();
 
   const {newX, newY} =
     currentBubble > -1 &&
@@ -46,30 +39,31 @@ function MapPage() {
   }, []);
 
   async function searchItems(val) {
-    if (val === '' || val === ' ') {
+    if (!val || val.match(/\s+/g)) {
       setBackSearches([]);
       setMarkedAisles([]);
-    } else if (val !== '') {
-      await setBackSearches([]);
+      return;
+    }
+    await setBackSearches([]);
 
-      const matches = [];
-      await wallData.aisles.forEach((a, index) => {
-        if (a.products) {
-          a.products.map(p => {
-            const match = store.items.findIndex(i => {
-              return i.docID === p;
-            });
-            if (match >= 0 && store.items[match].name.includes(val)) {
-              matches.push(index);
-            }
+    const matches = [];
+    await wallData.aisles.forEach((a, index) => {
+      if (a.products) {
+        a.products.map(p => {
+          const match = store.items.findIndex(i => {
+            return i.docID === p;
           });
-        }
-      });
-      await setBackSearches(matches);
-
-      if (backSearches) {
-        await setMarkedAisles(backSearches);
+          if (match >= 0 && store.items[match].name.includes(val)) {
+            matches.push(index);
+          }
+        });
       }
+    });
+    setBackSearches(matches);
+
+    if (backSearches.length) {
+      setMarkedAisles(backSearches);
+      setCurrentBubble(-1);
     }
   }
 
@@ -89,7 +83,7 @@ function MapPage() {
             onPress={() => {
               setCurrentBubble(-1);
             }}>
-            {wallData.wallCoordinates.map((coordinates, index) => {
+            {wallData.wallCoordinates.map(coordinates => {
               return (
                 <Wall
                   scale={scaleFactor}
@@ -119,7 +113,7 @@ function MapPage() {
             )}
           </Svg>
           {currentBubble >= 0 && (
-            <ProdBubble
+            <ProductBubble
               prods={wallData.aisles[currentBubble].products}
               coord={{x: newX, y: newY}}
               mapSize={wallData.mapSize}

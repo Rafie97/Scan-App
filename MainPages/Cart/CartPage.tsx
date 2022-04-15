@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
 
   totalBalanceView: {
-    marginTop: 15,
+    marginVertical: 'auto',
     marginLeft: 30,
     ...gs.flexColumn,
   },

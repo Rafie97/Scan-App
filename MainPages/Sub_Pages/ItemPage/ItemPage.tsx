@@ -125,7 +125,7 @@ function ItemPage({route}: ItemPageParams) {
             </View>
             <Text style={[styles.itemNameText]}>{item.name}</Text>
 
-            <Text style={styles.itemPriceText}>${item.price}</Text>
+            <Text style={styles.itemPriceText}>${item.price.toFixed(2)}</Text>
             {!route.params.isRecipe && lineChartData.labels.length ? (
               <PriceChart lineChartData={lineChartData} />
             ) : null}
