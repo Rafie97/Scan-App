@@ -25,11 +25,15 @@ console.disableYellowBox = true;
 
 const OuterNavigator = createStackNavigator();
 
+if (Platform.OS === 'ios' || !firebase.apps.length) {
+  firebase.initializeApp(config);
+}
+
 function App() {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
 
   React.useEffect(() => {
-    if (!firebase.apps.length || Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || !firebase.apps.length) {
       firebase.initializeApp(config);
     }
     auth().onAuthStateChanged(user => {

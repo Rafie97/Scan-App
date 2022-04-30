@@ -30,7 +30,9 @@ const PromoItemTile = ({isRecipe = false, ...item}: Item) => {
             styles.promoPriceView,
             {backgroundColor: isRecipe ? '#4400fe' : '#0073FE'},
           ]}>
-          <Text style={styles.promoPriceText}>${item.price.toFixed(2)}</Text>
+          <Text style={styles.promoPriceText}>{`$${item.price.toFixed(
+            2,
+          )}`}</Text>
         </View>
 
         <Text numberOfLines={2} style={styles.promoNameText}>
