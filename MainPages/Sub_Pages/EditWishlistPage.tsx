@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Item from '../../Models/ItemModels/Item';
 import SwipeableItem from '../../Components/SwipeableItem';
@@ -15,6 +8,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import gs from '../../Styles/globalStyles';
 import {useNavigation} from '@react-navigation/core';
 import {useStore} from '../../Reducers/store';
+import ItemBubble from '../../Components/ItemBubble';
 
 function EditWishlistPage(props: any) {
   const [listItems, setListItems] = useState<Item[]>([]);
@@ -39,7 +33,7 @@ function EditWishlistPage(props: any) {
       });
       setListItems(tempItems);
     }
-  }, [wishlists]);
+  }, [routeListName, store.items, store.recipes, wishlists]);
 
   function deleteItem(itemID) {
     const userID = auth().currentUser.uid;
@@ -57,6 +51,8 @@ function EditWishlistPage(props: any) {
     <SwipeableItem item={item} deleteItem={deleteItem} sourcePage="Account" />
   );
 
+  const renderSkeleton = () => <ItemBubble navToItem={() => {}} />;
+
   return (
     <View style={gs.fullBackground}>
       <View style={styles.backButtonView}>
@@ -69,13 +65,23 @@ function EditWishlistPage(props: any) {
         </TouchableOpacity>
       </View>
       <Text style={styles.listNameText}>{routeListName}</Text>
-      <FlatList
-        keyExtractor={(item, index) => `${index}`}
-        data={listItems}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-        style={gs.width100}
-      />
+      {listItems.length ? (
+        <FlatList
+          keyExtractor={(item, index) => `${index}`}
+          data={listItems}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+          style={gs.width100}
+        />
+      ) : (
+        <FlatList
+          keyExtractor={(item, index) => `${index}`}
+          data={[1, 2, 3]}
+          renderItem={renderSkeleton}
+          contentContainerStyle={styles.listContainer}
+          style={gs.width100}
+        />
+      )}
     </View>
   );
 }

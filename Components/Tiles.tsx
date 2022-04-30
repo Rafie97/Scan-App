@@ -1,11 +1,8 @@
-import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
-import React, {Component} from 'react';
-
+import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Receipt from '../Models/CartModels/Receipt';
 import Item from '../Models/ItemModels/Item';
-import {Recipe} from '../Models/ItemModels/Recipe';
 import gs from '../Styles/globalStyles';
 
 //PROMO TILE
@@ -55,15 +52,15 @@ type FamilyTileProps = {
 
 //FAMILY TILE
 const FamilyTile = (props: FamilyTileProps) => {
-  const [sauce, setSauce] = React.useState();
+  // const [sauce, setSauce] = React.useState();
 
-  React.useEffect(() => {
-    if (props.imageLink || props.imageLink === '') {
-      // setSauce(require('../../res/' + props.imageLink));
-    } else {
-      // setSauce(require('../../res/default_profile.jpg'));
-    }
-  });
+  // React.useEffect(() => {
+  //   if (props.imageLink || props.imageLink === '') {
+  //     setSauce(require('../../res/' + props.imageLink));
+  //   } else {
+  //     setSauce(require('../../res/default_profile.jpg'));
+  //   }
+  // });
 
   return (
     <View style={styles.accountTabTile}>
@@ -72,7 +69,7 @@ const FamilyTile = (props: FamilyTileProps) => {
         style={styles.accountTabImage}
       />
 
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
+      <View style={styles.nameView}>
         <Text style={[gs.bold, gs.taCenter]}>{props.name}</Text>
       </View>
     </View>
@@ -99,7 +96,7 @@ const WishlistTile = (wishlist: WishlistTileProps) => {
         style={styles.accountTabImage}
       />
 
-      <View style={{flex: 1, paddingTop: 10, alignSelf: 'stretch'}}>
+      <View style={styles.nameView}>
         <Text style={[gs.bold, gs.taCenter]}>{wishlist.name}</Text>
       </View>
     </TouchableOpacity>
@@ -126,7 +123,7 @@ const ReceiptTile = (props: ReceiptTileProps) => {
         style={styles.accountTabImage}
       />
       <View style={styles.storeNameView}>
-        <Text style={{textAlign: 'center', marginTop: 3, fontWeight: 'bold'}}>
+        <Text style={[gs.bold, gs.taCenter, {marginTop: 3}]}>
           {props.receipt.storeId}
         </Text>
         <Text style={gs.taCenter}>{props.receipt.date}</Text>
@@ -158,7 +155,6 @@ const styles = StyleSheet.create({
   promoPriceText: {
     marginVertical: 0,
     fontSize: 20,
-    ...gs.bold,
     ...gs.taCenter,
     ...gs.white,
   },
@@ -167,6 +163,7 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginVertical: 5,
     textAlign: 'left',
+    ...gs.bold,
   },
 
   itemImage: {
@@ -206,4 +203,6 @@ const styles = StyleSheet.create({
     ...gs.shadow,
     ...gs.width100,
   },
+
+  nameView: {paddingTop: 10, ...gs.aStretch, ...gs.flex1},
 });

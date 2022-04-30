@@ -2,78 +2,65 @@ import {Review} from './Review';
 
 interface ItemInterface {
   barcode: string;
+  category?: string;
   docID: string;
-  name: string;
+  feeds?: number;
   imageLink: string;
   location: Location;
+  name: string;
   price: number;
   priceHistory?: Map<string, number>;
   promo: boolean;
+  quantity: number;
   reviews: Review[];
   isRecipe: boolean;
-  category?: string;
-  feeds?: number;
 }
 
 class Item implements ItemInterface {
   barcode: string;
+  category?: string;
   docID: string;
-  name: string;
+  feeds?: number;
   imageLink: string;
   location: Location;
+  name: string;
   price: number;
   priceHistory?: Map<string, number>;
   promo: boolean;
+  quantity: number;
   reviews: Review[];
   isRecipe: boolean;
-  category?: string;
-  feeds?: number;
 
   constructor(doc) {
-    if (typeof doc.data == 'function') {
+    if (typeof doc.data === 'function') {
+      this.barcode = doc.data().barcode;
+      this.category = doc.data().category;
       this.docID = doc.id;
+      this.feeds = doc.data().feeds;
+      this.imageLink = doc.data().imageLink;
+      this.location = doc.data().location;
       this.name = doc.data().name;
       this.price = doc.data().price;
-      this.imageLink = doc.data().imageLink;
-      this.barcode = doc.data().barcode;
-      this.promo = doc.data().promo;
-      this.reviews = doc.data().reviews;
       this.priceHistory = convertPriceHistory(doc.data().priceHistory);
-      this.location = doc.data().location;
+      this.promo = doc.data().promo;
+      this.quantity = doc.data().quantity;
+      this.reviews = doc.data().reviews;
       this.isRecipe = doc.data().isRecipe;
-      this.category = doc.data().category;
-      this.feeds = doc.data().feeds;
     } else {
+      this.barcode = doc.barcode;
+      this.category = doc.category;
       this.docID = doc.docID;
+      this.feeds = doc.data().feeds;
+      this.imageLink = doc.imageLink;
+      this.location = doc.location;
       this.name = doc.name;
       this.price = doc.price;
-      this.imageLink = doc.imageLink;
-      this.barcode = doc.barcode;
-      this.promo = doc.promo;
-      this.reviews = doc.reviews;
       this.priceHistory = convertPriceHistory(doc.priceHistory);
-      this.location = doc.location;
+      this.promo = doc.promo;
+      this.quantity = doc.data().quantity;
+      this.reviews = doc.reviews;
+      this.isRecipe = doc.data().isRecipe;
     }
-  }
-
-  toString() {
-    return (
-      this.docID +
-      ',' +
-      this.name +
-      ',' +
-      this.price +
-      ',' +
-      this.imageLink +
-      ',' +
-      this.barcode +
-      ',' +
-      this.promo +
-      ',' +
-      this.reviews +
-      ',' +
-      this.priceHistory
-    );
   }
 }
 

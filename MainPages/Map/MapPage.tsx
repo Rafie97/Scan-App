@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Svg from 'react-native-svg';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import gs from '../../Styles/globalStyles';
 import SearchBar from '../../Components/SearchBar';
 import Aisle, {calcCurrCoords} from './MapComponents/Aisle';
@@ -130,11 +130,11 @@ function MapPage() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   mapBox: {
     ...gs.bgWhite,
     ...gs.margin20,
     ...gs.radius10,
     ...gs.shadow,
   },
-});
+};
