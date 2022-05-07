@@ -17,6 +17,8 @@ import {useDispatch, useStore} from '../../Reducers/store';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useAuth from '../../Auth_Components/AuthContext';
 import {ScrollView} from 'react-native-gesture-handler';
+import Receipt from '../../Models/CartModels/Receipt';
+import {Wishlist} from '../../Models/UserModels/User';
 
 export default function AccountPage() {
   const [didCount, setDidCount] = React.useState(false);
@@ -42,8 +44,8 @@ export default function AccountPage() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const wishlists = store.user.wishlists;
-  const receipts = store.user.receipts;
+  const wishlists: Wishlist[] = store.user ? store.user.wishlists : [];
+  const receipts: Receipt[] = store.user ? store.user.receipts : [];
 
   React.useEffect(() => {
     if (store.user === null && isFocused && authState.isAnonymous) {

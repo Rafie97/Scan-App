@@ -1,5 +1,4 @@
 import {NavigationProp} from '@react-navigation/native';
-import {CartItem} from '../Models/ItemModels/CartItem';
 import Item from '../Models/ItemModels/Item';
 import {Recipe} from '../Models/ItemModels/Recipe';
 import Map from '../Models/MapModels/Map';
@@ -10,7 +9,6 @@ export type StateType = {
   map: Map;
   items: Item[];
   recipes: Item[];
-  cart: CartItem[];
   total: number;
   showLogin: boolean;
 };
@@ -82,7 +80,7 @@ export const mainReducer = (state, action) => {
   }
 };
 
-const addToCart = (currCart: CartItem[], currTotal: number, item: CartItem) => {
+const addToCart = (currCart: Item[], currTotal: number, item: Item) => {
   let updated = false;
   currCart = currCart.map(cartItem => {
     //If there is a duplicate item in the cart just update its quantity
@@ -97,6 +95,6 @@ const addToCart = (currCart: CartItem[], currTotal: number, item: CartItem) => {
   return currCart;
 };
 
-const addToTotal = (currTotal: number, item: CartItem) => {
+const addToTotal = (currTotal: number, item: Item) => {
   return currTotal + item.price;
 };

@@ -29,6 +29,7 @@ class Item implements ItemInterface {
   promo: boolean;
   quantity: number;
   reviews: Review[];
+  stock?: number;
   isRecipe: boolean;
 
   constructor(doc) {

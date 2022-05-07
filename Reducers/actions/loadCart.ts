@@ -1,9 +1,9 @@
 import snapshotCart from '../../Connections/CartConnection';
-import {CartItem} from '../../Models/ItemModels/CartItem';
+import Item from '../../Models/ItemModels/Item';
 
 export default async function loadCart(dispatch, uid) {
   try {
-    snapshotCart(uid, (loadedItems: CartItem[]) => {
+    snapshotCart(uid, (loadedItems: Item[]) => {
       if (loadedItems.length) {
         dispatch({type: 'SET_CART', payload: loadedItems});
       } else {

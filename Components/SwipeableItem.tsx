@@ -6,12 +6,12 @@ import auth from '@react-native-firebase/auth';
 import gs from '../Styles/globalStyles';
 import ItemBubble from './ItemBubble';
 import {useNavigation} from '@react-navigation/native';
-import {CartItem} from '../Models/ItemModels/CartItem';
+import Item from '../Models/ItemModels/Item';
 
 // const {width} = Dimensions.get('window');
 
 type Props = {
-  item: CartItem;
+  item: Item;
   deleteItem: (itemID: string) => void;
   sourcePage: string;
   // setOuterScrollEnabled?: React.Dispatch<React.SetStateAction<boolean>>;

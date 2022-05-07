@@ -6,8 +6,6 @@ import {
   View,
   Text,
   ScrollView,
-  FlatList,
-  Modal,
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';

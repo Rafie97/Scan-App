@@ -20,7 +20,7 @@ function CartPage() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
-  const cartItems = store.user.cart;
+  const cartItems = store.user ? store.user.cart : [];
 
   React.useEffect(() => {
     if (store.user === null && isFocused && authh.isAnonymous) {
@@ -104,7 +104,7 @@ function CartPage() {
             item={item}
             deleteItem={deleteItem}
             sourcePage="Cart"
-            setOuterScrollEnabled={setScrollEnabled}
+            // setOuterScrollEnabled={setScrollEnabled}
           />
         )}
       />
