@@ -36,9 +36,7 @@ export function snapshotRecipes(
       }
       const recipes = await Promise.all(
         snapshot.docs.map(async doc => {
-          const recipe = {
-            ...doc.data(),
-          } as Recipe;
+          const recipe = new Recipe(doc);
           return recipe;
         }),
       );

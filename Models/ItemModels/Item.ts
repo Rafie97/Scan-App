@@ -1,33 +1,16 @@
 import {Review} from './Review';
 
-interface ItemInterface {
+class Item {
   barcode: string;
   category?: string;
   docID: string;
-  feeds?: number;
   imageLink: string;
   location: Location;
   name: string;
   price: number;
   priceHistory?: Map<string, number>;
   promo: boolean;
-  quantity: number;
-  reviews: Review[];
-  isRecipe: boolean;
-}
-
-class Item implements ItemInterface {
-  barcode: string;
-  category?: string;
-  docID: string;
-  feeds?: number;
-  imageLink: string;
-  location: Location;
-  name: string;
-  price: number;
-  priceHistory?: Map<string, number>;
-  promo: boolean;
-  quantity: number;
+  quantity?: number;
   reviews: Review[];
   stock?: number;
   isRecipe: boolean;
@@ -37,8 +20,8 @@ class Item implements ItemInterface {
       this.barcode = doc.data().barcode;
       this.category = doc.data().category;
       this.docID = doc.id;
-      this.feeds = doc.data().feeds;
       this.imageLink = doc.data().imageLink;
+      this.isRecipe = doc.data().isRecipe;
       this.location = doc.data().location;
       this.name = doc.data().name;
       this.price = doc.data().price;
@@ -46,28 +29,28 @@ class Item implements ItemInterface {
       this.promo = doc.data().promo;
       this.quantity = doc.data().quantity;
       this.reviews = doc.data().reviews;
-      this.isRecipe = doc.data().isRecipe;
+      this.stock = doc.data().stock;
     } else {
       this.barcode = doc.barcode;
       this.category = doc.category;
       this.docID = doc.docID;
-      this.feeds = doc.data().feeds;
       this.imageLink = doc.imageLink;
+      this.isRecipe = doc.isRecipe;
       this.location = doc.location;
       this.name = doc.name;
       this.price = doc.price;
       this.priceHistory = convertPriceHistory(doc.priceHistory);
       this.promo = doc.promo;
-      this.quantity = doc.data().quantity;
+      this.quantity = doc.quantity;
       this.reviews = doc.reviews;
-      this.isRecipe = doc.data().isRecipe;
+      this.stock = doc.stock;
     }
   }
 }
 
 export default Item;
 
-function convertPriceHistory(firebasePriceHistory: {
+export function convertPriceHistory(firebasePriceHistory: {
   timestamp: number;
 }): Map<string, number> {
   let priceHist = new Map<string, number>();
