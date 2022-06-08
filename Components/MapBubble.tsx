@@ -1,15 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  ImageBackground,
-  Image,
-  Animated,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 const MapBubble = props => {
   const [left, setLeft] = useState(null);

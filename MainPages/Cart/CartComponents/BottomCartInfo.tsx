@@ -3,29 +3,36 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import gs from '../../../Styles/globalStyles';
 
 type Props = {
-  cartSum: number[];
+  cartSum?: number[];
   isReceipt?: boolean;
 };
 
 export default function BottomCartInfo({cartSum, isReceipt = false}: Props) {
+  function getSubtotal(): string {
+    return cartSum ? cartSum[0].toFixed(2) : '0.00';
+  }
+  function getTax(): string {
+    return cartSum ? cartSum[1].toFixed(2) : '0.00';
+  }
+  function getTotal(): string {
+    return cartSum ? cartSum[2].toFixed(2) : '0.00';
+  }
   return (
     <View style={styles.bottomInfoContainer}>
       <View style={styles.receiptView}>
         <View style={styles.receiptRow}>
           <Text style={styles.totalTitles}>Subtotal</Text>
-          <Text style={styles.subtotalValue}>${cartSum[0].toFixed(2)}</Text>
+          <Text style={styles.subtotalValue}>${getSubtotal()}</Text>
         </View>
         <View style={styles.taxRow}>
           <Text style={styles.totalTitles}>Tax</Text>
           <Text style={styles.totalNumbersText}>
-            +{'  '}${cartSum[1].toFixed(2)}
+            +{'  '}${getTax()}
           </Text>
         </View>
         <View style={styles.receiptRow}>
           <Text style={styles.totalTitles}>Total</Text>
-          <Text style={[styles.totalNumbersText, gs.bold]}>
-            ${cartSum[2].toFixed(2)}
-          </Text>
+          <Text style={[styles.totalNumbersText, gs.bold]}>${getTotal()}</Text>
         </View>
       </View>
 

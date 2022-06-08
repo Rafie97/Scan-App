@@ -13,7 +13,7 @@ import BottomCartInfo from './CartComponents/BottomCartInfo';
 
 function CartPage() {
   const [isScrollEnabled, setScrollEnabled] = useState<boolean>(true);
-  const [cartSum, setCartSum] = useState<number[]>([0, 0, 0]);
+  const [cartSum, setCartSum] = useState<number[] | undefined>(undefined);
 
   const store = useStore();
   const authh = useAuth();
@@ -29,6 +29,7 @@ function CartPage() {
   }, [isFocused, store.user, authh.isAnonymous, dispatch]);
 
   React.useEffect(() => {
+    if (!cartItems) return;
     let tempSum = 0;
     cartItems.forEach(item => {
       const numPrice = +item.price * item.quantity;
@@ -38,7 +39,7 @@ function CartPage() {
       setCartSum([
         Math.round(100 * tempSum) / 100,
         Math.round(100 * 0.0825 * tempSum) / 100,
-        Math.round(100 * 1.0825 * tempSum) / 100,
+        Math.round(100 * 1.0825 * tempSum) / 100
       ]);
     }
   }, [cartItems]);
@@ -61,26 +62,35 @@ function CartPage() {
       });
   }
 
+  function getTickerTens(): string {
+    const sum =
+      cartSum && cartSum.length ? Math.trunc(cartSum[2]).toString() : '00';
+    console.log('sum: ', sum);
+    return sum;
+  }
+
+  function getTickerTenths(): string {
+    return cartSum && cartSum.length
+      ? (cartSum[2] - Math.trunc(cartSum[2]))
+          .toFixed(2)
+          .toString()
+          .slice(1, 4)
+      : '00';
+  }
+
   return (
     <View style={gs.fullBackground}>
       <View style={styles.blueHeaderContainer}>
         <View style={styles.blueHeader}>
           <View style={styles.totalBalanceView}>
-            {cartSum ? (
-              <View style={gs.flexRow}>
-                <Ticker textStyle={styles.tickerText} duration={500}>
-                  ${Math.trunc(cartSum[2]).toString() || 0}
-                </Ticker>
-                <Ticker duration={250} textStyle={styles.tickerText}>
-                  {(cartSum[2] - Math.trunc(cartSum[2]))
-                    .toFixed(2)
-                    .toString()
-                    .slice(1, 4) || 0}
-                </Ticker>
-              </View>
-            ) : (
-              <></>
-            )}
+            <View style={gs.flexRow}>
+              <Ticker textStyle={styles.tickerText} duration={500}>
+                ${getTickerTens()}
+              </Ticker>
+              <Ticker duration={250} textStyle={styles.tickerText}>
+                {getTickerTenths()}
+              </Ticker>
+            </View>
             <Text style={gs.white}>Total Balance</Text>
           </View>
           <TouchableOpacity
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'space-between',
     ...gs.bgBlue,
-    ...gs.flexRow,
+    ...gs.flexRow
   },
   blueHeaderContainer: {
     height: '12%',
@@ -129,13 +139,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 20,
-    ...gs.width100,
+    ...gs.width100
   },
 
   totalBalanceView: {
     marginVertical: 'auto',
     marginLeft: 30,
-    ...gs.flexColumn,
+    ...gs.flexColumn
   },
 
   topCheckoutView: {
@@ -144,19 +154,19 @@ const styles = StyleSheet.create({
     ...gs.bgWhite,
     ...gs.jCenter,
     ...gs.margin20,
-    ...gs.radius10,
+    ...gs.radius10
   },
 
   tickerText: {
     fontSize: 30,
     ...gs.bold,
     ...gs.white,
-    ...gs.taCenter,
+    ...gs.taCenter
   },
 
   listContainer: {
     paddingTop: 10,
     marginBottom: 10,
-    ...gs.aCenter,
-  },
+    ...gs.aCenter
+  }
 });

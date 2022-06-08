@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import auth from '@react-native-firebase/auth';
-import {Text} from 'react-native';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {Text, View} from 'react-native';
 
-const AuthContext = React.createContext();
+const AuthContext = React.createContext<FirebaseAuthTypes.User | undefined>(
+  undefined,
+);
 const useAuth = () => React.useContext(AuthContext);
 export default useAuth;
 
@@ -21,7 +23,11 @@ export const AuthProvider = ({children}) => {
   }, [currentUser]);
 
   if (pending) {
-    return <Text>Loading...</Text>;
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
