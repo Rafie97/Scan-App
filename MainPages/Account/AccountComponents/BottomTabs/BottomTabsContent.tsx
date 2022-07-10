@@ -3,7 +3,7 @@ import {TouchableOpacity, View, Text, FlatList} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import FamilyTile, {
   ReceiptTile,
-  WishlistTile,
+  WishlistTile
 } from '../../../../Components/Tiles';
 import FontAwe from 'react-native-vector-icons/FontAwesome';
 import Receipt from '../../../../Models/CartModels/Receipt';
@@ -25,44 +25,10 @@ export default function BottomTabsContent({
   setContactModal,
   selectedNames,
   wishlists,
-  receipts,
+  receipts
 }: BottomTabsContentProps) {
   const [selected, setSelected] = React.useState('');
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  if (currentBottomTabIndex === 0) {
-    return (
-      <View>
-        {contactsLoading ? (
-          <View style={styles.loadingView}>
-            <Text style={{color: 'white'}}>Loading...</Text>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.tabView}
-            onPress={() => setContactModal(true)}>
-            <Text style={[gs.blue, {fontSize: 18}]}>
-              <FontAwe name="plus-square" size={18} color="#0073FE" /> Add
-              Family
-            </Text>
-          </TouchableOpacity>
-        )}
-        {selectedNames ? (
-          <FlatList
-            keyExtractor={(item, index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
-            data={selectedNames}
-            horizontal={true}
-            renderItem={({item}) => <FamilyTile name={item} />}
-          />
-        ) : (
-          <View style={styles.noFamView}>
-            <Text style={styles.noFamText}>There is no Family to show</Text>
-          </View>
-        )}
-      </View>
-    );
-  }
-
   if (currentBottomTabIndex === 1) {
     return (
       <View>
@@ -92,7 +58,7 @@ export default function BottomTabsContent({
             <DropDownPicker
               items={[
                 {label: 'Date', value: 'date'},
-                {label: 'Store Name', value: 'store'},
+                {label: 'Store Name', value: 'store'}
               ]}
               open={dropdownOpen}
               setOpen={op => setDropdownOpen(op)}
@@ -113,6 +79,36 @@ export default function BottomTabsContent({
       </View>
     );
   }
+  return (
+    <View>
+      {contactsLoading ? (
+        <View style={styles.loadingView}>
+          <Text style={{color: 'white'}}>Loading...</Text>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.tabView}
+          onPress={() => setContactModal(true)}>
+          <Text style={[gs.blue, {fontSize: 18}]}>
+            <FontAwe name="plus-square" size={18} color="#0073FE" /> Add Family
+          </Text>
+        </TouchableOpacity>
+      )}
+      {selectedNames ? (
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          data={selectedNames}
+          horizontal={true}
+          renderItem={({item}) => <FamilyTile name={item} />}
+        />
+      ) : (
+        <View style={styles.noFamView}>
+          <Text style={styles.noFamText}>There is no Family to show</Text>
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = {
@@ -122,19 +118,19 @@ const styles = {
     margin: 10,
     ...gs.aCenter,
     ...gs.bgBlue,
-    ...gs.jCenter,
+    ...gs.jCenter
   },
   tabView: {
     height: 30,
     width: '40%' as '40%',
     marginBottom: 20,
     ...gs.aCenter,
-    ...gs.jCenter,
+    ...gs.jCenter
   },
   noFamView: {
     ...gs.aCenter,
     ...gs.jCenter,
-    ...gs.width100,
+    ...gs.width100
   },
   noFamText: {
     fontSize: 20,
@@ -143,7 +139,7 @@ const styles = {
     ...gs.blue,
     ...gs.bold,
     ...gs.taCenter,
-    ...gs.width100,
+    ...gs.width100
   },
   receiptView: {
     height: 30,
@@ -152,11 +148,11 @@ const styles = {
     ...gs.aCenter,
     ...gs.flexRow,
     ...gs.jCenter,
-    ...gs.width100,
+    ...gs.width100
   },
   sortBarView: {
     ...gs.aCenter,
     ...gs.flexRow,
-    ...gs.width100,
-  },
+    ...gs.width100
+  }
 };

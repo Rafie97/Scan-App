@@ -71,7 +71,7 @@ export default function AccountPage() {
       title: 'Contacts',
       message: 'This app would like to view your contacts',
       buttonPositive: 'OK',
-      buttonNegative: 'Cancel',
+      buttonNegative: 'Cancel'
     }).then(() => {
       console.log('GOT PERMSSIONS');
     });
@@ -107,14 +107,14 @@ export default function AccountPage() {
         title: 'Contacts',
         message: 'This app would like to view your contacts',
         buttonPositive: 'OK',
-        buttonNegative: 'Cancel',
+        buttonNegative: 'Cancel'
       }).then(() =>
         Contacts.getAll(async (err, contacts) => {
           if (err === 'denied') {
             alert('Contacts access was not granted');
           } else if (contacts) {
             contacts.forEach(con =>
-              setContactNames([...contactNames, con.givenName]),
+              setContactNames([...contactNames, con.givenName])
             );
 
             setContactsLoading(false);
@@ -123,7 +123,7 @@ export default function AccountPage() {
             const stringedContacts = JSON.stringify(contactNames);
             await AsyncStorage.setItem('storedContactNames', stringedContacts);
           }
-        }),
+        })
       );
     }
   }
@@ -176,7 +176,7 @@ export default function AccountPage() {
     tempSelectedNames.forEach(tempName => {
       if (!selectedNames.includes(tempName)) {
         famRef.add({
-          name: tempName,
+          name: tempName
         });
       }
     });
@@ -188,16 +188,16 @@ export default function AccountPage() {
 
   return (
     <View style={gs.fullBackground}>
-      <View style={styles.headerView}>
-        <Text style={styles.yourWishlistsText}>Your Account</Text>
-        <TouchableOpacity
-          style={styles.signOutTouchable}
-          onPress={() => signOut()}>
-          <Ion name="md-exit-outline" size={24} color="#0073FE" />
-          <Text style={styles.signOutText}>Sign out</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={{marginBottom: 60}}>
+      <ScrollView>
+        <View style={styles.headerView}>
+          <Text style={styles.yourWishlistsText}>Your Account</Text>
+          <TouchableOpacity
+            style={styles.signOutTouchable}
+            onPress={() => signOut()}>
+            <Ion name="md-exit-outline" size={24} color="#0073FE" />
+          </TouchableOpacity>
+        </View>
+
         <View style={{flexDirection: 'column', width: '100%'}}>
           <PersonalInfoCard
             editProfile={editProfile}
@@ -216,7 +216,7 @@ export default function AccountPage() {
                     .collection('users')
                     .doc(auth().currentUser.uid);
                   userRef.set({
-                    name: typedName,
+                    name: typedName
                   });
                 }
                 setEditProfile(!editProfile);
@@ -265,15 +265,14 @@ const styles = {
   yourWishlistsText: {
     ...gs.header,
     ...gs.flex1,
-    margin: 0,
+    margin: 0
   },
   headerView: {
     marginBottom: 10,
-    ...gs.aStretch,
+    // ...gs.aStretch,
     ...gs.flexRow,
     ...gs.margin20,
-    ...gs.width100,
-    ...gs.bgWhite,
+    ...gs.width100
   },
   middleButtonText: {
     fontSize: 20,
@@ -286,16 +285,16 @@ const styles = {
     ...gs.margin10,
     ...gs.radius10,
     ...gs.taCenter,
-    ...gs.white,
+    ...gs.white
   },
   signOutText: {
     fontSize: 18,
     textAlign: 'right' as 'right',
     paddingVertical: 5,
     ...gs.aStretch,
-    ...gs.flex1,
+    ...gs.flex1
   },
   signOutTouchable: {
-    ...gs.aStretch,
-  },
+    // ...gs.aStretch
+  }
 };
