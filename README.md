@@ -1,7 +1,6 @@
 ## Latest Version
 
-![image](https://github.com/Rafie97/Scan-App/assets/11741706/ebf958f1-977b-4666-b649-b826cea510c9)
-
+<img src="https://github.com/Rafie97/Scan-App/assets/11741706/ebf958f1-977b-4666-b649-b826cea510c9" alt="drawing" width="200"/>
 
 ![image](https://github.com/Rafie97/Scan-App/assets/11741706/e3b57b84-5fb3-4bad-a44e-1f4a66a4ea10)
 
