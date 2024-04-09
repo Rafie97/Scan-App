@@ -1,3 +1,5 @@
+Web5 self checkout application for phasing out reliance on big tech servers like Google, Amazon, etc. Works by having an internal wallet to pay for items that then transfers digital coins to the store's server and can later be redeemed. 
+
 ## Latest Version
 
 <img src="https://github.com/Rafie97/Scan-App/assets/11741706/ebf958f1-977b-4666-b649-b826cea510c9" alt="drawing" width="200"/>
