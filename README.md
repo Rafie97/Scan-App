@@ -1,4 +1,4 @@
-Web5 self checkout application for phasing out reliance on big tech servers like Google, Amazon, etc. Works by having an internal wallet to pay for items that then transfers digital coins to the store's server and can later be converted back to USD. Current version is on firebase as I am writing the server code. Final piece which has not been determined to be able to convert to Web5 is actually buying the wallet USDT. That must still be down over the internet rather than on WLAN
+Web5 self checkout application for phasing out reliance on big tech servers like Google, Amazon, etc. Works by having an internal wallet to pay for items that then transfers USDT to the store's server and can later be converted back to USD. Current version is on firebase as I am writing the server code. Final piece which has not been determined to be able to convert to Web5 is actually buying the wallet USDT. That must still be down over the internet rather than on WLAN
 
 ## Latest Version
 
